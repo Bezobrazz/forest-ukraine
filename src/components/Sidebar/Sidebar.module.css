@@ -1,0 +1,14 @@
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  background-color: #f0f0f0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.closeSidebarBtn {
+  font-size: x-large;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
