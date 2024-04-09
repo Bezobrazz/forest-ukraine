@@ -5,7 +5,9 @@ import s from "./Sidebar.module.css";
 const Sidebar = ({ closeSidebar }) => {
   return (
     <div className={s.sidebar}>
-      <h2>Navigation</h2>
+      <div className={s.topBar}>
+        <h2>Navigation</h2>
+      </div>
       <ul>
         <li>
           <Link to="/">Home</Link>
@@ -14,12 +16,7 @@ const Sidebar = ({ closeSidebar }) => {
           <Link to="/production">Production</Link>
         </li>
       </ul>
-      <div>
-        <AiFillCloseSquare
-          onClick={closeSidebar}
-          className={s.closeSidebarBtn}
-        />
-      </div>
+      <AiFillCloseSquare onClick={closeSidebar} className={s.closeSidebarBtn} />
     </div>
   );
 };

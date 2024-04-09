@@ -12,3 +12,10 @@
   top: 5px;
   right: 5px;
 }
+.topBar {
+  height: 60px;
+
+  background-color: #fff;
+  padding-left: 20px;
+  padding-top: 10px;
+}

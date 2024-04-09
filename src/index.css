@@ -1,1 +1,9 @@
 @import "../node_modules/reset-css/";
+
+body,
+html {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "SuisseIntl-Regular", sans-serif;
+  font-weight: 400;
+}
