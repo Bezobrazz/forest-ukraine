@@ -1,10 +1,13 @@
 .container {
+  height: 60px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
   background-color: aqua;
   margin: 0;
+  display: flex;
+  align-items: center;
 }
 .hamburgerBtn {
-  font-size: large;
+  font-size: xx-large;
   cursor: pointer;
 }

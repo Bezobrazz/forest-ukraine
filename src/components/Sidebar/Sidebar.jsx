@@ -6,9 +6,9 @@ const Sidebar = ({ closeSidebar }) => {
   return (
     <div className={s.sidebar}>
       <div className={s.topBar}>
-        <h2>Navigation</h2>
+        <h2 className={s.sidebarTitle}>Navigation</h2>
       </div>
-      <ul>
+      <ul className={s.navWrapper}>
         <li>
           <Link to="/">Home</Link>
         </li>
