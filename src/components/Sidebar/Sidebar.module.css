@@ -21,5 +21,13 @@
   font-size: large;
 }
 .navWrapper {
-  padding: 15px;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.navLink {
+  background-color: #fff;
+  padding: 10px;
+  font-size: large;
 }

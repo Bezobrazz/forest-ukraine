@@ -9,10 +9,10 @@ const Sidebar = ({ closeSidebar }) => {
         <h2 className={s.sidebarTitle}>Navigation</h2>
       </div>
       <ul className={s.navWrapper}>
-        <li>
+        <li className={s.navLink}>
           <Link to="/">Home</Link>
         </li>
-        <li>
+        <li className={s.navLink}>
           <Link to="/production">Production</Link>
         </li>
       </ul>
