@@ -5,6 +5,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 5;
 }
 .closeSidebarBtn {
   font-size: x-large;
@@ -27,7 +28,10 @@
   gap: 5px;
 }
 .navLink {
+  display: block;
+  text-decoration: none;
   background-color: #fff;
   padding: 10px;
   font-size: large;
+  color: cadetblue;
 }
