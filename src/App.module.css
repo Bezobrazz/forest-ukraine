@@ -1,6 +1,9 @@
 .pageWrapper {
   position: relative;
 }
+.content {
+  padding: 10px;
+}
 .backdrop {
   width: 100vw;
   height: 100vh;

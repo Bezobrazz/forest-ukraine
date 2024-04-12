@@ -29,7 +29,7 @@ const App = () => {
           closeSidebar={closeSidebar}
         />
       )}
-      <div className="content">
+      <div className={s.content}>
         <Routes>
           <Route index path="/" element={<Home />} />
           <Route path="/production" element={<Production />} />

@@ -11,12 +11,12 @@ const Sidebar = ({ toggleSidebar, closeSidebar }) => {
       <ul className={s.navWrapper}>
         <li>
           <Link className={s.navLink} to="/" onClick={closeSidebar}>
-            Home
+            Головна
           </Link>
         </li>
         <li>
           <Link className={s.navLink} to="/production" onClick={closeSidebar}>
-            Production
+            Виробництво
           </Link>
         </li>
       </ul>
