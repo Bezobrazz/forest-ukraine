@@ -18,6 +18,17 @@ const Sidebar = ({ toggleSidebar, closeSidebar }) => {
           <Link className={s.navLink} to="/production" onClick={closeSidebar}>
             Виробництво
           </Link>
+          <ul>
+            <li>
+              <Link
+                className={s.navLink}
+                to="/production/finished-products"
+                onClick={closeSidebar}
+              >
+                Виготовлена Продукція
+              </Link>
+            </li>
+          </ul>
         </li>
       </ul>
       <AiFillCloseSquare

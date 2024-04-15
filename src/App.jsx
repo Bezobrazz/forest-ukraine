@@ -6,6 +6,7 @@ import NotFound from "./pages/NotFound/NotFound.jsx";
 import s from "./App.module.css";
 import { useState } from "react";
 import NavBar from "./components/NavBar/NavBar.jsx";
+import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
 
 const App = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -33,6 +34,11 @@ const App = () => {
         <Routes>
           <Route index path="/" element={<Home />} />
           <Route path="/production" element={<Production />} />
+          <Route
+            path="/production/finished-products"
+            element={<FinishedProducts />}
+          />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

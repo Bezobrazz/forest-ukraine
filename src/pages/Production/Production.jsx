@@ -4,7 +4,6 @@ const Production = () => {
   return (
     <div className={styles.production}>
       <h2>Production Page</h2>
-      {/* Other content */}
     </div>
   );
 };
