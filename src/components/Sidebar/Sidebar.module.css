@@ -27,11 +27,19 @@
   flex-direction: column;
   gap: 5px;
 }
-.navLink {
+.navMainLinks {
   display: block;
   text-decoration: none;
   background-color: #fff;
   padding: 10px;
   font-size: large;
+  color: cadetblue;
+}
+.navSubLink {
+  display: block;
+  text-decoration: none;
+  background-color: #fff;
+  padding: 10px 20px;
+  font-size: medium;
   color: cadetblue;
 }
