@@ -4,13 +4,25 @@ import Home from "./pages/Home/Home.jsx";
 import Production from "./pages/Production/Production.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import s from "./App.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useMediaQuery } from "react-responsive";
 import NavBar from "./components/NavBar/NavBar.jsx";
 import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
 
 const App = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const [backdropIsOpen, setBackdropIsOpen] = useState(false);
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+  useEffect(() => {
+    if (isTabletOrMobile) {
+      setSidebarIsOpen(false);
+      setBackdropIsOpen(false);
+    } else {
+      setSidebarIsOpen(true);
+      setBackdropIsOpen(false);
+    }
+  }, [isTabletOrMobile]);
 
   const onHamburgerMenuBtnHandle = () => {
     setSidebarIsOpen(!sidebarIsOpen);
