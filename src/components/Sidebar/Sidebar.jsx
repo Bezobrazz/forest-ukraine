@@ -2,7 +2,7 @@ import { AiFillCloseSquare } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 
-const Sidebar = ({ toggleSidebar, closeSidebar }) => {
+const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
   const navItems = [
     { to: "/", text: "Головна" },
     {
@@ -15,7 +15,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar }) => {
   ];
 
   const handleNavLinkClick = () => {
-    closeSidebar();
+    isTabletOrMobile && closeSidebar();
   };
 
   return (

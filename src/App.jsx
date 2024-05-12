@@ -39,6 +39,7 @@ const App = () => {
       {sidebarIsOpen && (
         <Sidebar
           toggleSidebar={onHamburgerMenuBtnHandle}
+          isTabletOrMobile={isTabletOrMobile}
           closeSidebar={closeSidebar}
         />
       )}
