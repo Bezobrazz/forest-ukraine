@@ -35,7 +35,6 @@ const App = () => {
   };
   return (
     <div className={s.pageWrapper}>
-      <NavBar onHamburgerMenuBtnHandle={onHamburgerMenuBtnHandle} />
       {sidebarIsOpen && (
         <Sidebar
           toggleSidebar={onHamburgerMenuBtnHandle}
@@ -43,17 +42,20 @@ const App = () => {
           closeSidebar={closeSidebar}
         />
       )}
-      <div className={s.content}>
-        <Routes>
-          <Route index path="/" element={<Home />} />
-          <Route path="/production" element={<Production />} />
-          <Route
-            path="/production/finished-products"
-            element={<FinishedProducts />}
-          />
+      <div className={s.contentWrapper}>
+        <NavBar onHamburgerMenuBtnHandle={onHamburgerMenuBtnHandle} />
+        <div className={s.content}>
+          <Routes>
+            <Route index path="/" element={<Home />} />
+            <Route path="/production" element={<Production />} />
+            <Route
+              path="/production/finished-products"
+              element={<FinishedProducts />}
+            />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </div>
       {backdropIsOpen && (
         <div className={s.backdrop} onClick={closeSidebar}></div>

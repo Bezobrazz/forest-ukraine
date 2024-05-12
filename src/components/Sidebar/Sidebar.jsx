@@ -19,7 +19,9 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
   };
 
   return (
-    <div className={styles.sidebar}>
+    <div
+      className={`${isTabletOrMobile ? styles.sidebarMobile : styles.sidebar}`}
+    >
       <div className={styles.topBar}>
         <h2 className={styles.sidebarTitle}>Navigation</h2>
       </div>
@@ -51,10 +53,12 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
           </li>
         ))}
       </ul>
-      <AiFillCloseSquare
-        onClick={toggleSidebar}
-        className={styles.closeSidebarBtn}
-      />
+      {isTabletOrMobile && (
+        <AiFillCloseSquare
+          onClick={toggleSidebar}
+          className={styles.closeSidebarBtn}
+        />
+      )}
     </div>
   );
 };

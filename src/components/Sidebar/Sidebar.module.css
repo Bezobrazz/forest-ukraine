@@ -1,8 +1,16 @@
-.sidebar {
+.sidebarMobile {
   width: 200px;
   height: 100vh;
   background-color: #f0f0f0;
   position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  background-color: #f0f0f0;
   top: 0;
   left: 0;
   z-index: 5;
