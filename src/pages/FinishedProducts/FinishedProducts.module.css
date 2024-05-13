@@ -3,4 +3,34 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
+}
+.datePickerCustomInput {
+  width: 90px;
+  background-color: white;
+  color: gray;
+  padding: 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+}
+.quantityInput {
+  padding: 10px;
+  border-radius: 3px;
+  border: none;
+  font-size: 14px;
+}
+.saveButton {
+  background-color: rgb(5, 201, 201);
+  color: white;
+  padding: 10px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+.saveButton:hover {
+  background-color: rgb(8, 169, 169);
 }
