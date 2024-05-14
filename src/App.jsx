@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import NavBar from "./components/NavBar/NavBar.jsx";
 import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
+import GetFinishedProducts from "./Firebase/GetFinishedProducts.jsx";
 
 const App = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -55,6 +56,7 @@ const App = () => {
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <GetFinishedProducts />
         </div>
       </div>
       {backdropIsOpen && (
