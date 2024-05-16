@@ -5,6 +5,8 @@ import uk from "date-fns/locale/uk";
 import "react-datepicker/dist/react-datepicker.css";
 import SelectProduct from "../../components/SelectProduct/SelectProduct.jsx";
 import s from "./FinishedProducts.module.css";
+import GetFinishedProducts from "../../Firebase/GetFinishedProducts.jsx";
+import TotalClientCost from "../../components/TotalClientCost.jsx";
 
 registerLocale("uk", uk);
 
@@ -69,6 +71,8 @@ const FinishedProducts = () => {
           </button>
         </form>
       </div>
+      <GetFinishedProducts />
+      <TotalClientCost />
     </div>
   );
 };

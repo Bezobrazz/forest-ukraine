@@ -12,6 +12,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
         { to: "/production/finished-products", text: "Виготовлена Продукція" },
       ],
     },
+    { to: "/delivery-cost", text: "Вартість доставки для клієнта" },
   ];
 
   const handleNavLinkClick = () => {

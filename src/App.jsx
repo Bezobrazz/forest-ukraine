@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import NavBar from "./components/NavBar/NavBar.jsx";
 import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
-import GetFinishedProducts from "./Firebase/GetFinishedProducts.jsx";
+import DeliveryCost from "./pages/DeliveryCost/DeliveryCost.jsx";
 
 const App = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -53,10 +53,9 @@ const App = () => {
               path="/production/finished-products"
               element={<FinishedProducts />}
             />
-
+            <Route path="/delivery-cost" element={<DeliveryCost />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <GetFinishedProducts />
         </div>
       </div>
       {backdropIsOpen && (
