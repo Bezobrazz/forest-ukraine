@@ -1,0 +1,19 @@
+.deliveryCostContainer {
+  max-width: 70%;
+  margin: 0 auto;
+}
+.formInputsWrapper {
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.formInputWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.formInput {
+  width: 50px;
+}
