@@ -6,6 +6,7 @@ import ProductsList from "../components/ProductsList/ProductsList.jsx";
 
 export default function GetFinishedProducts() {
   const [localDates, setLocalDates] = useState([]);
+
   const convertTimestampToLocalDate = (timestamp) => {
     const milliseconds =
       (timestamp.seconds + timestamp.nanoseconds / 1000000000) * 1000;
@@ -28,11 +29,10 @@ export default function GetFinishedProducts() {
         products.value = productsData;
 
         //convert the firebase timestamp to local date
-        const localDates = products.value.map((item) =>
+        const localDatesResult = products.value.map((item) =>
           convertTimestampToLocalDate(item.date)
         );
-        setLocalDates(localDates);
-        console.log(localDates);
+        setLocalDates(localDatesResult);
       };
       getProducts();
     } catch (error) {

@@ -1,11 +1,12 @@
 import { products } from "../../components/State.js";
+import s from "./ProductsList.module.css";
 
 const ProductsList = ({ localDates }) => {
   return (
     <>
-      <ul>
+      <ul className={s.productsList}>
         {products.value.map((item) => (
-          <li key={item.id}>
+          <li className={s.productItem} key={item.id}>
             <p>{localDates}</p>
             <p>{item.product}</p>
             <p>{item.quantity}</p>
