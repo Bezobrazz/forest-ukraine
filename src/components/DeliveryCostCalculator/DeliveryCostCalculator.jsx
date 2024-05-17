@@ -3,8 +3,8 @@ import styles from "./DeliveryCostCalculator.module.css";
 
 const DeliveryCostCalculator = () => {
   // Стейт для зберігання даних про клієнтів та загальних даних
-  const [clients, setClients] = useState([{ bags: 800, distance: 700 }]);
-  const [totalDistance, setTotalDistance] = useState(830);
+  const [clients, setClients] = useState([{ bags: 0, distance: 0 }]);
+  const [totalDistance, setTotalDistance] = useState("");
   const [totalCost, setTotalCost] = useState(42000);
   const [maxCapacity, setMaxCapacity] = useState(2400);
 
@@ -61,24 +61,28 @@ const DeliveryCostCalculator = () => {
       </div>
       {clients.map((client, index) => (
         <div key={index} className={styles.client}>
-          <label>Кількість мішків для клієнта {index + 1}:</label>
-          <input
-            type="number"
-            value={client.bags}
-            onChange={(e) =>
-              handleClientChange(index, "bags", parseInt(e.target.value))
-            }
-            className={styles.input}
-          />
-          <label>Відстань для клієнта {index + 1} (км):</label>
-          <input
-            type="number"
-            value={client.distance}
-            onChange={(e) =>
-              handleClientChange(index, "distance", parseInt(e.target.value))
-            }
-            className={styles.input}
-          />
+          <div className={styles.inputClientWrapper}>
+            <label>Кількість мішків для клієнта {index + 1}:</label>
+            <input
+              type="number"
+              value={client.bags}
+              onChange={(e) =>
+                handleClientChange(index, "bags", parseInt(e.target.value))
+              }
+              className={styles.input}
+            />
+          </div>
+          <div className={styles.inputClientWrapper}>
+            <label>Відстань для клієнта {index + 1} (км):</label>
+            <input
+              type="number"
+              value={client.distance}
+              onChange={(e) =>
+                handleClientChange(index, "distance", parseInt(e.target.value))
+              }
+              className={styles.input}
+            />
+          </div>
           <p>
             Вартість доставки для клієнта {index + 1}:{" "}
             {calculateDeliveryCost(client.bags, client.distance).toFixed(2)} грн
