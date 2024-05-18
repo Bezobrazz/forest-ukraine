@@ -6,7 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import SelectProduct from "../../components/SelectProduct/SelectProduct.jsx";
 import s from "./FinishedProducts.module.css";
 import GetFinishedProducts from "../../Firebase/GetFinishedProducts.jsx";
-import TotalClientCost from "../../components/TotalClientCost.jsx";
+import { collection, addDoc } from "firebase/firestore";
+import { DBFinishedProducts } from "../../Firebase/FirebaseConfig.js";
 
 registerLocale("uk", uk);
 
@@ -20,8 +21,13 @@ ExampleCustomInput.displayName = "ExampleCustomInput";
 const FinishedProducts = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [selectedProduct, setSelectedProduct] = useState("");
-  const { label } = selectedProduct;
   const [quantity, setQuantity] = useState("");
+  const { label } = selectedProduct;
+
+  const finishedProductsCollectionRef = collection(
+    DBFinishedProducts,
+    "finished-products"
+  );
 
   const handleProductChange = (selected) => {
     setSelectedProduct(selected);
@@ -31,8 +37,19 @@ const FinishedProducts = () => {
     setQuantity(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const docRef = await addDoc(finishedProductsCollectionRef, {
+        date: startDate,
+        product: selectedProduct,
+        quantity: quantity,
+      });
+
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
     // Тут ти можеш обробити дані форми
     console.log("Дата:", startDate);
     console.log("Вибраний продукт:", label);
@@ -72,7 +89,6 @@ const FinishedProducts = () => {
         </form>
       </div>
       <GetFinishedProducts />
-      <TotalClientCost />
     </div>
   );
 };
