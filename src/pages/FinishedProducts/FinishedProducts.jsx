@@ -7,7 +7,6 @@ import SelectProduct from "../../components/SelectProduct/SelectProduct.jsx";
 import s from "./FinishedProducts.module.css";
 import GetFinishedProducts from "../../Firebase/GetFinishedProducts.jsx";
 import { collection, addDoc } from "firebase/firestore";
-import { DBFinishedProducts } from "../../Firebase/FirebaseConfig.js";
 
 registerLocale("uk", uk);
 
@@ -23,11 +22,6 @@ const FinishedProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [quantity, setQuantity] = useState("");
   const { label } = selectedProduct;
-
-  const finishedProductsCollectionRef = collection(
-    DBFinishedProducts,
-    "finished-products"
-  );
 
   const handleProductChange = (selected) => {
     setSelectedProduct(selected);
@@ -53,7 +47,7 @@ const FinishedProducts = () => {
     // Тут ти можеш обробити дані форми
     console.log("Дата:", startDate);
     console.log("Вибраний продукт:", label);
-    console.log("Кількість:", typeof quantity);
+    console.log("Кількість:", quantity);
   };
 
   return (

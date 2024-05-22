@@ -1,30 +1,18 @@
 import { useEffect, useState } from "react";
 import { products } from "../components/State.js";
 import { getDocs, collection } from "firebase/firestore";
-import { DBFinishedProducts } from "./FirebaseConfig.js";
+
 import ProductsList from "../components/ProductsList/ProductsList.jsx";
+import { convertTimestampToLocalDate } from "../helpers.js";
+import { getProducts } from "./firebaseServices.js";
 
 export default function GetFinishedProducts() {
   const [localDates, setLocalDates] = useState([]);
 
-  const finishedProductsCollectionRef = collection(
-    DBFinishedProducts,
-    "finished-products"
-  );
-
-  const convertTimestampToLocalDate = (timestamp) => {
-    const milliseconds =
-      (timestamp.seconds + timestamp.nanoseconds / 1000000000) * 1000;
-    return new Date(milliseconds).toLocaleDateString("uk-UA");
-  };
-
-  const getProducts = async () => {
+  const getFinishedProducts = async () => {
     //read the data from firebase
-    const data = await getDocs(finishedProductsCollectionRef);
-    const productsData = data.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+    const productsData = await getProducts();
+
     console.log(productsData);
     //set the data to the state
     products.value = productsData;
@@ -38,7 +26,7 @@ export default function GetFinishedProducts() {
 
   useEffect(() => {
     try {
-      getProducts();
+      getFinishedProducts();
     } catch (error) {
       console.log(error);
     }
