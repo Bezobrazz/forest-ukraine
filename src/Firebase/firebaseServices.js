@@ -19,3 +19,16 @@ const getCollectionData = async (collectionName) => {
 export const getProducts = async () => {
   return await getCollectionData("finished-products");
 };
+
+// Function to add a new product to the "finished-products" collection
+export const addProduct = async (product) => {
+  try {
+    const colRef = collection(db, "finished-products");
+    const docRef = await addDoc(colRef, product);
+    console.log("Document written with ID: ", docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error("Error adding document: ", error);
+    throw error;
+  }
+};

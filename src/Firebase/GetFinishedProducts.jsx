@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { products } from "../components/State.js";
-import { getDocs, collection } from "firebase/firestore";
-
 import ProductsList from "../components/ProductsList/ProductsList.jsx";
 import { convertTimestampToLocalDate } from "../helpers.js";
 import { getProducts } from "./firebaseServices.js";
