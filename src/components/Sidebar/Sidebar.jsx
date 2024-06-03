@@ -13,6 +13,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
       ],
     },
     { to: "/delivery-cost", text: "Вартість доставки для клієнта" },
+    { to: "/google-sheets", text: "Google Sheets" },
   ];
 
   const handleNavLinkClick = () => {

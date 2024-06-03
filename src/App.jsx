@@ -9,6 +9,7 @@ import { useMediaQuery } from "react-responsive";
 import NavBar from "./components/NavBar/NavBar.jsx";
 import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
 import DeliveryCost from "./pages/DeliveryCost/DeliveryCost.jsx";
+import { GoogleSheet } from "./pages/GoogleSheet/GoogleSheet.jsx";
 
 const App = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -54,6 +55,7 @@ const App = () => {
               element={<FinishedProducts />}
             />
             <Route path="/delivery-cost" element={<DeliveryCost />} />
+            <Route path="/google-sheets" element={<GoogleSheet />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
