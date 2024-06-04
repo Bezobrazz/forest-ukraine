@@ -58,8 +58,9 @@ export const GoogleSheet = () => {
     <div className={styles.container}>
       <h1 className={styles.heading}>Google Sheet</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.inputWrapper}>
         <label className={styles.label} htmlFor="date">
-          Date:
+          Date
         </label>
         <input
           className={styles.input}
@@ -69,8 +70,10 @@ export const GoogleSheet = () => {
           value={formData.date}
           onChange={handleInputChange}
         />
+        </div>
+        <div className={styles.inputWrapper}>
         <label className={styles.label} htmlFor="productName">
-          Product Name:
+          Product Name
         </label>
         <input
           className={styles.input}
@@ -80,8 +83,10 @@ export const GoogleSheet = () => {
           value={formData.productName}
           onChange={handleInputChange}
         />
+        </div>
+        <div className={styles.inputWrapper}>
         <label className={styles.label} htmlFor="quantity">
-          Quantity:
+          Quantity
         </label>
         <input
           className={styles.input}
@@ -91,6 +96,7 @@ export const GoogleSheet = () => {
           value={formData.quantity}
           onChange={handleInputChange}
         />
+        </div>
         <button className={styles.button} type="submit">
           Submit
         </button>
