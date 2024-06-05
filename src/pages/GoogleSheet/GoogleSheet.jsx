@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BallTriangle } from 'react-loader-spinner'
+import { FaPencilAlt, FaTrashAlt  } from "react-icons/fa";
 import styles from "./GoogleSheet.module.css";
 
 
@@ -140,6 +141,15 @@ export const GoogleSheet = () => {
                 </div>
                 <p>{product.productName}</p>
                 <p>{product.quantity}</p>
+                <div className={styles.buttonsWrapper}>
+                  <button>
+                <FaPencilAlt className={styles.icon}/>
+                </button>
+                <button>
+                <FaTrashAlt  className={styles.icon}/>
+                </button>
+                </div>
+                
               </li>
             );
           })}
