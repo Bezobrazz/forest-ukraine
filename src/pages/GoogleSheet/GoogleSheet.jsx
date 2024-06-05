@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BallTriangle } from 'react-loader-spinner';
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import styles from "./GoogleSheet.module.css";
+import { GetProducts } from "../../API/GetProducts";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -173,6 +174,7 @@ export const GoogleSheet = () => {
           })}
         </ul>
       )}
+      <GetProducts/>
     </div>
   );
 };
