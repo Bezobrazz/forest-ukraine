@@ -139,8 +139,10 @@ export const GoogleSheet = () => {
                   <p>{month}</p>
                   <p>{year}</p>
                 </div>
-                <p>{product.productName}</p>
+               <div className={styles.productQuantityWrapper}>
+               <p>{product.productName}</p>
                 <p>{product.quantity}</p>
+               </div>
                 <div className={styles.buttonsWrapper}>
                   <button>
                 <FaPencilAlt className={styles.icon}/>
