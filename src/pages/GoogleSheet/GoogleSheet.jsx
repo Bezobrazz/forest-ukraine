@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { BallTriangle } from 'react-loader-spinner'
 import styles from "./GoogleSheet.module.css";
+
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -8,6 +10,9 @@ export const GoogleSheet = () => {
     productName: "",
     quantity: "",
   });
+  console.log(formData.date)
+  const [loading, setIsLoading] = useState(false)
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,6 +23,7 @@ export const GoogleSheet = () => {
   };
 
   async function getData() {
+    setIsLoading(true)
     const response = await fetch("https://api.zerosheets.com/v1/7zk", {
       method: "GET",
       headers: {
@@ -26,6 +32,7 @@ export const GoogleSheet = () => {
     });
     const data = await response.json();
     setProducts(data);
+    setIsLoading(false)
   }
 
   async function postData(newProduct) {
@@ -40,7 +47,7 @@ export const GoogleSheet = () => {
 
     if (response.ok) {
       const updatedProducts = await response.json();
-      setProducts([...products, updatedProducts]);
+      setProducts([updatedProducts, ...products ]);
     }
   }
 
@@ -53,6 +60,15 @@ export const GoogleSheet = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  const splitDate = (dateString) => {
+    const date = new Date(dateString);
+    return {
+      day: String(date.getDate()).padStart(2, '0'),
+      month: String(date.getMonth() + 1).padStart(2, '0'),
+      year: date.getFullYear(),
+    };
+  };
 
   return (
     <div className={styles.container}>
@@ -101,15 +117,34 @@ export const GoogleSheet = () => {
           Submit
         </button>
       </form>
-      <ul className={styles.list}>
-        {products.map((product) => (
-          <li className={styles.listItem} key={product._lineNumber}>
-            <p>{product.date}</p>
-            <p>{product.productName}</p>
-            <p>{product.quantity}</p>
-          </li>
-        ))}
-      </ul>
+      {loading ? (<div className={styles.loader}>
+        <BallTriangle
+  height={70}
+  width={70}
+  radius={5}
+  color="#4fa94d"
+  ariaLabel="ball-triangle-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+  />
+      </div>) : (<ul className={styles.list}>
+        {products.map((product) => {
+            const { day, month, year } = splitDate(product.date);
+            return (
+              <li className={styles.listItem} key={product._lineNumber}>
+                <div className={styles.dateWrapper}>
+                  <p className={styles.day}>{day}</p>
+                  <p>{month}</p>
+                  <p>{year}</p>
+                </div>
+                <p>{product.productName}</p>
+                <p>{product.quantity}</p>
+              </li>
+            );
+          })}
+      </ul>)}
+      
     </div>
   );
 };
