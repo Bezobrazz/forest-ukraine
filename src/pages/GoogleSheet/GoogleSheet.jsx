@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { BallTriangle } from 'react-loader-spinner'
-import { FaPencilAlt, FaTrashAlt  } from "react-icons/fa";
+import { BallTriangle } from 'react-loader-spinner';
+import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import styles from "./GoogleSheet.module.css";
-
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -11,8 +10,9 @@ export const GoogleSheet = () => {
     productName: "",
     quantity: "",
   });
-  console.log(formData.date)
-  const [loading, setIsLoading] = useState(false)
+  const [loading, setIsLoading] = useState(false);
+
+  const apiKey = import.meta.env.VITE_API_GOOGLE_SHEETS;
 
 
   const handleInputChange = (e) => {
@@ -24,31 +24,45 @@ export const GoogleSheet = () => {
   };
 
   async function getData() {
-    setIsLoading(true)
-    const response = await fetch("https://api.zerosheets.com/v1/7zk", {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer KQAZVSzH1eN4XP5B7z0jOR03VXcNXMKC",
-      },
-    });
-    const data = await response.json();
-    setProducts(data);
-    setIsLoading(false)
+    setIsLoading(true);
+    try {
+      const response = await fetch("https://api.zerosheets.com/v1/7zk", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function postData(newProduct) {
-    const response = await fetch("https://api.zerosheets.com/v1/7zk", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer KQAZVSzH1eN4XP5B7z0jOR03VXcNXMKC",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    });
+    try {
+      const response = await fetch("https://api.zerosheets.com/v1/7zk", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newProduct),
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
       const updatedProducts = await response.json();
-      setProducts([updatedProducts, ...products ]);
+      setProducts([updatedProducts, ...products]);
+    } catch (error) {
+      console.error("Error posting data:", error);
     }
   }
 
@@ -76,61 +90,64 @@ export const GoogleSheet = () => {
       <h1 className={styles.heading}>Google Sheet</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.inputWrapper}>
-        <label className={styles.label} htmlFor="date">
-          Date
-        </label>
-        <input
-          className={styles.input}
-          type="date"
-          id="date"
-          name="date"
-          value={formData.date}
-          onChange={handleInputChange}
-        />
+          <label className={styles.label} htmlFor="date">
+            Date
+          </label>
+          <input
+            className={styles.input}
+            type="date"
+            id="date"
+            name="date"
+            value={formData.date}
+            onChange={handleInputChange}
+          />
         </div>
         <div className={styles.inputWrapper}>
-        <label className={styles.label} htmlFor="productName">
-          Product Name
-        </label>
-        <input
-          className={styles.input}
-          type="text"
-          id="productName"
-          name="productName"
-          value={formData.productName}
-          onChange={handleInputChange}
-        />
+          <label className={styles.label} htmlFor="productName">
+            Product Name
+          </label>
+          <input
+            className={styles.input}
+            type="text"
+            id="productName"
+            name="productName"
+            value={formData.productName}
+            onChange={handleInputChange}
+          />
         </div>
         <div className={styles.inputWrapper}>
-        <label className={styles.label} htmlFor="quantity">
-          Quantity
-        </label>
-        <input
-          className={styles.input}
-          type="number"
-          id="quantity"
-          name="quantity"
-          value={formData.quantity}
-          onChange={handleInputChange}
-        />
+          <label className={styles.label} htmlFor="quantity">
+            Quantity
+          </label>
+          <input
+            className={styles.input}
+            type="number"
+            id="quantity"
+            name="quantity"
+            value={formData.quantity}
+            onChange={handleInputChange}
+          />
         </div>
         <button className={styles.button} type="submit">
           Submit
         </button>
       </form>
-      {loading ? (<div className={styles.loader}>
-        <BallTriangle
-  height={70}
-  width={70}
-  radius={5}
-  color="#4fa94d"
-  ariaLabel="ball-triangle-loading"
-  wrapperStyle={{}}
-  wrapperClass=""
-  visible={true}
-  />
-      </div>) : (<ul className={styles.list}>
-        {products.map((product) => {
+      {loading ? (
+        <div className={styles.loader}>
+          <BallTriangle
+            height={70}
+            width={70}
+            radius={5}
+            color="#4fa94d"
+            ariaLabel="ball-triangle-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
+      ) : (
+        <ul className={styles.list}>
+          {products.map((product) => {
             const { day, month, year } = splitDate(product.date);
             return (
               <li className={styles.listItem} key={product._lineNumber}>
@@ -139,24 +156,23 @@ export const GoogleSheet = () => {
                   <p>{month}</p>
                   <p>{year}</p>
                 </div>
-               <div className={styles.productQuantityWrapper}>
-               <p>{product.productName}</p>
-                <p>{product.quantity}</p>
-               </div>
+                <div className={styles.productQuantityWrapper}>
+                  <p>{product.productName}</p>
+                  <p>{product.quantity}</p>
+                </div>
                 <div className={styles.buttonsWrapper}>
                   <button>
-                <FaPencilAlt className={styles.icon}/>
-                </button>
-                <button>
-                <FaTrashAlt  className={styles.icon}/>
-                </button>
+                    <FaPencilAlt className={styles.icon} />
+                  </button>
+                  <button>
+                    <FaTrashAlt className={styles.icon} />
+                  </button>
                 </div>
-                
               </li>
             );
           })}
-      </ul>)}
-      
+        </ul>
+      )}
     </div>
   );
 };
