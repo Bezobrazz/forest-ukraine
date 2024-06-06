@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BallTriangle } from 'react-loader-spinner';
+import { BallTriangle } from "react-loader-spinner";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import styles from "./GoogleSheet.module.css";
 import { GetProducts } from "../../API/GetProducts";
@@ -14,7 +14,6 @@ export const GoogleSheet = () => {
   const [loading, setIsLoading] = useState(false);
 
   const apiKey = import.meta.env.VITE_API_GOOGLE_SHEETS;
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,9 +32,7 @@ export const GoogleSheet = () => {
           Authorization: `Bearer ${apiKey}`,
         },
       });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
+
       const data = await response.json();
       setProducts(data);
     } catch (error) {
@@ -80,8 +77,8 @@ export const GoogleSheet = () => {
   const splitDate = (dateString) => {
     const date = new Date(dateString);
     return {
-      day: String(date.getDate()).padStart(2, '0'),
-      month: String(date.getMonth() + 1).padStart(2, '0'),
+      day: String(date.getDate()).padStart(2, "0"),
+      month: String(date.getMonth() + 1).padStart(2, "0"),
       year: date.getFullYear(),
     };
   };
@@ -174,7 +171,7 @@ export const GoogleSheet = () => {
           })}
         </ul>
       )}
-      <GetProducts/>
+      <GetProducts />
     </div>
   );
 };
