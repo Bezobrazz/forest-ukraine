@@ -25,8 +25,7 @@ export const GetProducts = () => {
   };
 
   const { items } = crmMaterials.value;
-
-  console.log(items);
+  console.log("CRM materials", items);
 
   useEffect(() => {
     fetchProducts();

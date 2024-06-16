@@ -3,6 +3,8 @@ import { BallTriangle } from "react-loader-spinner";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import styles from "./GoogleSheet.module.css";
 import { GetProducts } from "../../API/GetProducts";
+import Card from "../../components/ReuseComponents/Card/Card.jsx";
+import ListFinishedProducts from "../../components/ListFinishedProducts/ListFinishedProducts.jsx";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -74,18 +76,12 @@ export const GoogleSheet = () => {
     getData();
   }, []);
 
-  const splitDate = (dateString) => {
-    const date = new Date(dateString);
-    return {
-      day: String(date.getDate()).padStart(2, "0"),
-      month: String(date.getMonth() + 1).padStart(2, "0"),
-      year: date.getFullYear(),
-    };
-  };
-
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Google Sheet</h1>
+      <Card title={"Вироблено кори"} buttonTitle={"Додати"}>
+        <ListFinishedProducts products={products} />
+      </Card>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.inputWrapper}>
           <label className={styles.label} htmlFor="date">
@@ -144,32 +140,7 @@ export const GoogleSheet = () => {
           />
         </div>
       ) : (
-        <ul className={styles.list}>
-          {products.map((product) => {
-            const { day, month, year } = splitDate(product.date);
-            return (
-              <li className={styles.listItem} key={product._lineNumber}>
-                <div className={styles.dateWrapper}>
-                  <p className={styles.day}>{day}</p>
-                  <p>{month}</p>
-                  <p>{year}</p>
-                </div>
-                <div className={styles.productQuantityWrapper}>
-                  <p>{product.productName}</p>
-                  <p>{product.quantity}</p>
-                </div>
-                <div className={styles.buttonsWrapper}>
-                  <button>
-                    <FaPencilAlt className={styles.icon} />
-                  </button>
-                  <button>
-                    <FaTrashAlt className={styles.icon} />
-                  </button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <ListFinishedProducts products={products} />
       )}
       <GetProducts />
     </div>

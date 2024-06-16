@@ -1,7 +1,6 @@
 /* GoogleSheet.module.css */
 .container {
   font-family: Arial, sans-serif;
-
 }
 
 .heading {
@@ -18,9 +17,9 @@
   margin: 0 auto;
   margin-bottom: 30px;
 }
-.inputWrapper{
-  display:flex;
-  flex-direction:column;
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -68,13 +67,13 @@
 
 .listItem p {
   margin: 5px 0;
-
 }
 .loader {
   display: flex;
   justify-content: center;
 }
-.dateWrapper{
+.dateWrapper {
+  width: 100px;
   border-radius: 4px;
   padding: 5px;
   background-color: #333;
@@ -83,7 +82,7 @@
   flex-direction: column;
   align-items: center;
 }
-.day{
+.day {
   display: block;
   background-color: #ffff;
   font-weight: bold;
@@ -91,14 +90,13 @@
   border-radius: 4px;
   padding: 5px;
 }
-.productQuantityWrapper{
+.productQuantityWrapper {
   display: grid;
-  grid-template-columns: 2fr  1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 10px;
   width: 300px;
-
 }
-.buttonsWrapper{
+.buttonsWrapper {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -113,6 +111,6 @@
     cursor: pointer;
   }
 }
-.icon{
+.icon {
   fill: #ffff;
 }

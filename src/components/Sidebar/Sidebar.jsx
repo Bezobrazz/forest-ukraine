@@ -4,7 +4,7 @@ import styles from "./Sidebar.module.css";
 
 const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
   const navItems = [
-    { to: "/", text: "Головна" },
+    { to: "/", text: "Форест " },
     {
       to: "/production",
       text: "Виробництво",
