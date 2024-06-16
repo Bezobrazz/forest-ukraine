@@ -1,0 +1,71 @@
+.list {
+  list-style-type: none;
+  padding: 0;
+  max-height: 70vh;
+  overflow: scroll;
+}
+
+.listItem {
+  background-color: #f9f9f9;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.listItem p {
+  margin: 5px 0;
+}
+.loader {
+  display: flex;
+  justify-content: center;
+}
+.dateWrapper {
+  width: 100px;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: #333;
+  color: #ffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.monthYearWrapper {
+  display: flex;
+}
+.day {
+  display: block;
+  background-color: #ffff;
+  font-weight: bold;
+  color: #333;
+  border-radius: 4px;
+  padding: 5px;
+}
+.productQuantityWrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
+  width: 300px;
+}
+.buttonsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  button {
+    border: none;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}
+.icon {
+  fill: #ffff;
+}
