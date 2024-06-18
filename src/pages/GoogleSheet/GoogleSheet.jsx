@@ -5,6 +5,7 @@ import styles from "./GoogleSheet.module.css";
 import { GetProducts } from "../../API/GetProducts";
 import Card from "../../components/ReuseComponents/Card/Card.jsx";
 import ListFinishedProducts from "../../components/ListFinishedProducts/ListFinishedProducts.jsx";
+import Loader from "../../components/Loader/Loader.jsx";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -80,9 +81,9 @@ export const GoogleSheet = () => {
     <div className={styles.container}>
       <h1 className={styles.heading}>Google Sheet</h1>
       <Card title={"Вироблено кори"} buttonTitle={"Додати"}>
-        <ListFinishedProducts products={products} />
+        {loading ? <Loader /> : <ListFinishedProducts products={products} />}
       </Card>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      {/* <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.inputWrapper}>
           <label className={styles.label} htmlFor="date">
             Date
@@ -125,23 +126,8 @@ export const GoogleSheet = () => {
         <button className={styles.button} type="submit">
           Submit
         </button>
-      </form>
-      {loading ? (
-        <div className={styles.loader}>
-          <BallTriangle
-            height={70}
-            width={70}
-            radius={5}
-            color="#4fa94d"
-            ariaLabel="ball-triangle-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
-        </div>
-      ) : (
-        <ListFinishedProducts products={products} />
-      )}
+      </form> */}
+
       <GetProducts />
     </div>
   );
