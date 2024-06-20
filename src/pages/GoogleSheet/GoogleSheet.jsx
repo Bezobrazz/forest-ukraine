@@ -6,9 +6,11 @@ import { GetProducts } from "../../API/GetProducts";
 import Card from "../../components/ReuseComponents/Card/Card.jsx";
 import ListFinishedProducts from "../../components/ListFinishedProducts/ListFinishedProducts.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
+import Modal from "../../components/ReuseComponents/Modal/Modal.jsx";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
+  const [isOpen, setIsOpen] = useState(true);
   const [formData, setFormData] = useState({
     date: "",
     productName: "",
@@ -17,6 +19,13 @@ export const GoogleSheet = () => {
   const [loading, setIsLoading] = useState(false);
 
   const apiKey = import.meta.env.VITE_API_GOOGLE_SHEETS;
+
+  const handleModalOpen = () => {
+    setIsOpen(true);
+  };
+  const handleModalClose = () => {
+    setIsOpen(false);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,7 +89,11 @@ export const GoogleSheet = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Google Sheet</h1>
-      <Card title={"Вироблено кори"} buttonTitle={"Додати"}>
+      <Card
+        title={"Вироблено кори"}
+        buttonTitle={"Додати"}
+        modalOpen={handleModalOpen}
+      >
         {loading ? <Loader /> : <ListFinishedProducts products={products} />}
       </Card>
       {/* <form className={styles.form} onSubmit={handleSubmit}>
@@ -127,7 +140,7 @@ export const GoogleSheet = () => {
           Submit
         </button>
       </form> */}
-
+      {isOpen && <Modal onClose={handleModalClose} />}
       <GetProducts />
     </div>
   );
