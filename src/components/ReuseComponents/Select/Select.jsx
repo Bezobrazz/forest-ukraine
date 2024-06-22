@@ -5,27 +5,32 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function BasicSelect({label}) {
-  const [age, setAge] = React.useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
+export default function BasicSelect({
+  label,
+  value,
+  onChange,
+  options = [],
+  fullWidth = true,
+  minWidth = 120,
+  ...props
+}) {
   return (
-    <Box sx={{ minWidth: 120, width: "100%" }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+    <Box sx={{ minWidth, width: fullWidth ? "100%" : "auto" }}>
+      <FormControl fullWidth={fullWidth}>
+        <InputLabel id="select-label">{label}</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
+          labelId="select-label"
+          id="select"
+          value={value}
           label={label}
-          onChange={handleChange}
+          onChange={onChange}
+          {...props}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {options.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>

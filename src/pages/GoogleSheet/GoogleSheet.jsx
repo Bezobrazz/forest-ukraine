@@ -1,29 +1,25 @@
 import { useEffect, useState } from "react";
-import { BallTriangle } from "react-loader-spinner";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import styles from "./GoogleSheet.module.css";
 import { GetProducts } from "../../API/GetProducts";
 import Card from "../../components/ReuseComponents/Card/Card.jsx";
 import ListFinishedProducts from "../../components/ListFinishedProducts/ListFinishedProducts.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
 import Modal from "../../components/ReuseComponents/Modal/Modal.jsx";
-import DatePicker from "../../components/ReuseComponents/DatePicker/DatePicker.jsx"
-import Select from "../../components/ReuseComponents/Select/Select.jsx"
-import Input from "../../components/ReuseComponents/Input/Input.jsx"
+import DatePicker from "../../components/ReuseComponents/DatePicker/DatePicker.jsx";
+import Select from "../../components/ReuseComponents/Select/Select.jsx";
+import Input from "../../components/ReuseComponents/Input/Input.jsx";
 import AddIcon from '@mui/icons-material/Add';
-
-
-
-
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     date: "",
     productName: "",
     quantity: "",
   });
+
+    console.log("Products Data", products)
   const [loading, setIsLoading] = useState(false);
 
   const apiKey = import.meta.env.VITE_API_GOOGLE_SHEETS;
@@ -31,6 +27,7 @@ export const GoogleSheet = () => {
   const handleModalOpen = () => {
     setIsOpen(true);
   };
+
   const handleModalClose = () => {
     setIsOpen(false);
   };
@@ -40,6 +37,27 @@ export const GoogleSheet = () => {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleDateChange = (date) => {
+    setFormData({
+      ...formData,
+      date: date, // Assuming you're using dayjs for date formatting
+    });
+  };
+
+  const handleProductChange = (e) => {
+    setFormData({
+      ...formData,
+      productName: e.target.value,
+    });
+  };
+
+  const handleQuantityChange = (e) => {
+    setFormData({
+      ...formData,
+      quantity: e.target.value,
     });
   };
 
@@ -88,6 +106,7 @@ export const GoogleSheet = () => {
     e.preventDefault();
     postData(formData);
     setFormData({ date: "", productName: "", quantity: "" });
+    handleModalClose();
   };
 
   useEffect(() => {
@@ -102,64 +121,28 @@ export const GoogleSheet = () => {
         buttonTitle={"Додати"}
         buttonStyle={"contained"}
         buttonColor={"success"}
-        icon={<AddIcon/>}
+        icon={<AddIcon />}
         modalOpen={handleModalOpen}
       >
         {loading ? <Loader /> : <ListFinishedProducts products={products} />}
       </Card>
-      {/* <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.inputWrapper}>
-          <label className={styles.label} htmlFor="date">
-            Date
-          </label>
-          <input
-            className={styles.input}
-            type="date"
-            id="date"
-            name="date"
-            value={formData.date}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className={styles.inputWrapper}>
-          <label className={styles.label} htmlFor="productName">
-            Product Name
-          </label>
-          <input
-            className={styles.input}
-            type="text"
-            id="productName"
-            name="productName"
-            value={formData.productName}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className={styles.inputWrapper}>
-          <label className={styles.label} htmlFor="quantity">
-            Quantity
-          </label>
-          <input
-            className={styles.input}
-            type="number"
-            id="quantity"
-            name="quantity"
-            value={formData.quantity}
-            onChange={handleInputChange}
-          />
-        </div>
-        <button className={styles.button} type="submit">
-          Submit
-        </button>
-      </form> */}
-      {isOpen && <Modal title={"Внесіть дані"} width={"670px"} onClose={handleModalClose}>
-        <form className={styles.form}>
-          <div className={styles.inputsWrapper}>
-          <DatePicker label={"Виберіть дату"}/>
-          <Select label={"Виберіть продукцію"}/>
-          <Input label={"Введіть кількість"} type={"number"}/>
-          </div>
-        </form>
-        </Modal>}
+      {isOpen && (
+        <Modal title={"Внесіть дані"} width={"670px"} onClose={handleModalClose} onSave={handleSubmit}>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.inputsWrapper}>
+              <DatePicker label={"Виберіть дату"} value={formData.date} onChange={handleDateChange} />
+              <Select label={"Виберіть продукцію"} value={formData.productName} onChange={handleProductChange} options={[
+                { value: 'Кора Крупна', label: 'Кора Крупна' },
+                { value: 'Кора Середня', label: 'Кора Середня' },
+                { value: 'Кора Дрібна', label: 'Кора Дрібна' },
+                { value: 'Кора Відсів 2', label: 'Кора Відсів 2' },
+                { value: 'Кора Відсів 1', label: 'Кора Відсів 1' }
+              ]} />
+              <Input label={"Введіть кількість"} type={"number"} value={formData.quantity} onChange={handleQuantityChange} />
+            </div>
+          </form>
+        </Modal>
+      )}
       <GetProducts />
     </div>
   );
