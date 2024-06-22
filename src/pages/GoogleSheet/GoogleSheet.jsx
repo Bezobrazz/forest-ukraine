@@ -10,6 +10,7 @@ import Modal from "../../components/ReuseComponents/Modal/Modal.jsx";
 import DatePicker from "../../components/ReuseComponents/DatePicker/DatePicker.jsx"
 import Select from "../../components/ReuseComponents/Select/Select.jsx"
 import Input from "../../components/ReuseComponents/Input/Input.jsx"
+import AddIcon from '@mui/icons-material/Add';
 
 
 
@@ -99,6 +100,9 @@ export const GoogleSheet = () => {
       <Card
         title={"Вироблено кори"}
         buttonTitle={"Додати"}
+        buttonStyle={"contained"}
+        buttonColor={"success"}
+        icon={<AddIcon/>}
         modalOpen={handleModalOpen}
       >
         {loading ? <Loader /> : <ListFinishedProducts products={products} />}
