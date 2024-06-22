@@ -7,6 +7,13 @@ import Card from "../../components/ReuseComponents/Card/Card.jsx";
 import ListFinishedProducts from "../../components/ListFinishedProducts/ListFinishedProducts.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
 import Modal from "../../components/ReuseComponents/Modal/Modal.jsx";
+import DatePicker from "../../components/ReuseComponents/DatePicker/DatePicker.jsx"
+import Select from "../../components/ReuseComponents/Select/Select.jsx"
+import Input from "../../components/ReuseComponents/Input/Input.jsx"
+
+
+
+
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -140,7 +147,15 @@ export const GoogleSheet = () => {
           Submit
         </button>
       </form> */}
-      {isOpen && <Modal onClose={handleModalClose} />}
+      {isOpen && <Modal title={"Внесіть дані"} width={"670px"} onClose={handleModalClose}>
+        <form className={styles.form}>
+          <div className={styles.inputsWrapper}>
+          <DatePicker label={"Виберіть дату"}/>
+          <Select label={"Виберіть продукцію"}/>
+          <Input label={"Введіть кількість"} type={"number"}/>
+          </div>
+        </form>
+        </Modal>}
       <GetProducts />
     </div>
   );

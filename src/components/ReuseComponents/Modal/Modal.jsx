@@ -1,5 +1,6 @@
 import React from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import Button from "../Button/Button";
 import s from "./Modal.module.css";
 
 const Modal = ({ title, children, onClose, onSave, width, height }) => {
@@ -7,14 +8,17 @@ const Modal = ({ title, children, onClose, onSave, width, height }) => {
     <div className={s.modalBackdrop}>
       <div style={{ width: width, height: height }} className={s.modalContent}>
         <div className={s.modalHeader}>
-          <h2 style={{ fontSize: "24px" }}>{title}</h2>
+          <h2 сlassName={s.modalTitle}>{title}</h2>
           <button className={s.closeButton} onClick={onClose}>
-            <div className={s.modaHeaderBackground}></div>
+            <div className={s.modalHeaderBackground}></div>
             <IoCloseCircleOutline className={s.closeIcon} />
           </button>
         </div>
         <div className={s.modalBody}>{children}</div>
-        {/* <div className={s.modalFooter}></div> */}
+        <div className={s.modalFooter}>
+          <Button variant="outlined" title="Відмінити" color="success" onClick={onClose} />
+          <Button variant="contained" title="Зберегти" color="success" onClick={onSave} />
+        </div>
       </div>
     </div>
   );
