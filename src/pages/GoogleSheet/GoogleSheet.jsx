@@ -9,12 +9,13 @@ import DatePicker from "../../components/ReuseComponents/DatePicker/DatePicker.j
 import Select from "../../components/ReuseComponents/Select/Select.jsx";
 import Input from "../../components/ReuseComponents/Input/Input.jsx";
 import AddIcon from '@mui/icons-material/Add';
+import dayjs from 'dayjs'; 
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
-    date: "",
+    date: dayjs(),
     productName: "",
     quantity: "",
   });
