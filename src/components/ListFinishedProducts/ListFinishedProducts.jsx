@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./ListFinishedProducts.module.css";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
-const ListFinishedProducts = ({ products }) => {
+const ListFinishedProducts = ({ products, deleteRow, onEditClick }) => {
   const splitDate = (dateString) => {
     const date = new Date(dateString);
     return {
@@ -11,6 +11,7 @@ const ListFinishedProducts = ({ products }) => {
       year: date.getFullYear(),
     };
   };
+
   return (
     <ul className={styles.list}>
       {products.map((product) => {
@@ -29,10 +30,10 @@ const ListFinishedProducts = ({ products }) => {
               <p>{product.quantity}</p>
             </div>
             <div className={styles.buttonsWrapper}>
-              <button>
+              <button onClick={() => onEditClick(product)}>
                 <FaPencilAlt className={styles.icon} />
               </button>
-              <button>
+              <button onClick={() => deleteRow(product._lineNumber)}>
                 <FaTrashAlt className={styles.icon} />
               </button>
             </div>

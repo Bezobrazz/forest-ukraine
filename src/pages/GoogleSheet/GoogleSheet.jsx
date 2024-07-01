@@ -19,18 +19,28 @@ export const GoogleSheet = () => {
     productName: "",
     quantity: "",
   });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingLineNumber, setEditingLineNumber] = useState(null);
 
-    console.log("Products Data", products)
+  console.log("Products Data", products);
   const [loading, setIsLoading] = useState(false);
 
   const apiKey = import.meta.env.VITE_API_GOOGLE_SHEETS;
 
   const handleModalOpen = () => {
     setIsOpen(true);
+    setIsEditing(false);
+    setFormData({
+      date: dayjs(),
+      productName: "",
+      quantity: "",
+    });
   };
 
   const handleModalClose = () => {
     setIsOpen(false);
+    setIsEditing(false);
+    setEditingLineNumber(null);
   };
 
   const handleInputChange = (e) => {
@@ -44,7 +54,7 @@ export const GoogleSheet = () => {
   const handleDateChange = (date) => {
     setFormData({
       ...formData,
-      date: date, // Assuming you're using dayjs for date formatting
+      date: date,
     });
   };
 
@@ -62,6 +72,10 @@ export const GoogleSheet = () => {
     });
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   async function getData() {
     setIsLoading(true);
     try {
@@ -73,6 +87,7 @@ export const GoogleSheet = () => {
       });
 
       const data = await response.json();
+      console.log("data", data);
       setProducts(data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -102,17 +117,79 @@ export const GoogleSheet = () => {
       console.error("Error posting data:", error);
     }
   }
+  
+  async function deleteRow(lineNumber) {
+    const url = `https://api.zerosheets.com/v1/7zk/${lineNumber}`;
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      });
 
-  const handleSubmit = (e) => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      setProducts(products.filter(item => item._lineNumber !== lineNumber));
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  }
+
+  async function patchRow(lineNumber, payload) {
+    const url = `https://api.zerosheets.com/v1/7zk/${lineNumber}`;
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const updatedProduct = await response.json();
+      console.log(updatedProduct);
+
+      // Update the product in the state
+      setProducts(products.map(product => 
+        product._lineNumber === lineNumber ? updatedProduct : product
+      ));
+      
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    postData(formData);
-    setFormData({ date: "", productName: "", quantity: "" });
+    if (isEditing) {
+      await patchRow(editingLineNumber, formData);
+    } else {
+      await postData(formData);
+    }
+    setFormData({ date: dayjs(), productName: "", quantity: "" });
     handleModalClose();
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const handleEditClick = (product) => {
+    setIsEditing(true);
+    setEditingLineNumber(product._lineNumber);
+    setFormData({
+      date: dayjs(product.date),
+      productName: product.productName,
+      quantity: product.quantity,
+    });
+    setIsOpen(true);
+  };
+
+ 
 
   return (
     <div className={styles.container}>
@@ -125,10 +202,10 @@ export const GoogleSheet = () => {
         icon={<AddIcon />}
         modalOpen={handleModalOpen}
       >
-        {loading ? <Loader /> : <ListFinishedProducts products={products} />}
+        {loading ? <Loader /> : <ListFinishedProducts products={products} deleteRow={deleteRow} onEditClick={handleEditClick} />}
       </Card>
       {isOpen && (
-        <Modal title={"Внесіть дані"} width={"670px"} onClose={handleModalClose} onSave={handleSubmit}>
+        <Modal title={isEditing ? "Редагувати дані" : "Внесіть дані"} width={"670px"} onClose={handleModalClose} onSave={handleSubmit}>
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.inputsWrapper}>
               <DatePicker label={"Виберіть дату"} value={formData.date} onChange={handleDateChange} />
