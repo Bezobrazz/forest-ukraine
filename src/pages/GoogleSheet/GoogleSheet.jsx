@@ -8,8 +8,8 @@ import Modal from "../../components/ReuseComponents/Modal/Modal.jsx";
 import DatePicker from "../../components/ReuseComponents/DatePicker/DatePicker.jsx";
 import Select from "../../components/ReuseComponents/Select/Select.jsx";
 import Input from "../../components/ReuseComponents/Input/Input.jsx";
-import AddIcon from '@mui/icons-material/Add';
-import dayjs from 'dayjs'; 
+import AddIcon from "@mui/icons-material/Add";
+import dayjs from "dayjs";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -24,6 +24,15 @@ export const GoogleSheet = () => {
 
   console.log("Products Data", products);
   const [loading, setIsLoading] = useState(false);
+
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [totalPerProduct, setTotalPerProduct] = useState({
+    "Кора Крупна": 0,
+    "Кора Середня": 0,
+    "Кора Дрібна": 0,
+    "Кора Відсів 2": 0,
+    "Кора Відсів 1": 0,
+  });
 
   const apiKey = import.meta.env.VITE_API_GOOGLE_SHEETS;
 
@@ -89,12 +98,33 @@ export const GoogleSheet = () => {
       const data = await response.json();
       console.log("data", data);
       setProducts(data);
+      calculateTotals(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false);
     }
   }
+
+  const calculateTotals = (data) => {
+    let total = 0;
+    const totals = {
+      "Кора Крупна": 0,
+      "Кора Середня": 0,
+      "Кора Дрібна": 0,
+      "Кора Відсів 2": 0,
+      "Кора Відсів 1": 0,
+    };
+
+    data.forEach((product) => {
+      const quantity = parseFloat(product.quantity);
+      total += quantity;
+      totals[product.productName] += quantity;
+    });
+
+    setTotalQuantity(total);
+    setTotalPerProduct(totals);
+  };
 
   async function postData(newProduct) {
     try {
@@ -117,7 +147,7 @@ export const GoogleSheet = () => {
       console.error("Error posting data:", error);
     }
   }
-  
+
   async function deleteRow(lineNumber) {
     const url = `https://api.zerosheets.com/v1/7zk/${lineNumber}`;
     try {
@@ -132,7 +162,7 @@ export const GoogleSheet = () => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      setProducts(products.filter(item => item._lineNumber !== lineNumber));
+      setProducts(products.filter((item) => item._lineNumber !== lineNumber));
     } catch (error) {
       console.error("Error deleting data:", error);
     }
@@ -147,7 +177,7 @@ export const GoogleSheet = () => {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -158,10 +188,11 @@ export const GoogleSheet = () => {
       console.log(updatedProduct);
 
       // Update the product in the state
-      setProducts(products.map(product => 
-        product._lineNumber === lineNumber ? updatedProduct : product
-      ));
-      
+      setProducts(
+        products.map((product) =>
+          product._lineNumber === lineNumber ? updatedProduct : product
+        )
+      );
     } catch (error) {
       console.error("Error updating data:", error);
     }
@@ -189,11 +220,16 @@ export const GoogleSheet = () => {
     setIsOpen(true);
   };
 
- 
-
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>Google Sheet</h1>
+      <div className={styles.cardStatisticsContainer}>
+        <p>Вироблено кори всього: {totalQuantity}</p>
+        <p>Кора Крупна: {totalPerProduct["Кора Крупна"]}</p>
+        <p>Кора Середня: {totalPerProduct["Кора Середня"]}</p>
+        <p>Кора Дрібна: {totalPerProduct["Кора Дрібна"]}</p>
+        <p>Кора Відсів 2: {totalPerProduct["Кора Відсів 2"]}</p>
+        <p>Кора Відсів 1: {totalPerProduct["Кора Відсів 1"]}</p>
+      </div>
       <Card
         title={"Вироблено кори"}
         buttonTitle={"Додати"}
@@ -202,21 +238,48 @@ export const GoogleSheet = () => {
         icon={<AddIcon />}
         modalOpen={handleModalOpen}
       >
-        {loading ? <Loader /> : <ListFinishedProducts products={products} deleteRow={deleteRow} onEditClick={handleEditClick} />}
+        {loading ? (
+          <Loader />
+        ) : (
+          <ListFinishedProducts
+            products={products}
+            deleteRow={deleteRow}
+            onEditClick={handleEditClick}
+          />
+        )}
       </Card>
       {isOpen && (
-        <Modal title={isEditing ? "Редагувати дані" : "Внесіть дані"} width={"670px"} onClose={handleModalClose} onSave={handleSubmit}>
+        <Modal
+          title={isEditing ? "Редагувати дані" : "Внесіть дані"}
+          width={"670px"}
+          onClose={handleModalClose}
+          onSave={handleSubmit}
+        >
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.inputsWrapper}>
-              <DatePicker label={"Виберіть дату"} value={formData.date} onChange={handleDateChange} />
-              <Select label={"Виберіть продукцію"} value={formData.productName} onChange={handleProductChange} options={[
-                { value: 'Кора Крупна', label: 'Кора Крупна' },
-                { value: 'Кора Середня', label: 'Кора Середня' },
-                { value: 'Кора Дрібна', label: 'Кора Дрібна' },
-                { value: 'Кора Відсів 2', label: 'Кора Відсів 2' },
-                { value: 'Кора Відсів 1', label: 'Кора Відсів 1' }
-              ]} />
-              <Input label={"Введіть кількість"} type={"number"} value={formData.quantity} onChange={handleQuantityChange} />
+              <DatePicker
+                label={"Виберіть дату"}
+                value={formData.date}
+                onChange={handleDateChange}
+              />
+              <Select
+                label={"Виберіть продукцію"}
+                value={formData.productName}
+                onChange={handleProductChange}
+                options={[
+                  { value: "Кора Крупна", label: "Кора Крупна" },
+                  { value: "Кора Середня", label: "Кора Середня" },
+                  { value: "Кора Дрібна", label: "Кора Дрібна" },
+                  { value: "Кора Відсів 2", label: "Кора Відсів 2" },
+                  { value: "Кора Відсів 1", label: "Кора Відсів 1" },
+                ]}
+              />
+              <Input
+                label={"Введіть кількість"}
+                type={"number"}
+                value={formData.quantity}
+                onChange={handleQuantityChange}
+              />
             </div>
           </form>
         </Modal>
