@@ -238,6 +238,7 @@ export const GoogleSheet = () => {
     {label: "Кора Відсів 1", quantity: totalPerProduct["Кора Відсів 1"]},
   ]
 
+
   return (
     <div className={styles.container}>
       <div className={styles.cardStatisticsContainer}>
@@ -246,11 +247,11 @@ export const GoogleSheet = () => {
           value={filterDate}
           onChange={handleFilterDateChange}
         />
-        <div className={styles.itemWrapper}>
+        <div className={styles.mainItemWrapper}>
           <p>Вироблено кори всього:</p>
           <p>{totalQuantity}</p>
         </div>
-        {productsList.map((item, index) => <div key={index} className={styles.itemWrapper}>
+        {productsList.map((item, index) => <div key={index} className={styles.itemWrapper} style={{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff' }}>
           <p>{item.label}: </p>
           <p>{item.quantity}</p>
         </div> )}
