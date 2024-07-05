@@ -19,10 +19,9 @@ export const GoogleSheet = () => {
     productName: "",
     quantity: "",
   });
+  const [filterDate, setFilterDate] = useState(dayjs());
   const [isEditing, setIsEditing] = useState(false);
   const [editingLineNumber, setEditingLineNumber] = useState(null);
-
-  console.log("Products Data", products);
   const [loading, setIsLoading] = useState(false);
 
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -52,19 +51,16 @@ export const GoogleSheet = () => {
     setEditingLineNumber(null);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
   const handleDateChange = (date) => {
     setFormData({
       ...formData,
       date: date,
     });
+  };
+
+  const handleFilterDateChange = (date) => {
+    setFilterDate(date);
+    calculateTotals(products, date);
   };
 
   const handleProductChange = (e) => {
@@ -98,7 +94,7 @@ export const GoogleSheet = () => {
       const data = await response.json();
       console.log("data", data);
       setProducts(data);
-      calculateTotals(data);
+      calculateTotals(data, filterDate);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -106,7 +102,11 @@ export const GoogleSheet = () => {
     }
   }
 
-  const calculateTotals = (data) => {
+  const filterByDate = (data, date) => {
+    return data.filter((product) => dayjs(product.date).isSame(date, 'day'));
+  };
+
+  const calculateTotals = (data, filterDate) => {
     let total = 0;
     const totals = {
       "Кора Крупна": 0,
@@ -115,18 +115,20 @@ export const GoogleSheet = () => {
       "Кора Відсів 2": 0,
       "Кора Відсів 1": 0,
     };
-  
-    data.forEach((product) => {
+
+    const filteredData = filterByDate(data, filterDate);
+
+    filteredData.forEach((product) => {
       const quantity = parseFloat(product.quantity);
       total += quantity;
-  
+
       if (totals.hasOwnProperty(product.productName)) {
         totals[product.productName] += quantity;
       } else {
         console.warn(`Unknown product name: ${product.productName}`);
       }
     });
-  
+
     setTotalQuantity(total);
     setTotalPerProduct(totals);
   };
@@ -149,7 +151,7 @@ export const GoogleSheet = () => {
       const updatedProducts = await response.json();
       const newProductsList = [updatedProducts, ...products];
       setProducts(newProductsList);
-      calculateTotals(newProductsList);
+      calculateTotals(newProductsList, filterDate);
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -171,7 +173,7 @@ export const GoogleSheet = () => {
 
       const newProductsList = products.filter((item) => item._lineNumber !== lineNumber);
       setProducts(newProductsList);
-      calculateTotals(newProductsList);
+      calculateTotals(newProductsList, filterDate);
     } catch (error) {
       console.error("Error deleting data:", error);
     }
@@ -200,7 +202,7 @@ export const GoogleSheet = () => {
         product._lineNumber === lineNumber ? updatedProduct : product
       );
       setProducts(newProductsList);
-      calculateTotals(newProductsList);
+      calculateTotals(newProductsList, filterDate);
     } catch (error) {
       console.error("Error updating data:", error);
     }
@@ -239,14 +241,19 @@ export const GoogleSheet = () => {
   return (
     <div className={styles.container}>
       <div className={styles.cardStatisticsContainer}>
+        <DatePicker
+          label={"Фільтрувати за датою"}
+          value={filterDate}
+          onChange={handleFilterDateChange}
+        />
         <div className={styles.itemWrapper}>
-        <p className={styles.allProductsQuantity}>Вироблено кори всього:</p>
-        <p className={styles.allProductsQuantity}>{totalQuantity}</p>
+          <p>Вироблено кори всього:</p>
+          <p>{totalQuantity}</p>
         </div>
-       {productsList.map((item, index) => <div key={index} className={styles.itemWrapper}>
-        <p>{item.label}: </p>
-        <p>{item.quantity}</p>
-       </div> )}
+        {productsList.map((item, index) => <div key={index} className={styles.itemWrapper}>
+          <p>{item.label}: </p>
+          <p>{item.quantity}</p>
+        </div> )}
       </div>
       <Card
         title={"Вироблено кори"}
