@@ -23,7 +23,6 @@ export const GoogleSheet = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingLineNumber, setEditingLineNumber] = useState(null);
   const [loading, setIsLoading] = useState(false);
-
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [totalPerProduct, setTotalPerProduct] = useState({
     "Кора Крупна": 0,
@@ -230,14 +229,20 @@ export const GoogleSheet = () => {
     setIsOpen(true);
   };
 
+  const calculatePercentage = (quantity, total) => {
+    if (total === 0) {
+      return 0; // запобігає діленню на нуль
+    }
+    return Math.round((quantity / total) * 100);
+  };
+
   const productsList = [
     {label: "Кора Крупна", quantity: totalPerProduct["Кора Крупна"]},
     {label: "Кора Середня", quantity: totalPerProduct["Кора Середня"]},
     {label: "Кора Дрібна", quantity: totalPerProduct["Кора Дрібна"]},
     {label: "Кора Відсів 2", quantity: totalPerProduct["Кора Відсів 2"]},
     {label: "Кора Відсів 1", quantity: totalPerProduct["Кора Відсів 1"]},
-  ]
-
+  ];
 
   return (
     <div className={styles.container}>
@@ -251,10 +256,12 @@ export const GoogleSheet = () => {
           <p>Вироблено кори всього:</p>
           <p>{totalQuantity}</p>
         </div>
-        {productsList.map((item, index) => <div key={index} className={styles.itemWrapper} style={{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff' }}>
-          <p>{item.label}: </p>
-          <p>{item.quantity}</p>
-        </div> )}
+        {productsList.map((item, index) => (
+          <div key={index} className={styles.itemWrapper} style={{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff' }}>
+            <p>{item.label}:</p>
+            <p>{item.quantity} <span className={styles.persantage}>({calculatePercentage(item.quantity, totalQuantity)}%)</span></p>
+          </div>
+        ))}
       </div>
       <Card
         title={"Вироблено кори"}
