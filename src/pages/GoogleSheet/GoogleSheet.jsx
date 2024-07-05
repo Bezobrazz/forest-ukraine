@@ -115,13 +115,18 @@ export const GoogleSheet = () => {
       "Кора Відсів 2": 0,
       "Кора Відсів 1": 0,
     };
-
+  
     data.forEach((product) => {
       const quantity = parseFloat(product.quantity);
       total += quantity;
-      totals[product.productName] += quantity;
+  
+      if (totals.hasOwnProperty(product.productName)) {
+        totals[product.productName] += quantity;
+      } else {
+        console.warn(`Unknown product name: ${product.productName}`);
+      }
     });
-
+  
     setTotalQuantity(total);
     setTotalPerProduct(totals);
   };
@@ -142,7 +147,9 @@ export const GoogleSheet = () => {
       }
 
       const updatedProducts = await response.json();
-      setProducts([updatedProducts, ...products]);
+      const newProductsList = [updatedProducts, ...products];
+      setProducts(newProductsList);
+      calculateTotals(newProductsList);
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -162,7 +169,9 @@ export const GoogleSheet = () => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      setProducts(products.filter((item) => item._lineNumber !== lineNumber));
+      const newProductsList = products.filter((item) => item._lineNumber !== lineNumber);
+      setProducts(newProductsList);
+      calculateTotals(newProductsList);
     } catch (error) {
       console.error("Error deleting data:", error);
     }
@@ -187,12 +196,11 @@ export const GoogleSheet = () => {
       const updatedProduct = await response.json();
       console.log(updatedProduct);
 
-      // Update the product in the state
-      setProducts(
-        products.map((product) =>
-          product._lineNumber === lineNumber ? updatedProduct : product
-        )
+      const newProductsList = products.map((product) =>
+        product._lineNumber === lineNumber ? updatedProduct : product
       );
+      setProducts(newProductsList);
+      calculateTotals(newProductsList);
     } catch (error) {
       console.error("Error updating data:", error);
     }
@@ -220,15 +228,25 @@ export const GoogleSheet = () => {
     setIsOpen(true);
   };
 
+  const productsList = [
+    {label: "Кора Крупна", quantity: totalPerProduct["Кора Крупна"]},
+    {label: "Кора Середня", quantity: totalPerProduct["Кора Середня"]},
+    {label: "Кора Дрібна", quantity: totalPerProduct["Кора Дрібна"]},
+    {label: "Кора Відсів 2", quantity: totalPerProduct["Кора Відсів 2"]},
+    {label: "Кора Відсів 1", quantity: totalPerProduct["Кора Відсів 1"]},
+  ]
+
   return (
     <div className={styles.container}>
       <div className={styles.cardStatisticsContainer}>
-        <p>Вироблено кори всього: {totalQuantity}</p>
-        <p>Кора Крупна: {totalPerProduct["Кора Крупна"]}</p>
-        <p>Кора Середня: {totalPerProduct["Кора Середня"]}</p>
-        <p>Кора Дрібна: {totalPerProduct["Кора Дрібна"]}</p>
-        <p>Кора Відсів 2: {totalPerProduct["Кора Відсів 2"]}</p>
-        <p>Кора Відсів 1: {totalPerProduct["Кора Відсів 1"]}</p>
+        <div className={styles.itemWrapper}>
+        <p className={styles.allProductsQuantity}>Вироблено кори всього:</p>
+        <p className={styles.allProductsQuantity}>{totalQuantity}</p>
+        </div>
+       {productsList.map((item, index) => <div key={index} className={styles.itemWrapper}>
+        <p>{item.label}: </p>
+        <p>{item.quantity}</p>
+       </div> )}
       </div>
       <Card
         title={"Вироблено кори"}
