@@ -21,6 +21,7 @@ export const GoogleSheet = () => {
     quantity: "",
   });
   const [filterDate, setFilterDate] = useState(null);
+  const [filterButtonStyle, setFilterButtonStyle] = useState("allTime")
   const [isEditing, setIsEditing] = useState(false);
   const [editingLineNumber, setEditingLineNumber] = useState(null);
   const [loading, setIsLoading] = useState(false);
@@ -233,6 +234,7 @@ export const GoogleSheet = () => {
   const filterAllTime = () => {
     setFilterDate(null);
     calculateTotals(products, null);
+    setFilterButtonStyle("allTime")
   };
 
   const filterCurrentYear = () => {
@@ -243,6 +245,7 @@ export const GoogleSheet = () => {
       dayjs(product.date).isBetween(startOfYear, endOfYear, null, '[]')
     );
     calculateTotals(filteredData, null);
+    setFilterButtonStyle("currentYear")
   };
 
   const filterCurrentMonth = () => {
@@ -253,6 +256,7 @@ export const GoogleSheet = () => {
       dayjs(product.date).isBetween(startOfMonth, endOfMonth, null, '[]')
     );
     calculateTotals(filteredData, null);
+    setFilterButtonStyle("currentMonth")
   };
 
   const filterToday = () => {
@@ -262,6 +266,7 @@ export const GoogleSheet = () => {
       dayjs(product.date).isSame(today, 'day')
     );
     calculateTotals(filteredData, today);
+    setFilterButtonStyle("currentDay")
   };
 
   const productsList = [
@@ -276,10 +281,10 @@ export const GoogleSheet = () => {
     <div className={styles.container}>
       <div className={styles.cardStatisticsContainer}>
         <div className={styles.statisticsButtonWrapper}>
-          <BasicButtons title={"За весь час"} variant={"outlined"} color={"success"} onClick={filterAllTime} />
-          <BasicButtons title={"Поточний рік"} variant={"outlined"} color={"success"} onClick={filterCurrentYear} />
-          <BasicButtons title={"Поточний місяць"} variant={"outlined"} color={"success"} onClick={filterCurrentMonth} />
-          <BasicButtons title={"Сьогодні"} variant={"outlined"} color={"success"} onClick={filterToday} />
+          <BasicButtons title={"За весь час"} variant={filterButtonStyle === "allTime" ? "contained" : "outlined"} color={"success"} onClick={filterAllTime} />
+          <BasicButtons title={"Поточний рік"} variant={filterButtonStyle === "currentYear" ? "contained" : "outlined"} color={"success"} onClick={filterCurrentYear} />
+          <BasicButtons title={"Поточний місяць"} variant={filterButtonStyle === "currentMonth" ? "contained" : "outlined"} color={"success"} onClick={filterCurrentMonth} />
+          <BasicButtons title={"Сьогодні"} variant={filterButtonStyle === "currentDay" ? "contained" : "outlined"} color={"success"} onClick={filterToday} />
         </div>
         <DatePicker
           label={"Фільтрувати за датою"}
