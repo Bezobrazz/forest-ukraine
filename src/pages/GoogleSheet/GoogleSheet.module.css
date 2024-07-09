@@ -148,3 +148,7 @@ border-radius: 4px;
 .persantage{
   color: #9c9797;
 }
+.statisticsButtonWrapper{
+  display: flex;
+  gap: 5px;
+}

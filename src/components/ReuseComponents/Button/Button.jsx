@@ -10,7 +10,7 @@ export default function BasicButtons({variant, color, title, onClick, icon}) {
   );
 }
 
-//The Button comes with three variants: text (default), contained, and outlined.
+//The Button comes with three variants: text (default), 'contained', and 'outlined'.
 
 //Prop "endIcon" add icon to the end of button. Choose icon - https://mui.com/material-ui/material-icons/?query=ad
 

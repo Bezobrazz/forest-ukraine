@@ -10,6 +10,7 @@ import Select from "../../components/ReuseComponents/Select/Select.jsx";
 import Input from "../../components/ReuseComponents/Input/Input.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import dayjs from "dayjs";
+import BasicButtons from "../../components/ReuseComponents/Button/Button.jsx";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -19,7 +20,7 @@ export const GoogleSheet = () => {
     productName: "",
     quantity: "",
   });
-  const [filterDate, setFilterDate] = useState(dayjs());
+  const [filterDate, setFilterDate] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editingLineNumber, setEditingLineNumber] = useState(null);
   const [loading, setIsLoading] = useState(false);
@@ -51,13 +52,6 @@ export const GoogleSheet = () => {
   };
 
   const handleDateChange = (date) => {
-    setFormData({
-      ...formData,
-      date: date,
-    });
-  };
-
-  const handleFilterDateChange = (date) => {
     setFilterDate(date);
     calculateTotals(products, date);
   };
@@ -93,7 +87,7 @@ export const GoogleSheet = () => {
       const data = await response.json();
       console.log("data", data);
       setProducts(data);
-      calculateTotals(data, filterDate);
+      calculateTotals(data, null); // Відображення за весь час
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -115,7 +109,7 @@ export const GoogleSheet = () => {
       "Кора Відсів 1": 0,
     };
 
-    const filteredData = filterByDate(data, filterDate);
+    const filteredData = filterDate ? filterByDate(data, filterDate) : data;
 
     filteredData.forEach((product) => {
       const quantity = parseFloat(product.quantity);
@@ -231,9 +225,43 @@ export const GoogleSheet = () => {
 
   const calculatePercentage = (quantity, total) => {
     if (total === 0) {
-      return 0; // запобігає діленню на нуль
+      return 0;
     }
     return Math.round((quantity / total) * 100);
+  };
+
+  const filterAllTime = () => {
+    setFilterDate(null);
+    calculateTotals(products, null);
+  };
+
+  const filterCurrentYear = () => {
+    setFilterDate(null);
+    const startOfYear = dayjs().startOf('year');
+    const endOfYear = dayjs().endOf('year');
+    const filteredData = products.filter((product) => 
+      dayjs(product.date).isBetween(startOfYear, endOfYear, null, '[]')
+    );
+    calculateTotals(filteredData, null);
+  };
+
+  const filterCurrentMonth = () => {
+    setFilterDate(null);
+    const startOfMonth = dayjs().startOf('month');
+    const endOfMonth = dayjs().endOf('month');
+    const filteredData = products.filter((product) => 
+      dayjs(product.date).isBetween(startOfMonth, endOfMonth, null, '[]')
+    );
+    calculateTotals(filteredData, null);
+  };
+
+  const filterToday = () => {
+    setFilterDate(null);
+    const today = dayjs().startOf('day');
+    const filteredData = products.filter((product) => 
+      dayjs(product.date).isSame(today, 'day')
+    );
+    calculateTotals(filteredData, today);
   };
 
   const productsList = [
@@ -247,10 +275,16 @@ export const GoogleSheet = () => {
   return (
     <div className={styles.container}>
       <div className={styles.cardStatisticsContainer}>
+        <div className={styles.statisticsButtonWrapper}>
+          <BasicButtons title={"За весь час"} variant={"outlined"} color={"success"} onClick={filterAllTime} />
+          <BasicButtons title={"Поточний рік"} variant={"outlined"} color={"success"} onClick={filterCurrentYear} />
+          <BasicButtons title={"Поточний місяць"} variant={"outlined"} color={"success"} onClick={filterCurrentMonth} />
+          <BasicButtons title={"Сьогодні"} variant={"outlined"} color={"success"} onClick={filterToday} />
+        </div>
         <DatePicker
           label={"Фільтрувати за датою"}
           value={filterDate}
-          onChange={handleFilterDateChange}
+          onChange={handleDateChange}
         />
         <div className={styles.mainItemWrapper}>
           <p>Вироблено кори всього:</p>
