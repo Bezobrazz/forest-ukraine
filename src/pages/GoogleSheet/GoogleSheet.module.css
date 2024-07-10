@@ -1,8 +1,12 @@
-
 .container {
   font-family: Arial, sans-serif;
 }
-
+/* .contentWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+} */
 .heading {
   color: #333;
   text-align: center;
@@ -115,6 +119,7 @@
   margin-bottom: 30px;
 }
 .cardStatisticsContainer {
+  height: 100%;
   max-width: 670px;
   padding: 20px;
   background-color: white;
@@ -125,30 +130,29 @@
   justify-content: center;
   gap: 10px;
   margin-bottom: 30px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
-.mainItemWrapper{
+.mainItemWrapper {
   padding: 8px;
-    background-color: #333;
+  background-color: #333;
   color: #ffff;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
   font-size: 20px;
-  
-  
 }
-.itemWrapper{
+.itemWrapper {
   padding: 8px;
   background-color: #f9f9f9;
   border-bottom: 1px solid #333;
-border-radius: 4px;
+  border-radius: 4px;
   display: flex;
   justify-content: space-between;
 }
-.persantage{
+.persantage {
   color: #9c9797;
 }
-.statisticsButtonWrapper{
+.statisticsButtonWrapper {
   display: flex;
   gap: 5px;
 }

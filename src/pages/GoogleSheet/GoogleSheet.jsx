@@ -21,7 +21,7 @@ export const GoogleSheet = () => {
     quantity: "",
   });
   const [filterDate, setFilterDate] = useState(null);
-  const [filterButtonStyle, setFilterButtonStyle] = useState("allTime")
+  const [filterButtonStyle, setFilterButtonStyle] = useState("allTime");
   const [isEditing, setIsEditing] = useState(false);
   const [editingLineNumber, setEditingLineNumber] = useState(null);
   const [loading, setIsLoading] = useState(false);
@@ -97,7 +97,7 @@ export const GoogleSheet = () => {
   }
 
   const filterByDate = (data, date) => {
-    return data.filter((product) => dayjs(product.date).isSame(date, 'day'));
+    return data.filter((product) => dayjs(product.date).isSame(date, "day"));
   };
 
   const calculateTotals = (data, filterDate) => {
@@ -116,7 +116,7 @@ export const GoogleSheet = () => {
       const quantity = parseFloat(product.quantity);
       total += quantity;
 
-      if (totals.hasOwnProperty(product.productName)) {
+      if (Object.prototype.hasOwnProperty.call(totals, product.productName)) {
         totals[product.productName] += quantity;
       } else {
         console.warn(`Unknown product name: ${product.productName}`);
@@ -165,7 +165,9 @@ export const GoogleSheet = () => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const newProductsList = products.filter((item) => item._lineNumber !== lineNumber);
+      const newProductsList = products.filter(
+        (item) => item._lineNumber !== lineNumber
+      );
       setProducts(newProductsList);
       calculateTotals(newProductsList, filterDate);
     } catch (error) {
@@ -234,129 +236,170 @@ export const GoogleSheet = () => {
   const filterAllTime = () => {
     setFilterDate(null);
     calculateTotals(products, null);
-    setFilterButtonStyle("allTime")
+    setFilterButtonStyle("allTime");
   };
 
   const filterCurrentYear = () => {
     setFilterDate(null);
-    const startOfYear = dayjs().startOf('year');
-    const endOfYear = dayjs().endOf('year');
-    const filteredData = products.filter((product) => 
-      dayjs(product.date).isBetween(startOfYear, endOfYear, null, '[]')
+    const startOfYear = dayjs().startOf("year");
+    const endOfYear = dayjs().endOf("year");
+    const filteredData = products.filter((product) =>
+      dayjs(product.date).isBetween(startOfYear, endOfYear, null, "[]")
     );
     calculateTotals(filteredData, null);
-    setFilterButtonStyle("currentYear")
+    setFilterButtonStyle("currentYear");
   };
 
   const filterCurrentMonth = () => {
     setFilterDate(null);
-    const startOfMonth = dayjs().startOf('month');
-    const endOfMonth = dayjs().endOf('month');
-    const filteredData = products.filter((product) => 
-      dayjs(product.date).isBetween(startOfMonth, endOfMonth, null, '[]')
+    const startOfMonth = dayjs().startOf("month");
+    const endOfMonth = dayjs().endOf("month");
+    const filteredData = products.filter((product) =>
+      dayjs(product.date).isBetween(startOfMonth, endOfMonth, null, "[]")
     );
     calculateTotals(filteredData, null);
-    setFilterButtonStyle("currentMonth")
+    setFilterButtonStyle("currentMonth");
   };
 
   const filterToday = () => {
     setFilterDate(null);
-    const today = dayjs().startOf('day');
-    const filteredData = products.filter((product) => 
-      dayjs(product.date).isSame(today, 'day')
+    const today = dayjs().startOf("day");
+    const filteredData = products.filter((product) =>
+      dayjs(product.date).isSame(today, "day")
     );
     calculateTotals(filteredData, today);
-    setFilterButtonStyle("currentDay")
+    setFilterButtonStyle("currentDay");
   };
 
   const productsList = [
-    {label: "Кора Крупна", quantity: totalPerProduct["Кора Крупна"]},
-    {label: "Кора Середня", quantity: totalPerProduct["Кора Середня"]},
-    {label: "Кора Дрібна", quantity: totalPerProduct["Кора Дрібна"]},
-    {label: "Кора Відсів 2", quantity: totalPerProduct["Кора Відсів 2"]},
-    {label: "Кора Відсів 1", quantity: totalPerProduct["Кора Відсів 1"]},
+    { label: "Кора Крупна", quantity: totalPerProduct["Кора Крупна"] },
+    { label: "Кора Середня", quantity: totalPerProduct["Кора Середня"] },
+    { label: "Кора Дрібна", quantity: totalPerProduct["Кора Дрібна"] },
+    { label: "Кора Відсів 2", quantity: totalPerProduct["Кора Відсів 2"] },
+    { label: "Кора Відсів 1", quantity: totalPerProduct["Кора Відсів 1"] },
   ];
 
   return (
     <div className={styles.container}>
-      <div className={styles.cardStatisticsContainer}>
-        <div className={styles.statisticsButtonWrapper}>
-          <BasicButtons title={"За весь час"} variant={filterButtonStyle === "allTime" ? "contained" : "outlined"} color={"success"} onClick={filterAllTime} />
-          <BasicButtons title={"Поточний рік"} variant={filterButtonStyle === "currentYear" ? "contained" : "outlined"} color={"success"} onClick={filterCurrentYear} />
-          <BasicButtons title={"Поточний місяць"} variant={filterButtonStyle === "currentMonth" ? "contained" : "outlined"} color={"success"} onClick={filterCurrentMonth} />
-          <BasicButtons title={"Сьогодні"} variant={filterButtonStyle === "currentDay" ? "contained" : "outlined"} color={"success"} onClick={filterToday} />
-        </div>
-        <DatePicker
-          label={"Фільтрувати за датою"}
-          value={filterDate}
-          onChange={handleDateChange}
-        />
-        <div className={styles.mainItemWrapper}>
-          <p>Вироблено кори всього:</p>
-          <p>{totalQuantity}</p>
-        </div>
-        {productsList.map((item, index) => (
-          <div key={index} className={styles.itemWrapper} style={{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff' }}>
-            <p>{item.label}:</p>
-            <p>{item.quantity} <span className={styles.persantage}>({calculatePercentage(item.quantity, totalQuantity)}%)</span></p>
+      <div className={styles.contentWrapper}>
+        <div className={styles.cardStatisticsContainer}>
+          <div className={styles.statisticsButtonWrapper}>
+            <BasicButtons
+              title={"За весь час"}
+              variant={
+                filterButtonStyle === "allTime" ? "contained" : "outlined"
+              }
+              color={"success"}
+              onClick={filterAllTime}
+            />
+            <BasicButtons
+              title={"Поточний рік"}
+              variant={
+                filterButtonStyle === "currentYear" ? "contained" : "outlined"
+              }
+              color={"success"}
+              onClick={filterCurrentYear}
+            />
+            <BasicButtons
+              title={"Поточний місяць"}
+              variant={
+                filterButtonStyle === "currentMonth" ? "contained" : "outlined"
+              }
+              color={"success"}
+              onClick={filterCurrentMonth}
+            />
+            <BasicButtons
+              title={"Сьогодні"}
+              variant={
+                filterButtonStyle === "currentDay" ? "contained" : "outlined"
+              }
+              color={"success"}
+              onClick={filterToday}
+            />
           </div>
-        ))}
-      </div>
-      <Card
-        title={"Вироблено кори"}
-        buttonTitle={"Додати"}
-        buttonStyle={"contained"}
-        buttonColor={"success"}
-        icon={<AddIcon />}
-        modalOpen={handleModalOpen}
-      >
-        {loading ? (
-          <Loader />
-        ) : (
-          <ListFinishedProducts
-            products={products}
-            deleteRow={deleteRow}
-            onEditClick={handleEditClick}
+          <DatePicker
+            label={"Фільтрувати за датою"}
+            value={filterDate}
+            onChange={handleDateChange}
           />
-        )}
-      </Card>
-      {isOpen && (
-        <Modal
-          title={isEditing ? "Редагувати дані" : "Внесіть дані"}
-          width={"670px"}
-          onClose={handleModalClose}
-          onSave={handleSubmit}
-        >
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <div className={styles.inputsWrapper}>
-              <DatePicker
-                label={"Виберіть дату"}
-                value={formData.date}
-                onChange={handleDateChange}
-              />
-              <Select
-                label={"Виберіть продукцію"}
-                value={formData.productName}
-                onChange={handleProductChange}
-                options={[
-                  { value: "Кора Крупна", label: "Кора Крупна" },
-                  { value: "Кора Середня", label: "Кора Середня" },
-                  { value: "Кора Дрібна", label: "Кора Дрібна" },
-                  { value: "Кора Відсів 2", label: "Кора Відсів 2" },
-                  { value: "Кора Відсів 1", label: "Кора Відсів 1" },
-                ]}
-              />
-              <Input
-                label={"Введіть кількість"}
-                type={"number"}
-                value={formData.quantity}
-                onChange={handleQuantityChange}
-              />
+          <div className={styles.mainItemWrapper}>
+            <p>Вироблено кори всього:</p>
+            <p>{totalQuantity}</p>
+          </div>
+          {productsList.map((item, index) => (
+            <div
+              key={index}
+              className={styles.itemWrapper}
+              style={{
+                backgroundColor: index % 2 === 0 ? "#f0f0f0" : "#ffffff",
+              }}
+            >
+              <p>{item.label}:</p>
+              <p>
+                {item.quantity}{" "}
+                <span className={styles.persantage}>
+                  ({calculatePercentage(item.quantity, totalQuantity)}%)
+                </span>
+              </p>
             </div>
-          </form>
-        </Modal>
-      )}
-      <GetProducts />
+          ))}
+        </div>
+        <Card
+          title={"Вироблено кори"}
+          buttonTitle={"Додати"}
+          buttonStyle={"contained"}
+          buttonColor={"success"}
+          icon={<AddIcon />}
+          modalOpen={handleModalOpen}
+        >
+          {loading ? (
+            <Loader />
+          ) : (
+            <ListFinishedProducts
+              products={products}
+              deleteRow={deleteRow}
+              onEditClick={handleEditClick}
+            />
+          )}
+        </Card>
+        {isOpen && (
+          <Modal
+            title={isEditing ? "Редагувати дані" : "Внесіть дані"}
+            width={"670px"}
+            onClose={handleModalClose}
+            onSave={handleSubmit}
+          >
+            <form className={styles.form} onSubmit={handleSubmit}>
+              <div className={styles.inputsWrapper}>
+                <DatePicker
+                  label={"Виберіть дату"}
+                  value={formData.date}
+                  onChange={handleDateChange}
+                />
+                <Select
+                  label={"Виберіть продукцію"}
+                  value={formData.productName}
+                  onChange={handleProductChange}
+                  options={[
+                    { value: "Кора Крупна", label: "Кора Крупна" },
+                    { value: "Кора Середня", label: "Кора Середня" },
+                    { value: "Кора Дрібна", label: "Кора Дрібна" },
+                    { value: "Кора Відсів 2", label: "Кора Відсів 2" },
+                    { value: "Кора Відсів 1", label: "Кора Відсів 1" },
+                  ]}
+                />
+                <Input
+                  label={"Введіть кількість"}
+                  type={"number"}
+                  value={formData.quantity}
+                  onChange={handleQuantityChange}
+                />
+              </div>
+            </form>
+          </Modal>
+        )}
+        <GetProducts />
+      </div>
     </div>
   );
 };

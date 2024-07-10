@@ -1,5 +1,5 @@
 .cardContainer {
-  height: 55vh;
+  height: 53vh;
   max-width: 670px;
   padding: 20px;
   border-radius: 12px;
@@ -18,5 +18,3 @@
   font-size: 24px;
   font-weight: 700;
 }
-
-
