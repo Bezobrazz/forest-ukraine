@@ -1,7 +1,7 @@
 .list {
   list-style-type: none;
   padding: 0;
-  max-height: 70vh;
+  height: 100%;
   overflow: scroll;
 }
 

@@ -11,7 +11,7 @@ const Card = ({
   icon,
 }) => {
   return (
-    <div>
+    <>
       <div className={styles.cardContainer}>
         <div className={styles.topCardWrapper}>
           <h3 className={styles.topCardTitle}>{title}</h3>
@@ -25,7 +25,7 @@ const Card = ({
         </div>
         <div className={styles.bottomCardWrapper}>{children}</div>
       </div>
-    </div>
+    </>
   );
 };
 

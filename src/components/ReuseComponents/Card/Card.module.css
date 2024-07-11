@@ -5,7 +5,7 @@
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .topCardWrapper {
   display: flex;
@@ -17,4 +17,8 @@
 .topCardTitle {
   font-size: 24px;
   font-weight: 700;
+}
+.bottomCardWrapper {
+  height: 85%;
+  overflow: hidden;
 }
