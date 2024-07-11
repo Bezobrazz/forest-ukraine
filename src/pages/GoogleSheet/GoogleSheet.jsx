@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./GoogleSheet.module.css";
 import { GetProducts } from "../../API/GetProducts";
+import { crmMaterials } from "../../components/State.js";
 import Card from "../../components/ReuseComponents/Card/Card.jsx";
 import ListFinishedProducts from "../../components/ListFinishedProducts/ListFinishedProducts.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
@@ -19,6 +20,7 @@ export const GoogleSheet = () => {
     date: dayjs(),
     productName: "",
     quantity: "",
+    sku: "",
   });
   const [filterDate, setFilterDate] = useState(null);
   const [filterButtonStyle, setFilterButtonStyle] = useState("allTime");
@@ -36,6 +38,17 @@ export const GoogleSheet = () => {
 
   const apiKey = import.meta.env.VITE_API_GOOGLE_SHEETS;
 
+  const productsWithSku = [
+    { label: "Кора Крупна", sku: "SKU001-ABC" },
+    { label: "Кора Середня", sku: "SKU002-DEF" },
+    { label: "Кора Дрібна", sku: "SKU003-GHI" },
+    { label: "Кора Відсів 2", sku: "SKU004-JKL" },
+    { label: "Кора Відсів 1", sku: "SKU005-MNO" },
+  ];
+
+  const { items } = crmMaterials.value;
+  console.log("CRM materials", items);
+
   const handleModalOpen = () => {
     setIsOpen(true);
     setIsEditing(false);
@@ -43,6 +56,7 @@ export const GoogleSheet = () => {
       date: dayjs(),
       productName: "",
       quantity: "",
+      sku: "",
     });
   };
 
@@ -58,9 +72,13 @@ export const GoogleSheet = () => {
   };
 
   const handleProductChange = (e) => {
+    const selectedProduct = productsWithSku.find(
+      (product) => product.label === e.target.value
+    );
     setFormData({
       ...formData,
-      productName: e.target.value,
+      productName: selectedProduct.label,
+      sku: selectedProduct.sku,
     });
   };
 
@@ -211,17 +229,21 @@ export const GoogleSheet = () => {
     } else {
       await postData(formData);
     }
-    setFormData({ date: dayjs(), productName: "", quantity: "" });
+    setFormData({ date: dayjs(), productName: "", quantity: "", sku: "" });
     handleModalClose();
   };
 
   const handleEditClick = (product) => {
+    const selectedProduct = productsWithSku.find(
+      (p) => p.label === product.productName
+    );
     setIsEditing(true);
     setEditingLineNumber(product._lineNumber);
     setFormData({
       date: dayjs(product.date),
       productName: product.productName,
       quantity: product.quantity,
+      sku: selectedProduct ? selectedProduct.sku : "",
     });
     setIsOpen(true);
   };
@@ -380,13 +402,10 @@ export const GoogleSheet = () => {
                   label={"Виберіть продукцію"}
                   value={formData.productName}
                   onChange={handleProductChange}
-                  options={[
-                    { value: "Кора Крупна", label: "Кора Крупна" },
-                    { value: "Кора Середня", label: "Кора Середня" },
-                    { value: "Кора Дрібна", label: "Кора Дрібна" },
-                    { value: "Кора Відсів 2", label: "Кора Відсів 2" },
-                    { value: "Кора Відсів 1", label: "Кора Відсів 1" },
-                  ]}
+                  options={productsWithSku.map((product) => ({
+                    value: product.label,
+                    label: product.label,
+                  }))}
                 />
                 <Input
                   label={"Введіть кількість"}
