@@ -105,8 +105,14 @@ export const GoogleSheet = () => {
 
       const data = await response.json();
       console.log("data", data);
-      setProducts(data);
-      calculateTotals(data, null); // Відображення за весь час
+
+      // Сортування даних від найновіших до найстаріших
+      const sortedData = data.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
+
+      setProducts(sortedData);
+      calculateTotals(sortedData, null); // Відображення за весь час
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
