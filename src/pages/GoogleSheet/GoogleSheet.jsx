@@ -12,6 +12,7 @@ import Input from "../../components/ReuseComponents/Input/Input.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import dayjs from "dayjs";
 import BasicButtons from "../../components/ReuseComponents/Button/Button.jsx";
+import { getData } from "../../API/apiZeroSheets.js";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -90,29 +91,16 @@ export const GoogleSheet = () => {
   };
 
   useEffect(() => {
-    getData();
+    getZeroSheetsData();
   }, []);
 
-  async function getData() {
+  async function getZeroSheetsData() {
     setIsLoading(true);
     try {
-      const response = await fetch("https://api.zerosheets.com/v1/7zk", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-        },
-      });
+      const data = await getData();
 
-      const data = await response.json();
-      console.log("data", data);
-
-      // Сортування даних від найновіших до найстаріших
-      const sortedData = data.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
-
-      setProducts(sortedData);
-      calculateTotals(sortedData, null); // Відображення за весь час
+      setProducts(data);
+      calculateTotals(data, null);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {

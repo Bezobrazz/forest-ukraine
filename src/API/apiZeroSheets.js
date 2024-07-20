@@ -1,6 +1,6 @@
 const apiKey = import.meta.env.VITE_API_GOOGLE_SHEETS;
 
-export const fetchData = async () => {
+export const getData = async () => {
   try {
     const response = await fetch("https://api.zerosheets.com/v1/7zk", {
       method: "GET",
