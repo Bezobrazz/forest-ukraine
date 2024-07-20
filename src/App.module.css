@@ -12,6 +12,7 @@
 }
 .content {
   padding: 20px;
+  overflow-y: scroll;
 }
 .backdrop {
   width: 100vw;
