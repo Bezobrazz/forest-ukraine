@@ -1,9 +1,9 @@
-import React from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import Button from "../Button/Button";
 import s from "./Modal.module.css";
+import Loader from "../../Loader/Loader.jsx";
 
-const Modal = ({ title, children, onClose, onSave, width, height }) => {
+const Modal = ({ title, children, onClose, onSave, width, height, loader }) => {
   return (
     <div className={s.modalBackdrop}>
       <div style={{ width: width, height: height }} className={s.modalContent}>
@@ -16,8 +16,20 @@ const Modal = ({ title, children, onClose, onSave, width, height }) => {
         </div>
         <div className={s.modalBody}>{children}</div>
         <div className={s.modalFooter}>
-          <Button variant="outlined" title="Відмінити" color="success" onClick={onClose} />
-          <Button variant="contained" title="Зберегти" color="success" onClick={onSave} />
+          {loader && <Loader height={40} width={40} />}
+          <Button
+            variant="outlined"
+            title="Відмінити"
+            color="success"
+            onClick={onClose}
+          />
+
+          <Button
+            variant="contained"
+            title="Зберегти"
+            color="success"
+            onClick={onSave}
+          />
         </div>
       </div>
     </div>

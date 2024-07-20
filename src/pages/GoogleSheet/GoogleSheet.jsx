@@ -12,7 +12,7 @@ import Input from "../../components/ReuseComponents/Input/Input.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import dayjs from "dayjs";
 import BasicButtons from "../../components/ReuseComponents/Button/Button.jsx";
-import { getData, postData } from "../../API/apiZeroSheets.js";
+import { getData, patchData, postData } from "../../API/apiZeroSheets.js";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -28,6 +28,7 @@ export const GoogleSheet = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingLineNumber, setEditingLineNumber] = useState(null);
   const [loading, setIsLoading] = useState(false);
+  const [patchLoader, setPatchLoader] = useState(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [totalPerProduct, setTotalPerProduct] = useState({
     "Кора Крупна": 0,
@@ -175,24 +176,10 @@ export const GoogleSheet = () => {
     }
   }
 
-  async function patchRow(lineNumber, payload) {
-    const url = `https://api.zerosheets.com/v1/7zk/${lineNumber}`;
+  async function patchZeroSheetsRow(lineNumber) {
+    setPatchLoader(true);
     try {
-      const response = await fetch(url, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const updatedProduct = await response.json();
-      console.log(updatedProduct);
+      const updatedProduct = await patchData(lineNumber, formData);
 
       const newProductsList = products.map((product) =>
         product._lineNumber === lineNumber ? updatedProduct : product
@@ -201,13 +188,15 @@ export const GoogleSheet = () => {
       calculateTotals(newProductsList, filterDate);
     } catch (error) {
       console.error("Error updating data:", error);
+    } finally {
+      setPatchLoader(false);
     }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isEditing) {
-      await patchRow(editingLineNumber, formData);
+      await patchZeroSheetsRow(editingLineNumber, formData);
     } else {
       await postZeroSheetsData(formData);
     }
@@ -357,7 +346,7 @@ export const GoogleSheet = () => {
           modalOpen={handleModalOpen}
         >
           {loading ? (
-            <Loader />
+            <Loader height={70} width={70} />
           ) : (
             <ListFinishedProducts
               products={products}
@@ -370,6 +359,7 @@ export const GoogleSheet = () => {
           <Modal
             title={isEditing ? "Редагувати дані" : "Внесіть дані"}
             width={"670px"}
+            loader={patchLoader}
             onClose={handleModalClose}
             onSave={handleSubmit}
           >
