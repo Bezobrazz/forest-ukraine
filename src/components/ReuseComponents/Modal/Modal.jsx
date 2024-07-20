@@ -16,7 +16,7 @@ const Modal = ({ title, children, onClose, onSave, width, height, loader }) => {
         </div>
         <div className={s.modalBody}>{children}</div>
         <div className={s.modalFooter}>
-          {loader && <Loader height={40} width={40} />}
+          {loader && <Loader height={30} width={30} />}
           <Button
             variant="outlined"
             title="Відмінити"

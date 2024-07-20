@@ -145,6 +145,7 @@ export const GoogleSheet = () => {
   }
 
   const handleSubmit = async (e) => {
+    setPatchLoader(true);
     e.preventDefault();
     if (isEditing) {
       await patchZeroSheetsRow(editingLineNumber, formData);
@@ -153,6 +154,7 @@ export const GoogleSheet = () => {
     }
     setFormData({ date: dayjs(), productName: "", quantity: "", sku: "" });
     handleModalClose();
+    setPatchLoader(false);
   };
 
   const handleEditClick = (product) => {
