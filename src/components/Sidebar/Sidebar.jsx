@@ -1,3 +1,4 @@
+import { CgClose } from "react-icons/cg";
 import { AiFillCloseSquare } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
@@ -25,7 +26,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
       className={`${isTabletOrMobile ? styles.sidebarMobile : styles.sidebar}`}
     >
       <div className={styles.topBar}>
-        <h2 className={styles.sidebarTitle}>Navigation</h2>
+        {/* <h2 className={styles.sidebarTitle}>Navigation</h2> */}
       </div>
       <ul className={styles.navWrapper}>
         {navItems.map((item, index) => (
@@ -56,10 +57,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
         ))}
       </ul>
       {isTabletOrMobile && (
-        <AiFillCloseSquare
-          onClick={toggleSidebar}
-          className={styles.closeSidebarBtn}
-        />
+        <CgClose onClick={toggleSidebar} className={styles.closeSidebarBtn} />
       )}
     </div>
   );

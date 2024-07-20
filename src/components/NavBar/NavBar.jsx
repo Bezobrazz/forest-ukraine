@@ -1,4 +1,4 @@
-import { GiHamburgerMenu } from "react-icons/gi";
+import { RxHamburgerMenu } from "react-icons/rx";
 import { useMediaQuery } from "react-responsive";
 import s from "./NavBar.module.css";
 
@@ -7,7 +7,7 @@ const NavBar = ({ onHamburgerMenuBtnHandle }) => {
   return (
     <div className={s.container}>
       {isTabletOrMobile && (
-        <GiHamburgerMenu
+        <RxHamburgerMenu
           onClick={onHamburgerMenuBtnHandle}
           className={s.hamburgerBtn}
         />
