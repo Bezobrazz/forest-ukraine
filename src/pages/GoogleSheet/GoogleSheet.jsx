@@ -12,7 +12,7 @@ import Input from "../../components/ReuseComponents/Input/Input.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import dayjs from "dayjs";
 import BasicButtons from "../../components/ReuseComponents/Button/Button.jsx";
-import { getData } from "../../API/apiZeroSheets.js";
+import { getData, postData } from "../../API/apiZeroSheets.js";
 
 export const GoogleSheet = () => {
   const [products, setProducts] = useState([]);
@@ -139,22 +139,10 @@ export const GoogleSheet = () => {
     setTotalPerProduct(totals);
   };
 
-  async function postData(newProduct) {
+  async function postZeroSheetsData(newProduct) {
     try {
-      const response = await fetch("https://api.zerosheets.com/v1/7zk", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newProduct),
-      });
+      const updatedProducts = await postData(newProduct);
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const updatedProducts = await response.json();
       const newProductsList = [updatedProducts, ...products];
       setProducts(newProductsList);
       calculateTotals(newProductsList, filterDate);
@@ -221,7 +209,7 @@ export const GoogleSheet = () => {
     if (isEditing) {
       await patchRow(editingLineNumber, formData);
     } else {
-      await postData(formData);
+      await postZeroSheetsData(formData);
     }
     setFormData({ date: dayjs(), productName: "", quantity: "", sku: "" });
     handleModalClose();
