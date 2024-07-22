@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import Logo from "../../assets/images/logo.svg";
 
+// just comment
+
 const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
   const navItems = [
     { to: "/", text: "Форест " },
