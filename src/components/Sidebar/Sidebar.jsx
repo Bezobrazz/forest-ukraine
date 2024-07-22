@@ -1,6 +1,7 @@
 import { CgClose } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
+import Logo from "../../assets/images/logo.svg";
 
 const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
   const navItems = [
@@ -24,7 +25,11 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
     <div
       className={`${isTabletOrMobile ? styles.sidebarMobile : styles.sidebar}`}
     >
-      <div className={styles.topBar}></div>
+      <div className={styles.topBar}>
+        {!isTabletOrMobile && (
+          <img src={Logo} alt="logo" className={styles.logo} />
+        )}
+      </div>
       <ul className={styles.navWrapper}>
         {navItems.map((item, index) => (
           <li key={index}>

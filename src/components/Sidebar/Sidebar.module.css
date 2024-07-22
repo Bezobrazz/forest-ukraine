@@ -26,7 +26,10 @@
   right: 5px;
 }
 .topBar {
-  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 130px;
   padding: 10px;
 }
 .sidebarTitle {
@@ -54,4 +57,7 @@
   padding: 10px 20px;
   font-size: medium;
   color: cadetblue;
+}
+.logo {
+  width: 150px;
 }

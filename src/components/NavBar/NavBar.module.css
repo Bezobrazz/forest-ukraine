@@ -12,3 +12,8 @@
   stroke: #333333;
   cursor: pointer;
 }
+.logo {
+  width: 100px;
+  height: 100px;
+  margin-left: auto;
+}
