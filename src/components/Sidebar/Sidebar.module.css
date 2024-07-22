@@ -44,11 +44,22 @@
 .navMainLinks {
   display: block;
   text-decoration: none;
-  /* background-color: #fff; */
   padding: 10px;
-  font-size: large;
+  font-size: 20px;
   color: #333;
   border-bottom: 2px solid #333;
+  transition: ease all 0.5s;
+}
+.navMainLinks:hover {
+  background-color: #333;
+  color: #fff;
+}
+.navLink {
+  display: block;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: medium;
+  color: #333;
 }
 .navSubLink {
   display: block;

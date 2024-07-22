@@ -27,7 +27,9 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
     >
       <div className={styles.topBar}>
         {!isTabletOrMobile && (
-          <img src={Logo} alt="logo" className={styles.logo} />
+          <Link to="/">
+            <img src={Logo} alt="logo" className={styles.logo} />
+          </Link>
         )}
       </div>
       <ul className={styles.navWrapper}>
