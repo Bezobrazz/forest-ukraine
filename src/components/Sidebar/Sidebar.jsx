@@ -1,6 +1,9 @@
-import { AiFillCloseSquare } from "react-icons/ai";
+import { CgClose } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
+import Logo from "../../assets/images/logo.svg";
+
+// just comment
 
 const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
   const navItems = [
@@ -8,12 +11,12 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
     {
       to: "/production",
       text: "Виробництво",
-      subItems: [
-        { to: "/production/finished-products", text: "Виготовлена Продукція" },
-      ],
+      // subItems: [
+      //   { to: "/production/finished-products", text: "Виготовлена Продукція" },
+      // ],
     },
     { to: "/delivery-cost", text: "Вартість доставки для клієнта" },
-    { to: "/google-sheets", text: "Google Sheets" },
+    { to: "/google-sheets", text: "Виготовлена продукція" },
   ];
 
   const handleNavLinkClick = () => {
@@ -25,7 +28,11 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
       className={`${isTabletOrMobile ? styles.sidebarMobile : styles.sidebar}`}
     >
       <div className={styles.topBar}>
-        <h2 className={styles.sidebarTitle}>Navigation</h2>
+        {!isTabletOrMobile && (
+          <Link to="/">
+            <img src={Logo} alt="logo" className={styles.logo} />
+          </Link>
+        )}
       </div>
       <ul className={styles.navWrapper}>
         {navItems.map((item, index) => (
@@ -56,10 +63,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
         ))}
       </ul>
       {isTabletOrMobile && (
-        <AiFillCloseSquare
-          onClick={toggleSidebar}
-          className={styles.closeSidebarBtn}
-        />
+        <CgClose onClick={toggleSidebar} className={styles.closeSidebarBtn} />
       )}
     </div>
   );

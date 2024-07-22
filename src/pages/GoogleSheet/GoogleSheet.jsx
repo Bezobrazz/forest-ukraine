@@ -358,9 +358,9 @@ export const GoogleSheet = () => {
             <div
               key={index}
               className={styles.itemWrapper}
-              style={{
-                backgroundColor: index % 2 === 0 ? "#f0f0f0" : "#ffffff",
-              }}
+              // style={{
+              //   backgroundColor: index % 2 === 0 ? "#f0f0f0" : "#ffffff",
+              // }}
             >
               <p>{item.label}:</p>
               <p>
