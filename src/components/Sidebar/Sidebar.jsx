@@ -1,5 +1,4 @@
 import { CgClose } from "react-icons/cg";
-import { AiFillCloseSquare } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 
@@ -9,12 +8,12 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
     {
       to: "/production",
       text: "Виробництво",
-      subItems: [
-        { to: "/production/finished-products", text: "Виготовлена Продукція" },
-      ],
+      // subItems: [
+      //   { to: "/production/finished-products", text: "Виготовлена Продукція" },
+      // ],
     },
     { to: "/delivery-cost", text: "Вартість доставки для клієнта" },
-    { to: "/google-sheets", text: "Google Sheets" },
+    { to: "/google-sheets", text: "Виготовлена продукція" },
   ];
 
   const handleNavLinkClick = () => {
@@ -25,9 +24,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
     <div
       className={`${isTabletOrMobile ? styles.sidebarMobile : styles.sidebar}`}
     >
-      <div className={styles.topBar}>
-        {/* <h2 className={styles.sidebarTitle}>Navigation</h2> */}
-      </div>
+      <div className={styles.topBar}></div>
       <ul className={styles.navWrapper}>
         {navItems.map((item, index) => (
           <li key={index}>

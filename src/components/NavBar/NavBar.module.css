@@ -1,12 +1,11 @@
 .container {
   height: 60px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
   margin: 0;
   display: flex;
   align-items: center;
-  background-color: #f4d03f;
-  background-image: linear-gradient(132deg, #f4d03f 0%, #16a085 100%);
+  border-bottom: 2px solid #333;
 }
 .hamburgerBtn {
   font-size: xx-large;
