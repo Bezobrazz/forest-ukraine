@@ -176,6 +176,7 @@ export const GoogleSheet = () => {
     <div className={styles.container}>
       <div className={styles.contentWrapper}>
         <FinishedProductsStatistics products={products} />
+      
         <Card
           title={"Вироблено кори"}
           buttonTitle={"Додати"}

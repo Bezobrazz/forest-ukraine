@@ -12,6 +12,7 @@
 }
 .content {
   padding: 20px;
+  overflow-y: scroll;
 }
 .backdrop {
   width: 100vw;
@@ -19,5 +20,5 @@
   top: 0;
   z-index: 4;
   position: absolute;
-  background-color: rgba(66, 55, 43, 0.499);
+  background-color: #3333;
 }
