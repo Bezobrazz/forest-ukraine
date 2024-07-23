@@ -1,0 +1,38 @@
+.cardStatisticsContainer {
+  height: 100%;
+  max-width: 670px;
+  padding: 20px;
+  background-color: white;
+  color: #333;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+.statisticsButtonWrapper {
+  display: flex;
+  gap: 5px;
+}
+.mainItemWrapper {
+  padding: 8px;
+  background-color: #333;
+  color: #ffff;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+}
+.itemWrapper {
+  padding: 8px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #333;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+.persantage {
+  color: #9c9797;
+}
