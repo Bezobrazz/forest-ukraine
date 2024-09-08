@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./DeliveryCostCalculator.module.css";
 
 const DeliveryCostCalculator = () => {
@@ -6,15 +6,51 @@ const DeliveryCostCalculator = () => {
   const [clients, setClients] = useState([{ bags: 0, distance: 0 }]);
   const [totalDistance, setTotalDistance] = useState("");
   const [totalCost, setTotalCost] = useState(42000);
-  const [maxCapacity, setMaxCapacity] = useState(2400);
+  const [maxCapacity, setMaxCapacity] = useState(2000);
+
+  // Стейт для зберігання розрахунків
+  const [clientCosts, setClientCosts] = useState([]);
+  const [costPerBag, setCostPerBag] = useState([]);
+
+  // Функція для розрахунку загального внеску всіх клієнтів
+  const getTotalContribution = () => {
+    return clients.reduce((sum, client) => {
+      return sum + client.bags * client.distance;
+    }, 0);
+  };
 
   // Функція для розрахунку вартості доставки для кожного клієнта
   const calculateDeliveryCost = (bags, distance) => {
-    const costPerKm = totalCost / totalDistance;
-    const costPerBag = (costPerKm * distance) / maxCapacity;
+    const totalContribution = getTotalContribution();
+    
+    if (totalContribution > 0) {
+      const clientContribution = bags * distance;
+      return (clientContribution / totalContribution) * totalCost;
+    }
 
-    return bags * costPerBag;
+    return 0;
   };
+
+  // Функція для розрахунку вартості одного мішка для кожного клієнта
+  const calculateCostPerOneBag = (bags, distance) => {
+    if (bags === 0) return 0;
+
+    const totalCostForClient = calculateDeliveryCost(bags, distance);
+    return totalCostForClient / bags;
+  };
+
+  // Оновлення вартості в стейті при зміні даних клієнтів
+  useEffect(() => {
+    const updatedClientCosts = clients.map(client => 
+      calculateDeliveryCost(client.bags, client.distance)
+    );
+    const updatedCostPerBag = clients.map(client => 
+      calculateCostPerOneBag(client.bags, client.distance)
+    );
+
+    setClientCosts(updatedClientCosts);
+    setCostPerBag(updatedCostPerBag);
+  }, [clients, totalCost, totalDistance]);
 
   // Функція для додавання нового клієнта
   const addClient = () => {
@@ -31,7 +67,7 @@ const DeliveryCostCalculator = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Введіть дані для розрахунку вартості доставки:</h2>
+      <h2 className={styles.title}>Введіть дані для розрахунку вартості доставки:</h2>
       <div className={styles.inputGroup}>
         <label>Загальна відстань (км):</label>
         <input
@@ -85,7 +121,11 @@ const DeliveryCostCalculator = () => {
           </div>
           <p>
             Вартість доставки для клієнта {index + 1}:{" "}
-            {calculateDeliveryCost(client.bags, client.distance).toFixed(2)} грн
+            {clientCosts[index]?.toFixed(2)} грн
+          </p>
+          <p>
+            Вартість доставки 1 мішка для клієнта {index + 1}:{" "}
+            {costPerBag[index]?.toFixed(2)} грн
           </p>
         </div>
       ))}
