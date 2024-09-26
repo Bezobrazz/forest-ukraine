@@ -67,68 +67,69 @@ const DeliveryCostCalculator = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Введіть дані для розрахунку вартості доставки:</h2>
-      <div className={styles.inputGroup}>
-        <label>Загальна відстань (км):</label>
-        <input
-          type="number"
-          value={totalDistance}
-          onChange={(e) => setTotalDistance(parseInt(e.target.value))}
-          className={styles.input}
-        />
-      </div>
-      <div className={styles.inputGroup}>
-        <label>Загальна вартість (грн):</label>
-        <input
-          type="number"
-          value={totalCost}
-          onChange={(e) => setTotalCost(parseInt(e.target.value))}
-          className={styles.input}
-        />
-      </div>
-      <div className={styles.inputGroup}>
-        <label>Максимальна вмістимість машини (мішків):</label>
-        <input
-          type="number"
-          value={maxCapacity}
-          onChange={(e) => setMaxCapacity(parseInt(e.target.value))}
-          className={styles.input}
-        />
-      </div>
-      {clients.map((client, index) => (
-        <div key={index} className={styles.client}>
-          <div className={styles.inputClientWrapper}>
-            <label>Кількість мішків для клієнта {index + 1}:</label>
-            <input
-              type="number"
-              value={client.bags}
-              onChange={(e) =>
-                handleClientChange(index, "bags", parseInt(e.target.value))
-              }
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.inputClientWrapper}>
-            <label>Відстань для клієнта {index + 1} (км):</label>
-            <input
-              type="number"
-              value={client.distance}
-              onChange={(e) =>
-                handleClientChange(index, "distance", parseInt(e.target.value))
-              }
-              className={styles.input}
-            />
-          </div>
-          <p>
-            Вартість доставки для клієнта {index + 1}:{" "}
-            {clientCosts[index]?.toFixed(2)} грн
-          </p>
-          <p>
-            Вартість доставки 1 мішка для клієнта {index + 1}:{" "}
-            {costPerBag[index]?.toFixed(2)} грн
-          </p>
+      <h2 className={styles.header}>Delivery Cost Calculator</h2>
+      
+      <div className={styles.mainInput}>
+        <div className={styles.inputGroup}>
+          <label>Загальна відстань (км):</label>
+          <input
+            type="number"
+            value={totalDistance}
+            onChange={(e) => setTotalDistance(parseInt(e.target.value))}
+            className={styles.input}
+          />
         </div>
-      ))}
+        <div className={styles.inputGroup}>
+          <label>Загальна вартість (грн):</label>
+          <input
+            type="number"
+            value={totalCost}
+            onChange={(e) => setTotalCost(parseInt(e.target.value))}
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <label>Максимальна вмістимість машини (мішків):</label>
+          <input
+            type="number"
+            value={maxCapacity}
+            onChange={(e) => setMaxCapacity(parseInt(e.target.value))}
+            className={styles.input}
+          />
+        </div>
+      </div>
+
+      <div className={styles.clientSection}>
+        {clients.map((client, index) => (
+          <div key={index} className={styles.clientCard}>
+            <div className={styles.inputGroup}>
+              <label>Кількість мішків для клієнта {index + 1}:</label>
+              <input
+                type="number"
+                value={client.bags}
+                onChange={(e) =>
+                  handleClientChange(index, "bags", parseInt(e.target.value))
+                }
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <label>Відстань для клієнта {index + 1} (км):</label>
+              <input
+                type="number"
+                value={client.distance}
+                onChange={(e) =>
+                  handleClientChange(index, "distance", parseInt(e.target.value))
+                }
+                className={styles.input}
+              />
+            </div>
+            <p className={styles.text}>Вартість доставки для клієнта {index + 1}: <span className={styles.deliveryInfo}>{clientCosts[index]?.toFixed(2)}</span>  грн</p>
+            <p>Вартість доставки 1 мішка для клієнта {index + 1}: <span className={styles.deliveryInfo}>{costPerBag[index]?.toFixed(2)}</span>  грн</p>
+          </div>
+        ))}
+      </div>
+
       <button onClick={addClient} className={styles.addButton}>
         Додати ще клієнта
       </button>
