@@ -8,7 +8,7 @@ const Modal = ({ title, children, onClose, onSave, width, height, loader }) => {
     <div className={s.modalBackdrop}>
       <div style={{ width: width, height: height }} className={s.modalContent}>
         <div className={s.modalHeader}>
-          <h2 сlassName={s.modalTitle}>{title}</h2>
+          <h2 className={s.modalTitle}>{title}</h2>
           <button className={s.closeButton} onClick={onClose}>
             <div className={s.modalHeaderBackground}></div>
             <IoCloseCircleOutline className={s.closeIcon} />
