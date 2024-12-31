@@ -1,5 +1,3 @@
-const Operations = () => {
+export const Operations = () => {
   return <div>Operstions</div>;
 };
-
-export default Operations;

@@ -1,18 +1,24 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useMediaQuery } from "react-responsive";
+
+import s from "./App.module.css";
+
 import Sidebar from "./components/Sidebar/Sidebar.jsx";
+import NavBar from "./components/NavBar/NavBar.jsx";
+
 import Home from "./pages/Home/Home.jsx";
 import Production from "./pages/Production/Production.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
-import s from "./App.module.css";
-import { useState, useEffect } from "react";
-import { useMediaQuery } from "react-responsive";
-import NavBar from "./components/NavBar/NavBar.jsx";
 import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
 import DeliveryCost from "./pages/DeliveryCost/DeliveryCost.jsx";
 import { GoogleSheet } from "./pages/GoogleSheet/GoogleSheet.jsx";
-import Suppliers from "./pages/Production/components/Suppliers/Suppliers.jsx";
-import Bags from "./pages/Production/components/Bags/Bags.jsx";
-import Operations from "./pages/Production/components/Operations/Operations.jsx";
+
+import {
+  Suppliers,
+  Bags,
+  Operations,
+} from "./pages/Production/components/index.js";
 
 const App = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
