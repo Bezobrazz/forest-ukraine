@@ -2,3 +2,68 @@
   font-size: 18px;
   color: #333;
 }
+
+.link {
+  padding: 16px;
+  background-color: white;
+  border-bottom: 4px solid transparent;
+  transition: all 0.3s;
+}
+
+.active {
+  border-color: teal;
+  color: gray;
+}
+
+.inactive {
+  color: teal;
+}
+
+.inactive:hover {
+  color: gray;
+  border-color: teal;
+}
+
+.link:hover {
+  color: gray;
+  border-color: teal;
+}
+
+.container {
+  padding-left: 0.5rem; /* px-2 */
+  padding-right: 0.5rem; /* px-2 */
+}
+
+.navbar {
+  margin-bottom: 1rem; /* mb-4 */
+  display: flex;
+  width: 100%;
+  gap: 1rem; /* gap-4 */
+  overflow: auto; /* overflow-auto */
+  border-bottom: 2px solid #e5e7eb; /* border-b-2 border-b-gray-200 */
+  background-color: white; /* bg-white */
+  font-size: 1.25rem; /* text-xl */
+  font-weight: bold; /* font-bold */
+}
+
+/* .scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+	background: #999;
+} */

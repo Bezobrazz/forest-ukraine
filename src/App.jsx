@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Production from "./pages/Production/Production.jsx";
@@ -10,6 +10,9 @@ import NavBar from "./components/NavBar/NavBar.jsx";
 import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
 import DeliveryCost from "./pages/DeliveryCost/DeliveryCost.jsx";
 import { GoogleSheet } from "./pages/GoogleSheet/GoogleSheet.jsx";
+import Suppliers from "./pages/Production/components/Suppliers/Suppliers.jsx";
+import Bags from "./pages/Production/components/Bags/Bags.jsx";
+import Operations from "./pages/Production/components/Operations/Operations.jsx";
 
 const App = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -49,7 +52,12 @@ const App = () => {
         <div className={s.content}>
           <Routes>
             <Route index path="/" element={<Home />} />
-            <Route path="/production" element={<Production />} />
+            <Route path="/production" element={<Production />}>
+              <Route index element={<Navigate to="suppliers-info" />} />
+              <Route path="suppliers-info" element={<Suppliers />} />
+              <Route path="bags-info" element={<Bags />} />
+              <Route path="operations-info" element={<Operations />} />
+            </Route>
             <Route
               path="/production/finished-products"
               element={<FinishedProducts />}
