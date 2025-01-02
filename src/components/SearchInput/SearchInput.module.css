@@ -1,7 +1,18 @@
+.inputWrapper {
+  position: relative;
+}
+
 .input {
-  width: 100%;
-  padding: 8px 16px 8px 40px;
+  padding: 10px 20px 10px 40px;
   border-radius: 8px;
   border: 2px solid var(--primary-color);
   font-size: 16px;
+}
+.iconContainer {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+  pointer-events: none;
 }

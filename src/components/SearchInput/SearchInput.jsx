@@ -1,5 +1,4 @@
 import { BiSearchAlt } from "react-icons/bi";
-import { AiOutlineSearch } from "react-icons/ai";
 import { useState } from "react";
 import styles from "./SearchInput.module.css";
 
@@ -27,7 +26,7 @@ const SearchInput = ({
   };
 
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <div className={styles.inputWrapper}>
       <input
         type="text"
         value={query}
@@ -35,16 +34,7 @@ const SearchInput = ({
         placeholder={placeholder}
         className={styles.input}
       />
-      <span
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "12px",
-          transform: "translateY(-50%)",
-          color: "var(--primary-color)",
-          pointerEvents: "none",
-        }}
-      >
+      <span className={styles.iconContainer}>
         <BiSearchAlt />{" "}
       </span>
     </div>
