@@ -2,3 +2,10 @@
   display: flex;
   gap: 10px;
 }
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}

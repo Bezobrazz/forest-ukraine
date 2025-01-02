@@ -8,6 +8,11 @@
   border: 2px solid var(--primary-color);
   font-size: 16px;
 }
+
+.input::placeholder {
+  color: var(--primary-color);
+}
+
 .iconContainer {
   position: absolute;
   top: 50%;
