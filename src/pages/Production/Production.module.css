@@ -5,33 +5,32 @@
 
 .link {
   padding: 16px;
-  background-color: white;
   border-bottom: 4px solid transparent;
   transition: all 0.3s;
 }
 
 .active {
-  border-color: teal;
-  color: gray;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
 }
 
 .inactive {
-  color: teal;
+  color: var(--primary-color);
 }
 
 .inactive:hover {
-  color: gray;
-  border-color: teal;
+  color: var(--accent-color);
+  border-color: var(--accent-color);
 }
 
-.link:hover {
+/* .link:hover {
   color: gray;
   border-color: teal;
-}
+} */
 
 .container {
-  padding-left: 0.5rem; /* px-2 */
-  padding-right: 0.5rem; /* px-2 */
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .navbar {
@@ -40,10 +39,8 @@
   width: 100%;
   gap: 1rem; /* gap-4 */
   overflow: auto; /* overflow-auto */
-  border-bottom: 2px solid #e5e7eb; /* border-b-2 border-b-gray-200 */
-  background-color: white; /* bg-white */
   font-size: 1.25rem; /* text-xl */
-  font-weight: bold; /* font-bold */
+  font-weight: bold;
 }
 
 /* .scrollbar {

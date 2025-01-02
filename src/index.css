@@ -29,3 +29,7 @@ h2 {
   background-color: #1e7a0a;
   transition: all 0.5s ease;
 }
+:root {
+  --primary-color: #333333;
+  --accent-color: #2e7d32;
+}
