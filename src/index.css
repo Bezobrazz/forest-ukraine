@@ -14,7 +14,7 @@ h2 {
 .button {
   min-width: 120px;
   border: none;
-  background-color: #34a40f;
+  background-color: var(--accent-color);
   display: flex;
   align-items: center;
   justify-content: center;

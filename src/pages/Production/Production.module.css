@@ -3,11 +3,11 @@
   color: #333;
 }
 
-.link {
+/* .link {
   padding: 16px;
   border-bottom: 4px solid transparent;
   transition: all 0.3s;
-}
+} */
 
 .active {
   border-color: var(--accent-color);
