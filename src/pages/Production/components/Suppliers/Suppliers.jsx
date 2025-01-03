@@ -3,8 +3,16 @@ import Button from "../../../../components/Button/Button.jsx";
 import SearchInput from "../../../../components/SearchInput/SearchInput.jsx";
 import styles from "./Suppliers.module.css";
 import Table from "../../../../components/Table/Table.jsx";
+import Modal from "../../../../components/ReuseComponents/Modal/Modal.jsx";
+import { useState } from "react";
+import Input from "../../../../components/ReuseComponents/Input/Input.jsx";
 
 export const Suppliers = () => {
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
   const columns = [
     {
       key: "actions",
@@ -37,9 +45,37 @@ export const Suppliers = () => {
             <BiSort />
           </Button>
         </div>
-        <Button variant="primary">Додати постачальника</Button>
+        <Button variant="primary" onClick={handleOpenModal}>
+          Додати постачальника
+        </Button>
       </div>
       <Table columns={columns} data={data} />
+      {openModal && (
+        <Modal
+          title="Додати постачальника"
+          width="400px"
+          onClose={() => {
+            setOpenModal(false);
+          }}
+          onSave={() => {}}
+        >
+          <form>
+            <div className={styles.inputWrapper}>
+              <Input
+                type="text"
+                size={"small"}
+                placeholder="Ім'я, прізвище або назва*"
+              />
+              <Input type="number" size={"small"} placeholder="Телефон" />
+              <Input
+                type="number"
+                size={"small"}
+                placeholder="Реквізити для оплати"
+              />
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 };

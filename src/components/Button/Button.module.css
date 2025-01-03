@@ -22,7 +22,7 @@
 }
 
 .primary:hover:not(:disabled) {
-  background-color: #209e09;
+  background-color: var(--accent-color-hover);
 }
 
 .secondary {
@@ -31,6 +31,6 @@
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: #92979a;
+  background-color: var(--accent-color-hover);
   color: white;
 }

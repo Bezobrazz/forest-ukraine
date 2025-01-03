@@ -32,4 +32,5 @@ h2 {
 :root {
   --primary-color: #333333;
   --accent-color: #2e7d32;
+  --accent-color-hover: #209e09;
 }
