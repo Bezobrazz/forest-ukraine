@@ -10,6 +10,15 @@
   margin-bottom: 20px;
 }
 
+.supplierEditButton {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  text-decoration: underline;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .inputWrapper {
   display: flex;
   flex-direction: column;

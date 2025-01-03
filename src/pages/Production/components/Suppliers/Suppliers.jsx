@@ -6,9 +6,11 @@ import Table from "../../../../components/Table/Table.jsx";
 import Modal from "../../../../components/ReuseComponents/Modal/Modal.jsx";
 import { useState } from "react";
 import Input from "../../../../components/ReuseComponents/Input/Input.jsx";
+import CustomSelect from "../../../../components/CustomSelect/CustomSelect.jsx";
 
 export const Suppliers = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -23,7 +25,18 @@ export const Suppliers = () => {
         </Button>
       ),
     },
-    { key: "name", title: "Постачальник" },
+    {
+      key: "name",
+      title: "Постачальник",
+      render: (text, record) => (
+        <button
+          className={styles.supplierEditButton}
+          onClick={() => alert(`Editing ${record.name}`)}
+        >
+          {text}
+        </button>
+      ),
+    },
     { key: "price", title: "Ціна" },
     { key: "bags", title: "Мішки (дебет)" },
     { key: "loan", title: "Борг" },
@@ -33,6 +46,12 @@ export const Suppliers = () => {
     { id: 1, name: "John Doe", age: 30 },
     { id: 2, name: "Jane Smith", age: 25 },
   ];
+
+  const selectOptions = [
+    { value: "price", label: "По ціні" },
+    { value: "bags", label: "По мішкам" },
+    { value: "loan", label: "По боргам" },
+  ];
   return (
     <div>
       <div className={styles.topBar}>
@@ -41,9 +60,13 @@ export const Suppliers = () => {
             placeholder="Пошук постачальників..."
             onSearch={() => {}}
           />
-          <Button variant="secondary">
-            <BiSort />
-          </Button>
+          <CustomSelect
+            minWidth={150}
+            placeholder={<BiSort />}
+            value={selectedOption}
+            options={selectOptions}
+            onChange={(value) => setSelectedOption(value)}
+          />
         </div>
         <Button variant="primary" onClick={handleOpenModal}>
           Додати постачальника

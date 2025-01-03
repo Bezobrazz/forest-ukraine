@@ -14,10 +14,29 @@ export default function BasicSelect({
   ...props
 }) {
   return (
-    <Box sx={{ minWidth, width: fullWidth ? "100%" : "auto" }}>
+    <Box
+      sx={{
+        minWidth,
+        width: fullWidth ? "100%" : "auto",
+        border: "2px solid var(--primary-color)",
+        borderRadius: "8px",
+      }}
+    >
       <FormControl fullWidth={fullWidth}>
-        <InputLabel id="select-label">{label}</InputLabel>
+        <InputLabel
+          sx={{
+            color: "var(--primary-color)",
+          }}
+          id="select-label"
+          shrink
+        >
+          {label}
+        </InputLabel>
         <Select
+          sx={{
+            backgroundColor: "white",
+          }}
+          size="small"
           labelId="select-label"
           id="select"
           value={value}
