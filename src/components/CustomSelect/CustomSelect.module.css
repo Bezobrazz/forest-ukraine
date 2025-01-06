@@ -1,6 +1,5 @@
 .container {
   position: relative;
-
   font-size: 16px;
 }
 
@@ -61,4 +60,10 @@
 .option.selected {
   background-color: var(--accent-color);
   color: white;
+}
+
+@media screen and (max-width: 425px) {
+  .container {
+    width: 100%;
+  }
 }

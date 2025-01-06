@@ -1,6 +1,7 @@
 import styles from "./Button.module.css";
 
 const Button = ({
+  width = "auto",
   children,
   onClick,
   type = "button",
@@ -9,6 +10,7 @@ const Button = ({
 }) => {
   return (
     <button
+      style={{ width }}
       className={`${styles.button} ${styles[variant]}`}
       onClick={onClick}
       type={type}

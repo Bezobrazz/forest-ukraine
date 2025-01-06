@@ -8,7 +8,7 @@ export default function CustomSelect({
   value,
   onChange,
   options = [],
-  fullWidth = true,
+  fullWidth = false,
   minWidth = 120,
   placeholder = "Select an option",
 }) {

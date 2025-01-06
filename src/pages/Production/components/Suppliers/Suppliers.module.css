@@ -1,13 +1,17 @@
-.searchWrapper {
-  display: flex;
-  gap: 10px;
-}
-
 .topBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 20px;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .supplierEditButton {
@@ -24,4 +28,10 @@
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .searchWrapper {
+    width: 100%;
+  }
 }

@@ -7,10 +7,14 @@ import Modal from "../../../../components/ReuseComponents/Modal/Modal.jsx";
 import { useState } from "react";
 import Input from "../../../../components/ReuseComponents/Input/Input.jsx";
 import CustomSelect from "../../../../components/CustomSelect/CustomSelect.jsx";
+import { useMediaQuery } from "react-responsive";
 
 export const Suppliers = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+
+  // const isTabletOrMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -62,13 +66,18 @@ export const Suppliers = () => {
           />
           <CustomSelect
             minWidth={150}
-            placeholder={<BiSort />}
+            fullWidth={isMobile ? true : false}
+            placeholder={isMobile ? "Сортувати" : <BiSort />}
             value={selectedOption}
             options={selectOptions}
             onChange={(value) => setSelectedOption(value)}
           />
         </div>
-        <Button variant="primary" onClick={handleOpenModal}>
+        <Button
+          variant="primary"
+          width={isMobile ? "100%" : "230px"}
+          onClick={handleOpenModal}
+        >
           Додати постачальника
         </Button>
       </div>

@@ -1,4 +1,6 @@
 .inputWrapper {
+  display: flex;
+  align-items: center;
   position: relative;
 }
 
@@ -20,4 +22,13 @@
   transform: translateY(-50%);
   color: var(--primary-color);
   pointer-events: none;
+}
+
+@media screen and (max-width: 425px) {
+  .inputWrapper {
+    width: 100%;
+  }
+  .input {
+    width: 100%;
+  }
 }
