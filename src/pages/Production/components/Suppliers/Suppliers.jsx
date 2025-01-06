@@ -4,17 +4,51 @@ import SearchInput from "../../../../components/SearchInput/SearchInput.jsx";
 import styles from "./Suppliers.module.css";
 import Table from "../../../../components/Table/Table.jsx";
 import Modal from "../../../../components/ReuseComponents/Modal/Modal.jsx";
-import { useState } from "react";
+import { suppliers } from "../../../../components/State.js";
+import { useEffect, useState } from "react";
 import Input from "../../../../components/ReuseComponents/Input/Input.jsx";
 import CustomSelect from "../../../../components/CustomSelect/CustomSelect.jsx";
 import { useMediaQuery } from "react-responsive";
+import {
+  addSupplier,
+  getSuppliers,
+} from "../../../../Firebase/Suppliers/SuppliersService.js";
 
 export const Suppliers = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
-  // const isTabletOrMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
+
+  const SuppliersList = async () => {
+    try {
+      const suppliersData = await getSuppliers();
+      if (suppliers.length === 0) {
+        console.log("No suppliers found.");
+      } else {
+        suppliers.value = suppliersData; // added suppliers to the global state from signals
+      }
+    } catch (error) {
+      console.error("Error fetching suppliers:", error);
+    }
+  };
+
+  useEffect(() => {
+    SuppliersList();
+  }, []);
+
+  // const addNewSupplier = async () => {
+  //   try {
+  //     const newSupplier = {
+  //       name: "New Supplier",
+  //       phone: "0934567788",
+  //       bagspaymentDetails: 8273642876348,
+  //     };
+  //     const supplierId = await addSupplier(newSupplier);
+  //   } catch (error) {
+  //     console.error("Error adding supplier:", error);
+  //   }
+  // };
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -46,10 +80,7 @@ export const Suppliers = () => {
     { key: "loan", title: "Борг" },
   ];
 
-  const data = [
-    { id: 1, name: "John Doe", age: 30 },
-    { id: 2, name: "Jane Smith", age: 25 },
-  ];
+  const data = suppliers.value;
 
   const selectOptions = [
     { value: "price", label: "По ціні" },
@@ -77,6 +108,7 @@ export const Suppliers = () => {
           variant="primary"
           width={isMobile ? "100%" : "230px"}
           onClick={handleOpenModal}
+          // onClick={addNewSupplier}
         >
           Додати постачальника
         </Button>
