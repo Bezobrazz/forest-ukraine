@@ -37,4 +37,6 @@ h2 {
   --accent-color-hover: #209e09;
   --media-query-tabletOrMobile: 768px;
   --media-query-mobile: 425px;
+
+  --toastify-color-success: #2e7d32;
 }

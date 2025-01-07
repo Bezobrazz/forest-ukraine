@@ -13,6 +13,13 @@ import {
   addSupplier,
   getSuppliers,
 } from "../../../../Firebase/Suppliers/SuppliersService.js";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  errorNotify,
+  infoNotify,
+  successNotify,
+} from "../../../../components/Notifications/Notifications.js";
 
 export const Suppliers = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -24,6 +31,12 @@ export const Suppliers = () => {
   const [supplierPaymentDetails, setSupplierPaymentDetails] = useState("");
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
+
+  const setInitialInputValuesState = () => {
+    setSupplierName("");
+    setSupplierPhone("");
+    setSupplierPaymentDetails("");
+  };
 
   const SuppliersList = async () => {
     try {
@@ -38,6 +51,7 @@ export const Suppliers = () => {
       }
     } catch (error) {
       console.error("Error fetching suppliers:", error);
+      errorNotify("Помилка при завантаженні постачальників!", 2000);
     }
   };
 
@@ -45,25 +59,11 @@ export const Suppliers = () => {
     SuppliersList();
   }, []);
 
-  // const addNewSupplier = async () => {
-  //   try {
-  //     const newSupplier = {
-  //       name: "New Supplier",
-  //       phone: "0934567788",
-  //       bagspaymentDetails: 8273642876348,
-  //     };
-  //     const supplierId = await addSupplier(newSupplier);
-  //   } catch (error) {
-  //     console.error("Error adding supplier:", error);
-  //   }
-  // };
-
   const addNewSupplier = async () => {
     if (!supplierName) {
-      alert("Please fill in all the fields");
+      infoNotify("Будь ласка, введіть ім'я постачальника!", 2000);
       return;
     }
-
     try {
       const newSupplier = {
         name: supplierName,
@@ -71,18 +71,20 @@ export const Suppliers = () => {
         paymentDetails: supplierPaymentDetails,
       };
       await addSupplier(newSupplier);
-      alert("Supplier added successfully!");
-      setOpenModal(false); // Close modal after adding supplier
-      // Optionally, refetch the supplier list to show the new supplier
+      successNotify("Постачальник успішно доданий!", 1000);
+      setOpenModal(false);
       SuppliersList();
+      setInitialInputValuesState();
     } catch (error) {
       console.error("Error adding supplier:", error);
+      errorNotify("Помилка при додаванні постачальника!", 2000);
     }
   };
 
   const handleOpenModal = () => {
     setOpenModal(true);
   };
+
   const columns = [
     {
       key: "actions",
@@ -138,7 +140,6 @@ export const Suppliers = () => {
           variant="primary"
           width={isMobile ? "100%" : "230px"}
           onClick={handleOpenModal}
-          // onClick={addNewSupplier}
         >
           Додати постачальника
         </Button>
@@ -180,6 +181,7 @@ export const Suppliers = () => {
           </form>
         </Modal>
       )}
+      <ToastContainer />
     </div>
   );
 };
