@@ -19,6 +19,10 @@ export const Suppliers = () => {
   const [selectedOption, setSelectedOption] = useState("");
   const [isLoader, setIsLoader] = useState(false);
 
+  const [supplierName, setSupplierName] = useState("");
+  const [supplierPhone, setSupplierPhone] = useState("");
+  const [supplierPaymentDetails, setSupplierPaymentDetails] = useState("");
+
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
   const SuppliersList = async () => {
@@ -53,6 +57,28 @@ export const Suppliers = () => {
   //     console.error("Error adding supplier:", error);
   //   }
   // };
+
+  const addNewSupplier = async () => {
+    if (!supplierName) {
+      alert("Please fill in all the fields");
+      return;
+    }
+
+    try {
+      const newSupplier = {
+        name: supplierName,
+        phone: supplierPhone,
+        paymentDetails: supplierPaymentDetails,
+      };
+      await addSupplier(newSupplier);
+      alert("Supplier added successfully!");
+      setOpenModal(false); // Close modal after adding supplier
+      // Optionally, refetch the supplier list to show the new supplier
+      SuppliersList();
+    } catch (error) {
+      console.error("Error adding supplier:", error);
+    }
+  };
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -125,19 +151,29 @@ export const Suppliers = () => {
           onClose={() => {
             setOpenModal(false);
           }}
-          onSave={() => {}}
+          onSave={addNewSupplier}
         >
           <form>
             <div className={styles.inputWrapper}>
               <Input
                 type="text"
                 size={"small"}
+                value={supplierName}
+                onChange={(e) => setSupplierName(e.target.value)}
                 placeholder="Ім'я, прізвище або назва*"
               />
-              <Input type="number" size={"small"} placeholder="Телефон" />
               <Input
                 type="number"
                 size={"small"}
+                value={supplierPhone}
+                onChange={(e) => setSupplierPhone(e.target.value)}
+                placeholder="Телефон"
+              />
+              <Input
+                type="number"
+                size={"small"}
+                value={supplierPaymentDetails}
+                onChange={(e) => setSupplierPaymentDetails(e.target.value)}
                 placeholder="Реквізити для оплати"
               />
             </div>

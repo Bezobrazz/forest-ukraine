@@ -1,5 +1,12 @@
 import db from "./FirebaseConfig";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 export const getCollectionData = async (collectionName) => {
   try {
@@ -26,6 +33,41 @@ export const addDocumentToCollection = async (collectionName, document) => {
     return docRef.id;
   } catch (error) {
     console.error(`Error adding document to ${collectionName}:`, error);
+    throw error;
+  }
+};
+
+export const deleteDocumentFromCollection = async (
+  collectionName,
+  documentId
+) => {
+  try {
+    console.log(
+      `Deleting document with ID: ${documentId} from collection: ${collectionName}`
+    );
+    const docRef = doc(db, collectionName, documentId);
+    await deleteDoc(docRef);
+    console.log(`Document with ID: ${documentId} deleted successfully.`);
+  } catch (error) {
+    console.error(`Error deleting document from ${collectionName}:`, error);
+    throw error;
+  }
+};
+
+export const updateDocumentInCollection = async (
+  collectionName,
+  documentId,
+  updatedData
+) => {
+  try {
+    console.log(
+      `Updating document with ID: ${documentId} in collection: ${collectionName}`
+    );
+    const docRef = doc(db, collectionName, documentId);
+    await updateDoc(docRef, updatedData);
+    console.log(`Document with ID: ${documentId} updated successfully.`);
+  } catch (error) {
+    console.error(`Error updating document in ${collectionName}:`, error);
     throw error;
   }
 };
