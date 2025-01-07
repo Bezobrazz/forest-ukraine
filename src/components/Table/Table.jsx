@@ -1,6 +1,7 @@
+import Loader from "../Loader/Loader.jsx";
 import styles from "./Table.module.css";
 
-const Table = ({ columns, data, rowKey = "id" }) => {
+const Table = ({ isLoader = false, columns, data, rowKey = "id" }) => {
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -27,6 +28,11 @@ const Table = ({ columns, data, rowKey = "id" }) => {
           ))}
         </tbody>
       </table>
+      {isLoader && (
+        <div className={styles.loaderWrapper}>
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };

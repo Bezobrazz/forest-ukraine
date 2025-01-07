@@ -35,3 +35,10 @@
 .row:hover {
   background-color: #f9f9f9;
 }
+
+.loaderWrapper {
+  padding-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

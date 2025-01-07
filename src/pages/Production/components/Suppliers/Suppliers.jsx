@@ -17,15 +17,19 @@ import {
 export const Suppliers = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const [isLoader, setIsLoader] = useState(false);
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
   const SuppliersList = async () => {
     try {
+      setIsLoader(true);
       const suppliersData = await getSuppliers();
+
       if (suppliers.length === 0) {
         console.log("No suppliers found.");
       } else {
+        setIsLoader(false);
         suppliers.value = suppliersData; // added suppliers to the global state from signals
       }
     } catch (error) {
@@ -113,7 +117,7 @@ export const Suppliers = () => {
           Додати постачальника
         </Button>
       </div>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={data} isLoader={isLoader} />
       {openModal && (
         <Modal
           title="Додати постачальника"
