@@ -20,6 +20,7 @@ import {
   infoNotify,
   successNotify,
 } from "../../../../components/Notifications/Notifications.js";
+import { serverTimestamp } from "firebase/firestore";
 
 export const Suppliers = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -38,7 +39,7 @@ export const Suppliers = () => {
     setSupplierPaymentDetails("");
   };
 
-  const SuppliersList = async () => {
+  const getSuppliersList = async () => {
     try {
       setIsLoader(true);
       const suppliersData = await getSuppliers();
@@ -56,7 +57,7 @@ export const Suppliers = () => {
   };
 
   useEffect(() => {
-    SuppliersList();
+    getSuppliersList();
   }, []);
 
   const addNewSupplier = async () => {
@@ -69,11 +70,12 @@ export const Suppliers = () => {
         name: supplierName,
         phone: supplierPhone,
         paymentDetails: supplierPaymentDetails,
+        createdAt: serverTimestamp(),
       };
       await addSupplier(newSupplier);
       successNotify("Постачальник успішно доданий!", 1000);
       setOpenModal(false);
-      SuppliersList();
+      getSuppliersList();
       setInitialInputValuesState();
     } catch (error) {
       console.error("Error adding supplier:", error);
@@ -144,7 +146,12 @@ export const Suppliers = () => {
           Додати постачальника
         </Button>
       </div>
-      <Table columns={columns} data={data} isLoader={isLoader} />
+      <Table
+        columns={columns}
+        data={data}
+        isLoader={isLoader}
+        sortBy="createdAt"
+      />
       {openModal && (
         <Modal
           title="Додати постачальника"
@@ -162,6 +169,7 @@ export const Suppliers = () => {
                 value={supplierName}
                 onChange={(e) => setSupplierName(e.target.value)}
                 placeholder="Ім'я, прізвище або назва*"
+                required
               />
               <Input
                 type="number"

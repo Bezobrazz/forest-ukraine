@@ -1,7 +1,19 @@
 import Loader from "../Loader/Loader.jsx";
 import styles from "./Table.module.css";
 
-const Table = ({ isLoader = false, columns, data, rowKey = "id" }) => {
+const Table = ({
+  isLoader = false,
+  columns,
+  data,
+  rowKey = "id",
+  sortBy = "createdAt",
+}) => {
+  const sortedData = [...data].sort((a, b) => {
+    if (a[sortBy] > b[sortBy]) return -1;
+    if (a[sortBy] < b[sortBy]) return 1;
+    return 0;
+  });
+
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -15,7 +27,7 @@ const Table = ({ isLoader = false, columns, data, rowKey = "id" }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
+          {sortedData.map((row) => (
             <tr key={row[rowKey]} className={styles.row}>
               {columns.map((column) => (
                 <td key={column.key} className={styles.cell}>
