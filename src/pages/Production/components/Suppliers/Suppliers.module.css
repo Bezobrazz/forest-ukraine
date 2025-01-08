@@ -23,13 +23,6 @@
   cursor: pointer;
 }
 
-.inputWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
 .trashButton {
   width: 35px;
   height: 35px;

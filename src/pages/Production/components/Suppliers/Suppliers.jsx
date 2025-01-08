@@ -1,31 +1,30 @@
+import { useState, useEffect } from "react";
 import { BsFillTrashFill } from "react-icons/bs";
 import { BiSort } from "react-icons/bi";
+import { useMediaQuery } from "react-responsive";
 import Button from "../../../../components/Button/Button.jsx";
 import SearchInput from "../../../../components/SearchInput/SearchInput.jsx";
 import styles from "./Suppliers.module.css";
 import Table from "../../../../components/Table/Table.jsx";
-import Modal from "../../../../components/ReuseComponents/Modal/Modal.jsx";
 import { suppliers } from "../../../../components/State.js";
-import { useEffect, useState } from "react";
-import Input from "../../../../components/ReuseComponents/Input/Input.jsx";
-import CustomSelect from "../../../../components/CustomSelect/CustomSelect.jsx";
-import { useMediaQuery } from "react-responsive";
 import {
   addSupplier,
   getSuppliers,
   deleteSupplier,
 } from "../../../../Firebase/Suppliers/SuppliersService.js";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
   errorNotify,
   infoNotify,
   successNotify,
 } from "../../../../components/Notifications/Notifications.js";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { serverTimestamp } from "firebase/firestore";
+import CustomSelect from "../../../../components/CustomSelect/CustomSelect.jsx";
+import { AddModal } from "./components/AddModal/AddModal.jsx";
 
 export const Suppliers = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [isLoader, setIsLoader] = useState(false);
 
@@ -34,8 +33,6 @@ export const Suppliers = () => {
   const [supplierPaymentDetails, setSupplierPaymentDetails] = useState("");
 
   const [searchValue, setSearchValue] = useState("");
-
-  console.log("suppliers.value:", suppliers.value);
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
@@ -54,7 +51,7 @@ export const Suppliers = () => {
         console.log("No suppliers found.");
       } else {
         setIsLoader(false);
-        suppliers.value = suppliersData; // added suppliers to the global state from signals
+        suppliers.value = suppliersData;
       }
     } catch (error) {
       console.error("Error fetching suppliers:", error);
@@ -80,7 +77,7 @@ export const Suppliers = () => {
       };
       await addSupplier(newSupplier);
       successNotify("Постачальник успішно доданий!", 1000);
-      setOpenModal(false);
+      setOpenAddModal(false);
       getSuppliersList();
       setInitialInputValuesState();
     } catch (error) {
@@ -118,10 +115,6 @@ export const Suppliers = () => {
   const searchedSuppliers = suppliers.value.filter((supplier) =>
     supplier.name.toLowerCase().includes(searchValue.toLowerCase())
   );
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
 
   const columns = [
     {
@@ -169,6 +162,7 @@ export const Suppliers = () => {
     { value: "bags", label: "По мішкам" },
     { value: "loan", label: "По боргам" },
   ];
+
   return (
     <div>
       <div className={styles.topBar}>
@@ -190,7 +184,7 @@ export const Suppliers = () => {
         <Button
           variant="primary"
           width={isMobile ? "100%" : "230px"}
-          onClick={handleOpenModal}
+          onClick={() => setOpenAddModal(true)}
         >
           Додати постачальника
         </Button>
@@ -201,43 +195,17 @@ export const Suppliers = () => {
         isLoader={isLoader}
         sortBy="createdAt"
       />
-      {openModal && (
-        <Modal
-          title="Додати постачальника"
-          width="400px"
-          onClose={() => {
-            setOpenModal(false);
-          }}
-          onSave={addNewSupplier}
-        >
-          <form>
-            <div className={styles.inputWrapper}>
-              <Input
-                type="text"
-                size={"small"}
-                value={supplierName}
-                onChange={(e) => setSupplierName(e.target.value)}
-                placeholder="Ім'я, прізвище або назва*"
-                required
-              />
-              <Input
-                type="number"
-                size={"small"}
-                value={supplierPhone}
-                onChange={(e) => setSupplierPhone(e.target.value)}
-                placeholder="Телефон"
-              />
-              <Input
-                type="number"
-                size={"small"}
-                value={supplierPaymentDetails}
-                onChange={(e) => setSupplierPaymentDetails(e.target.value)}
-                placeholder="Реквізити для оплати"
-              />
-            </div>
-          </form>
-        </Modal>
-      )}
+      <AddModal
+        isOpen={openAddModal}
+        onClose={() => setOpenAddModal(false)}
+        onSave={addNewSupplier}
+        supplierName={supplierName}
+        setSupplierName={setSupplierName}
+        supplierPhone={supplierPhone}
+        setSupplierPhone={setSupplierPhone}
+        supplierPaymentDetails={supplierPaymentDetails}
+        setSupplierPaymentDetails={setSupplierPaymentDetails}
+      />
       <ToastContainer />
     </div>
   );
