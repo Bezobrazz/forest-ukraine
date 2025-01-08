@@ -31,6 +31,8 @@ export const Suppliers = () => {
   const [supplierPhone, setSupplierPhone] = useState("");
   const [supplierPaymentDetails, setSupplierPaymentDetails] = useState("");
 
+  const [searchValue, setSearchValue] = useState("");
+
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
   const setInitialInputValuesState = () => {
@@ -83,6 +85,13 @@ export const Suppliers = () => {
     }
   };
 
+  const searchSupplier = (value) => {
+    setSearchValue(value);
+  };
+  const searchedSuppliers = suppliers.value.filter((supplier) =>
+    supplier.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -114,7 +123,7 @@ export const Suppliers = () => {
     { key: "loan", title: "Борг" },
   ];
 
-  const data = suppliers.value;
+  const data = searchValue ? searchedSuppliers : suppliers.value;
 
   const selectOptions = [
     { value: "price", label: "По ціні" },
@@ -127,7 +136,8 @@ export const Suppliers = () => {
         <div className={styles.searchWrapper}>
           <SearchInput
             placeholder="Пошук постачальників..."
-            onSearch={() => {}}
+            value={searchValue}
+            onSearch={searchSupplier}
           />
           <CustomSelect
             minWidth={150}
