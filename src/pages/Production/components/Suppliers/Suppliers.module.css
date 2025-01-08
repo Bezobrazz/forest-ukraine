@@ -30,6 +30,23 @@
   margin-bottom: 20px;
 }
 
+.trashButton {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+.trashButton:hover {
+  color: red;
+}
+
 @media screen and (max-width: 768px) {
   .searchWrapper {
     width: 100%;

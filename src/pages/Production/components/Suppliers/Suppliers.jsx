@@ -1,3 +1,4 @@
+import { BsFillTrashFill } from "react-icons/bs";
 import { BiSort } from "react-icons/bi";
 import Button from "../../../../components/Button/Button.jsx";
 import SearchInput from "../../../../components/SearchInput/SearchInput.jsx";
@@ -12,6 +13,7 @@ import { useMediaQuery } from "react-responsive";
 import {
   addSupplier,
   getSuppliers,
+  deleteSupplier,
 } from "../../../../Firebase/Suppliers/SuppliersService.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,6 +34,8 @@ export const Suppliers = () => {
   const [supplierPaymentDetails, setSupplierPaymentDetails] = useState("");
 
   const [searchValue, setSearchValue] = useState("");
+
+  console.log("suppliers.value:", suppliers.value);
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
@@ -85,6 +89,29 @@ export const Suppliers = () => {
     }
   };
 
+  const deleteChoosedSupplier = async (id) => {
+    const supplierToDelete = suppliers.value.find(
+      (supplier) => supplier.id === id
+    );
+    if (!supplierToDelete) {
+      errorNotify("Постачальник із заданим ID не знайдено!", 2000);
+      return;
+    }
+    const isConfirmed = window.confirm(
+      `Ви впевнені, що хочете видалити постачальника "${supplierToDelete.name}"?`
+    );
+    if (!isConfirmed) return;
+
+    try {
+      await deleteSupplier(id);
+      successNotify("Постачальник успішно видалений!", 1000);
+      getSuppliersList();
+    } catch (error) {
+      console.error("Error deleting supplier:", error);
+      errorNotify("Помилка при видаленні постачальника!", 2000);
+    }
+  };
+
   const searchSupplier = (value) => {
     setSearchValue(value);
   };
@@ -121,6 +148,18 @@ export const Suppliers = () => {
     { key: "price", title: "Ціна" },
     { key: "bags", title: "Мішки (дебет)" },
     { key: "loan", title: "Борг" },
+    {
+      key: "action",
+      title: "",
+      render: (text, record) => (
+        <button
+          className={styles.trashButton}
+          onClick={() => deleteChoosedSupplier(record.id)}
+        >
+          <BsFillTrashFill />
+        </button>
+      ),
+    },
   ];
 
   const data = searchValue ? searchedSuppliers : suppliers.value;
