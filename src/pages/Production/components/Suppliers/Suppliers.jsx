@@ -11,6 +11,7 @@ import {
   addSupplier,
   getSuppliers,
   deleteSupplier,
+  updateSupplier,
 } from "../../../../Firebase/Suppliers/SuppliersService.js";
 import {
   errorNotify,
@@ -22,15 +23,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { serverTimestamp } from "firebase/firestore";
 import CustomSelect from "../../../../components/CustomSelect/CustomSelect.jsx";
 import { AddModal } from "./components/AddModal/AddModal.jsx";
+import { UpdateModal } from "./components/UpdateModal/UpdateModal.jsx";
 
 export const Suppliers = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [isLoader, setIsLoader] = useState(false);
 
   const [supplierName, setSupplierName] = useState("");
   const [supplierPhone, setSupplierPhone] = useState("");
   const [supplierPaymentDetails, setSupplierPaymentDetails] = useState("");
+  const [supplierId, setSupplierId] = useState("");
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -109,6 +113,49 @@ export const Suppliers = () => {
     }
   };
 
+  const updateChoosedSupplier = async (id) => {
+    if (!supplierName) {
+      infoNotify("Будь ласка, введіть ім'я постачальника!", 2000);
+      return;
+    }
+    setIsLoader(true);
+    try {
+      await updateSupplier(id, {
+        name: supplierName,
+        phone: supplierPhone,
+        paymentDetails: supplierPaymentDetails,
+      });
+      successNotify("Постачальник успішно відредагований!", 1000);
+      getSuppliersList();
+      setOpenUpdateModal(false);
+      setInitialInputValuesState();
+      setIsLoader(false);
+    } catch (error) {
+      console.error("Error editing supplier:", error);
+      errorNotify("Помилка при редагуванні постачальника!", 2000);
+    }
+  };
+
+  const handleOpenUpdateModal = (id) => {
+    const supplierToUpdate = suppliers.value.find(
+      (supplier) => supplier.id === id
+    );
+    if (!supplierToUpdate) {
+      errorNotify("Постачальник із заданим ID не знайдено!", 2000);
+      return;
+    }
+    setSupplierName(supplierToUpdate.name);
+    setSupplierPhone(supplierToUpdate.phone);
+    setSupplierPaymentDetails(supplierToUpdate.paymentDetails);
+    setSupplierId(id);
+    setOpenUpdateModal(true);
+  };
+
+  const handleOpenAddModal = () => {
+    setInitialInputValuesState();
+    setOpenAddModal(true);
+  };
+
   const searchSupplier = (value) => {
     setSearchValue(value);
   };
@@ -132,7 +179,7 @@ export const Suppliers = () => {
       render: (text, record) => (
         <button
           className={styles.supplierEditButton}
-          onClick={() => alert(`Editing ${record.name}`)}
+          onClick={() => handleOpenUpdateModal(record.id)}
         >
           {text}
         </button>
@@ -184,7 +231,7 @@ export const Suppliers = () => {
         <Button
           variant="primary"
           width={isMobile ? "100%" : "230px"}
-          onClick={() => setOpenAddModal(true)}
+          onClick={handleOpenAddModal}
         >
           Додати постачальника
         </Button>
@@ -199,6 +246,18 @@ export const Suppliers = () => {
         isOpen={openAddModal}
         onClose={() => setOpenAddModal(false)}
         onSave={addNewSupplier}
+        supplierName={supplierName}
+        setSupplierName={setSupplierName}
+        supplierPhone={supplierPhone}
+        setSupplierPhone={setSupplierPhone}
+        supplierPaymentDetails={supplierPaymentDetails}
+        setSupplierPaymentDetails={setSupplierPaymentDetails}
+      />
+      <UpdateModal
+        isOpen={openUpdateModal}
+        isLoader={isLoader}
+        onClose={() => setOpenUpdateModal(false)}
+        onSave={() => updateChoosedSupplier(supplierId)}
         supplierName={supplierName}
         setSupplierName={setSupplierName}
         supplierPhone={supplierPhone}

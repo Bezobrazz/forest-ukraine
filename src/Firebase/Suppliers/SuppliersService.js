@@ -4,6 +4,7 @@ import {
   getCollectionData,
   addDocumentToCollection,
   deleteDocumentFromCollection,
+  updateDocumentInCollection,
 } from "../FirebaseServices.js";
 
 const COLLECTION_NAME = "suppliers";
@@ -18,4 +19,12 @@ export const addSupplier = async (supplier) => {
 
 export const deleteSupplier = async (supplierId) => {
   return await deleteDocumentFromCollection(COLLECTION_NAME, supplierId);
+};
+
+export const updateSupplier = async (supplierId, updatedData) => {
+  return await updateDocumentInCollection(
+    COLLECTION_NAME,
+    supplierId,
+    updatedData
+  );
 };
