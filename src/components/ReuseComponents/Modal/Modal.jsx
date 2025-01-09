@@ -27,7 +27,11 @@ const Modal = ({
         </div>
         <div className={s.modalBody}>{children}</div>
 
-        <Stack spacing={2} direction={{ xs: "column", sm: "row" }}>
+        <Stack
+          spacing={2}
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="flex-end"
+        >
           {loader && <Loader height={30} width={30} />}
           <Button
             variant="outlined"
