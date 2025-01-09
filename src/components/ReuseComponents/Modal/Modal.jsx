@@ -2,6 +2,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import Button from "../Button/Button";
 import s from "./Modal.module.css";
 import Loader from "../../Loader/Loader.jsx";
+import { Stack } from "@mui/material";
 
 const Modal = ({
   title,
@@ -25,7 +26,8 @@ const Modal = ({
           </button>
         </div>
         <div className={s.modalBody}>{children}</div>
-        <div className={s.modalFooter}>
+
+        <Stack spacing={2} direction={{ xs: "column", sm: "row" }}>
           {loader && <Loader height={30} width={30} />}
           <Button
             variant="outlined"
@@ -40,7 +42,7 @@ const Modal = ({
             color="success"
             onClick={onSave}
           />
-        </div>
+        </Stack>
       </div>
     </div>
   );

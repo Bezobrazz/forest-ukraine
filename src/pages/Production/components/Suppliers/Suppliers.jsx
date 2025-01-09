@@ -72,6 +72,7 @@ export const Suppliers = () => {
       infoNotify("Будь ласка, введіть ім'я постачальника!", 2000);
       return;
     }
+    setIsLoader(true);
     try {
       const newSupplier = {
         name: supplierName,
@@ -80,9 +81,9 @@ export const Suppliers = () => {
         createdAt: serverTimestamp(),
       };
       await addSupplier(newSupplier);
+      getSuppliersList();
       successNotify("Постачальник успішно доданий!", 1000);
       setOpenAddModal(false);
-      getSuppliersList();
       setInitialInputValuesState();
     } catch (error) {
       console.error("Error adding supplier:", error);
