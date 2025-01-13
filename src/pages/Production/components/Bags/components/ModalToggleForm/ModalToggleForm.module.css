@@ -1,0 +1,38 @@
+.modalContent {
+  margin-bottom: 30px;
+}
+
+.radioWrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--primary-color);
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+input[type="radio"]:checked {
+  border-color: var(--accent-color);
+  background-color: var(--accent-color);
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

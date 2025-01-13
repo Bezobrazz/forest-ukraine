@@ -22,32 +22,30 @@ export const AddModal = ({
       onClose={onClose}
       onSave={onSave}
     >
-      <form>
-        <div className={styles.inputWrapper}>
-          <Input
-            type="text"
-            size="small"
-            value={supplierName}
-            onChange={(e) => setSupplierName(e.target.value)}
-            placeholder="Ім'я, прізвище або назва*"
-            required
-          />
-          <Input
-            type="number"
-            size="small"
-            value={supplierPhone}
-            onChange={(e) => setSupplierPhone(e.target.value)}
-            placeholder="Телефон"
-          />
-          <Input
-            type="number"
-            size="small"
-            value={supplierPaymentDetails}
-            onChange={(e) => setSupplierPaymentDetails(e.target.value)}
-            placeholder="Реквізити для оплати"
-          />
-        </div>
-      </form>
+      <div className={styles.inputWrapper}>
+        <Input
+          type="text"
+          size="small"
+          value={supplierName}
+          onChange={(e) => setSupplierName(e.target.value)}
+          placeholder="Ім'я, прізвище або назва*"
+          required
+        />
+        <Input
+          type="number"
+          size="small"
+          value={supplierPhone}
+          onChange={(e) => setSupplierPhone(e.target.value)}
+          placeholder="Телефон"
+        />
+        <Input
+          type="number"
+          size="small"
+          value={supplierPaymentDetails}
+          onChange={(e) => setSupplierPaymentDetails(e.target.value)}
+          placeholder="Реквізити для оплати"
+        />
+      </div>
     </Modal>
   );
 };
