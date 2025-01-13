@@ -4,6 +4,7 @@ import { useMediaQuery } from "react-responsive";
 
 import ModalToggleForm from "./components/ModalToggleForm/ModalToggleForm.jsx";
 import { useState } from "react";
+import { InformationCard } from "../../../../components/InformationCard/InformationCard.jsx";
 
 export const Bags = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -19,6 +20,15 @@ export const Bags = () => {
         >
           Додати операцію
         </Button>
+      </div>
+      <div className={styles.cardsWrapper}>
+        <InformationCard title="Мішків на складі" description="1000" />
+        <InformationCard title="Середня вартість мішка" description="1000" />
+        <InformationCard
+          title="Списано мішків"
+          description="1000"
+          bgcolor="var(--warning-color)"
+        />
       </div>
       <ModalToggleForm
         isOpenModal={isOpenModal}
