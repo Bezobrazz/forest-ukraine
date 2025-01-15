@@ -87,7 +87,7 @@ export const Bags = () => {
 
       <div className={styles.cardsWrapper}>
         <InformationCard title="Мішків на складі" description="1000" />
-        <InformationCard title="Середня вартість мішка" description="1000" />
+        {/* <InformationCard title="Середня вартість мішка" description="1000" /> */}
         <InformationCard
           title="Списано мішків"
           description="1000"
