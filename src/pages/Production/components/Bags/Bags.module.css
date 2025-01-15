@@ -10,7 +10,7 @@
 .cardsWrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   flex-wrap: wrap;
   margin-bottom: 40px;
 }
