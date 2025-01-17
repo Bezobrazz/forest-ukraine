@@ -96,3 +96,56 @@ export const getSubcollectionData = async (
     throw error;
   }
 };
+
+export const deleteSubcollectionDocument = async (
+  collectionName,
+  documentId,
+  subcollectionName,
+  subDocumentId
+) => {
+  try {
+    console.log(
+      `Deleting document with ID: ${subDocumentId} from subcollection: ${subcollectionName} of document: ${documentId} in collection: ${collectionName}`
+    );
+    const docRef = doc(
+      db,
+      `${collectionName}/${documentId}/${subcollectionName}`,
+      subDocumentId
+    );
+    await deleteDoc(docRef);
+    console.log(`Document with ID: ${subDocumentId} deleted successfully.`);
+  } catch (error) {
+    console.error(
+      `Error deleting document from ${subcollectionName} in ${collectionName}/${documentId}:`,
+      error
+    );
+    throw error;
+  }
+};
+
+export const updateSubcollectionDocument = async (
+  collectionName,
+  documentId,
+  subcollectionName,
+  subDocumentId,
+  updatedData
+) => {
+  try {
+    console.log(
+      `Updating document with ID: ${subDocumentId} in subcollection: ${subcollectionName} of document: ${documentId} in collection: ${collectionName}`
+    );
+    const docRef = doc(
+      db,
+      `${collectionName}/${documentId}/${subcollectionName}`,
+      subDocumentId
+    );
+    await updateDoc(docRef, updatedData);
+    console.log(`Document with ID: ${subDocumentId} updated successfully.`);
+  } catch (error) {
+    console.error(
+      `Error updating document in ${subcollectionName} of ${collectionName}/${documentId}:`,
+      error
+    );
+    throw error;
+  }
+};
