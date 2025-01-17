@@ -97,6 +97,32 @@ export const getSubcollectionData = async (
   }
 };
 
+export const addDocumentToSubcollection = async (
+  collectionName,
+  documentId,
+  subcollectionName,
+  newDocument
+) => {
+  try {
+    console.log(
+      `Adding document to subcollection: ${subcollectionName} of document: ${documentId} in collection: ${collectionName}`
+    );
+    const colRef = collection(
+      db,
+      `${collectionName}/${documentId}/${subcollectionName}`
+    );
+    const docRef = await addDoc(colRef, newDocument);
+    console.log(`Document added with ID: ${docRef.id}`);
+    return docRef.id;
+  } catch (error) {
+    console.error(
+      `Error adding document to ${subcollectionName} in ${collectionName}/${documentId}:`,
+      error
+    );
+    throw error;
+  }
+};
+
 export const deleteSubcollectionDocument = async (
   collectionName,
   documentId,

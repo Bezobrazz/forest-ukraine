@@ -1,5 +1,3 @@
-console.log("Шлях до поточного файлу:", import.meta.url);
-
 import {
   getCollectionData,
   addDocumentToCollection,

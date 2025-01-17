@@ -3,13 +3,39 @@ import Button from "../../../../components/Button/Button.jsx";
 import { useMediaQuery } from "react-responsive";
 
 import ModalToggleForm from "./components/ModalToggleForm/ModalToggleForm.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { InformationCard } from "../../../../components/InformationCard/InformationCard.jsx";
 import Table from "../../../../components/Table/Table.jsx";
 import { BsFillTrashFill } from "react-icons/bs";
+import {
+  getBagOperations,
+  addBagOperation,
+} from "../../../../Firebase/Bags/BagsService.js";
+import { bagsOperations } from "../../../../components/State.js";
+import {
+  errorNotify,
+  infoNotify,
+  successNotify,
+} from "../../../../components/Notifications/Notifications.js";
 
 export const Bags = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const [operationDate, setOperationDate] = useState(
+    new Date().toLocaleDateString()
+  );
+  const [operationType, setOperationType] = useState("");
+  const [bagPrice, setBagPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [deliveryCost, setDeliveryCost] = useState("");
+
+  const setInitialInputValuesState = () => {
+    setOperationDate(new Date().toLocaleDateString());
+    setOperationType("");
+    setBagPrice("");
+    setQuantity("");
+    setDeliveryCost("");
+  };
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
@@ -17,19 +43,75 @@ export const Bags = () => {
     console.log("deleteChoosedOperation", id);
   };
 
+  const getBagOperationsList = async (documentId) => {
+    try {
+      const bagOperationsList = await getBagOperations(documentId);
+      console.log("Отримані дані з Firebase:", bagOperationsList); // Перевіряємо, що приходить із Firebase
+      if (bagsOperations === 0) {
+        console.log("No operations found.");
+      } else {
+        bagsOperations.value = bagOperationsList;
+        console.log("Значення сигналу після оновлення:", bagsOperations.value); // Перевіряємо, чи оновлюється сигнал
+      }
+    } catch (error) {
+      console.error("Error fetching bag operations:", error);
+      errorNotify("Помилка при завантаженні операцій!", 2000);
+    }
+  };
+
+  useEffect(() => {
+    getBagOperationsList("summary").then(() => {
+      console.log("Операції завантажені", bagsOperations.value);
+    });
+  }, []);
+
+  const addNewBagsOperation = async () => {
+    if (!operationDate || !bagPrice || !quantity) {
+      infoNotify("Будь ласка, заповніть обов'язкові поля!", 2000);
+      return;
+    }
+
+    const priceInCents = Math.round(parseFloat(bagPrice) * 100);
+    const deliveryCostInCents = Math.round(parseFloat(deliveryCost) * 100);
+
+    try {
+      const totalCostInCents =
+        priceInCents * quantity + deliveryCostInCents * quantity;
+      const totalCost = totalCostInCents / 100;
+
+      const newBagsOperation = {
+        type: operationType,
+        date: operationDate,
+        bagPrice: parseFloat(bagPrice),
+        quantity: parseInt(quantity),
+        deliveryCost: parseFloat(deliveryCost || 0),
+        totalCost: totalCost,
+      };
+      console.log("Додавання нової операції:", newBagsOperation); // Лог нової операції
+      await addBagOperation("summary", newBagsOperation);
+      getBagOperations("summary");
+      setInitialInputValuesState();
+      setIsOpenModal(false);
+      successNotify("Операція успішно додана!", 2000);
+    } catch (error) {
+      console.error("Error adding bags operation:", error);
+      errorNotify("Помилка при додаванні операції!", 2000);
+    }
+  };
+
   const columns = [
     {
-      key: "operation",
+      key: "type",
       title: "Операція",
     },
     {
-      key: "createdAt",
+      key: "date",
       title: "Дата",
     },
-    { key: "price", title: "Ціна" },
+    { key: "bagPrice", title: "Ціна" },
     { key: "quantity", title: "Кількість" },
-    { key: "deliveryPrice", title: "Вартість доставки" },
-    { key: "sum", title: "Сума" },
+    { key: "deliveryCost", title: "Вартість доставки" },
+    { key: "totalCost", title: "Сума" },
     {
       key: "action",
       title: "",
@@ -44,30 +126,6 @@ export const Bags = () => {
     },
   ];
 
-  const data = [
-    {
-      id: 1,
-      operation: "Додано",
-      createdAt: "2023-02-01",
-      price: 1000,
-      quantity: 100,
-      deliveryPrice: 100,
-    },
-    {
-      id: 2,
-      operation: "Списано",
-      createdAt: "2023-02-01",
-      quantity: 100,
-    },
-  ];
-
-  data.forEach((item) => {
-    item.sum = item.price * item.quantity + item.deliveryPrice;
-    if (item.operation === "Списано") {
-      return (item.sum = item.quantity);
-    }
-  });
-
   return (
     <div>
       <div className={styles.topBar}>
@@ -81,8 +139,19 @@ export const Bags = () => {
       </div>
 
       <ModalToggleForm
+        setInitialInputValuesState={setInitialInputValuesState}
+        operationDate={operationDate}
+        setOperationDate={setOperationDate}
+        setOperationType={setOperationType}
+        bagPrice={bagPrice}
+        setBagPrice={setBagPrice}
+        quantity={quantity}
+        setQuantity={setQuantity}
+        deliveryCost={deliveryCost}
+        setDeliveryCost={setDeliveryCost}
         isOpenModal={isOpenModal}
         setIsOpenModal={setIsOpenModal}
+        addNewBagsOperation={addNewBagsOperation}
       />
 
       <div className={styles.cardsWrapper}>
@@ -95,10 +164,11 @@ export const Bags = () => {
       </div>
 
       <Table
+        key={bagsOperations.value.length}
         columns={columns}
-        data={data}
+        data={bagsOperations.value}
         // isLoader={isLoader}
-        sortBy="createdAt"
+        sortBy="date"
       />
     </div>
   );
