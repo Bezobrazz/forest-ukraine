@@ -71,3 +71,28 @@ export const updateDocumentInCollection = async (
     throw error;
   }
 };
+
+export const getSubcollectionData = async (
+  collectionName,
+  documentId,
+  subcollectionName
+) => {
+  try {
+    console.log(
+      `Getting data from subcollection: ${subcollectionName} of document: ${documentId} in collection: ${collectionName}`
+    );
+    const colRef = collection(
+      db,
+      `${collectionName}/${documentId}/${subcollectionName}`
+    );
+    const snapshot = await getDocs(colRef);
+    const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return docs;
+  } catch (error) {
+    console.error(
+      `Error getting data from ${subcollectionName} in ${collectionName}/${documentId}:`,
+      error
+    );
+    throw error;
+  }
+};

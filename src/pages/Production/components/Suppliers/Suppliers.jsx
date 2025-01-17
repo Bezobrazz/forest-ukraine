@@ -12,6 +12,7 @@ import {
   getSuppliers,
   deleteSupplier,
   updateSupplier,
+  getSupplierTransactions,
 } from "../../../../Firebase/Suppliers/SuppliersService.js";
 import {
   errorNotify,
@@ -40,6 +41,8 @@ export const Suppliers = () => {
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
+  console.log("suppliers", suppliers.value);
+
   const setInitialInputValuesState = () => {
     setSupplierName("");
     setSupplierPhone("");
@@ -65,6 +68,25 @@ export const Suppliers = () => {
 
   useEffect(() => {
     getSuppliersList();
+  }, []);
+
+  const getSupplierTransactionsList = async (supplierId) => {
+    try {
+      const suppliersTransactions = await getSupplierTransactions(supplierId);
+      if (suppliersTransactions.length === 0) {
+        console.log("No transactions found for this supplier.");
+      } else {
+        setIsLoader(false);
+        console.log("suppliersTransactions", suppliersTransactions);
+      }
+    } catch (error) {
+      console.error("Error fetching supplier transactions:", error);
+      errorNotify("Помилка при завантаженні транзакцій постачальника!", 2000);
+    }
+  };
+
+  useEffect(() => {
+    getSupplierTransactionsList("0gEZyxbGil4Bn5SqmRmj");
   }, []);
 
   const addNewSupplier = async () => {
