@@ -9,7 +9,7 @@ const ModalToggleForm = ({
   addNewBagsOperation,
 }) => {
   const [operationDate, setOperationDate] = useState(
-    new Date().toLocaleDateString({ dateStyle: "short" })
+    new Date().toISOString().split("T")[0]
   );
   const [operationType, setOperationType] = useState("Додано");
   const [bagPrice, setBagPrice] = useState("");
@@ -17,7 +17,7 @@ const ModalToggleForm = ({
   const [deliveryCost, setDeliveryCost] = useState("");
 
   const setInitialInputValuesState = () => {
-    setOperationDate(new Date().toLocaleDateString({ dateStyle: "short" }));
+    setOperationDate(new Date().toISOString().split("T")[0]);
     setBagPrice("");
     setQuantity("");
     setDeliveryCost("");

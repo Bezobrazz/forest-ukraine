@@ -13,7 +13,7 @@ const Table = ({
     if (a[sortBy] < b[sortBy]) return 1;
     return 0;
   });
-  console.log("data", data);
+
   return (
     <div className={styles.container}>
       <table className={styles.table}>

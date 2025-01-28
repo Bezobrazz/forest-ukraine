@@ -31,3 +31,11 @@
 .trashButton:hover {
   color: red;
 }
+
+.green {
+  color: var(--primary-color);
+}
+
+.red {
+  color: red;
+}

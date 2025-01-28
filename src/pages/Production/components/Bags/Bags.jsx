@@ -18,6 +18,7 @@ import {
   successNotify,
 } from "../../../../components/Notifications/Notifications.js";
 import useBagsStore from "../../../../components/stores/bagsStore.js";
+import { ToastContainer } from "react-toastify";
 
 export const Bags = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -29,7 +30,7 @@ export const Bags = () => {
   const getBagOperationsList = async (documentId) => {
     try {
       const bagOperationsList = await getBagOperations(documentId);
-      console.log("Отримані дані з Firebase:", bagOperationsList);
+
       setBagsOperationsState(bagOperationsList);
     } catch (error) {
       console.error("Error fetching bag operations:", error);
@@ -69,7 +70,6 @@ export const Bags = () => {
         totalCost: totalCost,
       };
 
-      console.log("Додавання нової операції:", newBagsOperation);
       await addBagOperation("summary", newBagsOperation);
       getBagOperationsList("summary");
       setIsOpenModal(false);
@@ -99,8 +99,15 @@ export const Bags = () => {
   };
 
   const columns = [
-    { key: "type", title: "Операція" },
-    { key: "date", title: "Дата" },
+    {
+      key: "type",
+      title: "Операція",
+    },
+    {
+      key: "date",
+      title: "Дата",
+      render: (value) => `${value}`,
+    },
     { key: "bagPrice", title: "Ціна (грн)", render: (value) => `${value}` },
     {
       key: "quantity",
@@ -164,6 +171,7 @@ export const Bags = () => {
         data={bagsOperations || []}
         sortBy="date"
       />
+      <ToastContainer />
     </div>
   );
 };
