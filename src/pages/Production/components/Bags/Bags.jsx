@@ -106,7 +106,10 @@ export const Bags = () => {
     {
       key: "date",
       title: "Дата",
-      render: (value) => `${value}`,
+      render: (value) => {
+        const [year, month, day] = value.split("T")[0].split("-");
+        return `${day}.${month}.${year}`;
+      },
     },
     { key: "bagPrice", title: "Ціна (грн)", render: (value) => `${value}` },
     {
