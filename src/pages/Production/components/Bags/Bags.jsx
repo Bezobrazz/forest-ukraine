@@ -89,6 +89,13 @@ export const Bags = () => {
 
   const deleteBagOperationItem = async (id) => {
     try {
+      const confirmDelete = window.confirm(
+        "Ви впевнені, що хочете видалити цю операцію?"
+      );
+      if (!confirmDelete) {
+        return;
+      }
+
       await deleteBagOperation("summary", id);
       getBagOperationsList("summary");
       successNotify("Операція успішно видалена!", 2000);
