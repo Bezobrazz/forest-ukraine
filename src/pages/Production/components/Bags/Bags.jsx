@@ -21,20 +21,8 @@ import useBagsStore from "../../../../components/stores/bagsStore.js";
 
 export const Bags = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [operationDate, setOperationDate] = useState(new Date());
-  const [operationType, setOperationType] = useState("Додано");
-  const [bagPrice, setBagPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [deliveryCost, setDeliveryCost] = useState("");
 
   const { bagsOperations, setBagsOperationsState } = useBagsStore();
-
-  const setInitialInputValuesState = () => {
-    setOperationDate(new Date().toLocaleDateString());
-    setBagPrice("");
-    setQuantity("");
-    setDeliveryCost("");
-  };
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
@@ -53,7 +41,13 @@ export const Bags = () => {
     getBagOperationsList("summary");
   }, [setBagsOperationsState]);
 
-  const addNewBagsOperation = async () => {
+  const addNewBagsOperation = async (
+    operationDate,
+    operationType,
+    bagPrice,
+    quantity,
+    deliveryCost
+  ) => {
     if (!operationDate || !bagPrice || !quantity) {
       infoNotify("Будь ласка, заповніть обов'язкові поля!", 2000);
       return;
@@ -78,7 +72,6 @@ export const Bags = () => {
       console.log("Додавання нової операції:", newBagsOperation);
       await addBagOperation("summary", newBagsOperation);
       getBagOperationsList("summary");
-      setInitialInputValuesState();
       setIsOpenModal(false);
       successNotify("Операція успішно додана!", 2000);
     } catch (error) {
@@ -126,8 +119,6 @@ export const Bags = () => {
     },
   ];
 
-  console.log("bagsOperations", typeof bagsOperations);
-
   return (
     <div>
       <div className={styles.topBar}>
@@ -141,17 +132,6 @@ export const Bags = () => {
       </div>
 
       <ModalToggleForm
-        setInitialInputValuesState={setInitialInputValuesState}
-        operationDate={operationDate}
-        setOperationDate={setOperationDate}
-        operationType={operationType}
-        setOperationType={setOperationType}
-        bagPrice={bagPrice}
-        setBagPrice={setBagPrice}
-        quantity={quantity}
-        setQuantity={setQuantity}
-        deliveryCost={deliveryCost}
-        setDeliveryCost={setDeliveryCost}
         isOpenModal={isOpenModal}
         setIsOpenModal={setIsOpenModal}
         addNewBagsOperation={addNewBagsOperation}

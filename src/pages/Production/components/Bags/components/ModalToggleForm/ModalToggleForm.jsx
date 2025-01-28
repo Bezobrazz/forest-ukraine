@@ -4,28 +4,40 @@ import Input from "../../../../../../components/ReuseComponents/Input/Input.jsx"
 import styles from "./ModalToggleForm.module.css";
 
 const ModalToggleForm = ({
-  operationDate,
-  setOperationDate,
-  operationType,
-  setOperationType,
-  bagPrice,
-  setBagPrice,
-  quantity,
-  setQuantity,
-  deliveryCost,
-  setDeliveryCost,
   isOpenModal,
   setIsOpenModal,
   addNewBagsOperation,
 }) => {
+  const [operationDate, setOperationDate] = useState(
+    new Date().toLocaleDateString({ dateStyle: "short" })
+  );
+  const [operationType, setOperationType] = useState("Додано");
+  const [bagPrice, setBagPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [deliveryCost, setDeliveryCost] = useState("");
+
+  const setInitialInputValuesState = () => {
+    setOperationDate(new Date().toLocaleDateString({ dateStyle: "short" }));
+    setBagPrice("");
+    setQuantity("");
+    setDeliveryCost("");
+  };
+
   const handleRadioChange = (e) => {
     setOperationType(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addNewBagsOperation();
-    console.log("submitted");
+    addNewBagsOperation(
+      operationDate,
+      operationType,
+      bagPrice,
+      quantity,
+      deliveryCost
+    );
+    setInitialInputValuesState();
+    setIsOpenModal(false);
   };
 
   return (
