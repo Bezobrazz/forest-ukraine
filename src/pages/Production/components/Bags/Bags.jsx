@@ -101,10 +101,22 @@ export const Bags = () => {
   const columns = [
     { key: "type", title: "Операція" },
     { key: "date", title: "Дата" },
-    { key: "bagPrice", title: "Ціна" },
-    { key: "quantity", title: "Кількість" },
-    { key: "deliveryCost", title: "Вартість доставки" },
-    { key: "totalCost", title: "Сума" },
+    { key: "bagPrice", title: "Ціна (грн)", render: (value) => `${value}` },
+    {
+      key: "quantity",
+      title: "Кількість (шт)",
+      render: (value) => `${value.toLocaleString()}`,
+    },
+    {
+      key: "deliveryCost",
+      title: "Вартість доставки (грн)",
+      render: (value) => `${value.toLocaleString()}`,
+    },
+    {
+      key: "totalCost",
+      title: "Сума (грн)",
+      render: (value) => `${value.toLocaleString()}`,
+    },
     {
       key: "action",
       title: "",

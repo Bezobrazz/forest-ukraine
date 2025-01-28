@@ -37,7 +37,6 @@ const ModalToggleForm = ({
       deliveryCost
     );
     setInitialInputValuesState();
-    setIsOpenModal(false);
   };
 
   return (
