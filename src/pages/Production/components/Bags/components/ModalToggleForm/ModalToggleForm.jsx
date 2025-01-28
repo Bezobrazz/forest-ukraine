@@ -25,10 +25,12 @@ const ModalToggleForm = ({
 
   const handleRadioChange = (e) => {
     setOperationType(e.target.value);
+    setInitialInputValuesState();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     addNewBagsOperation(
       operationDate,
       operationType,
@@ -36,6 +38,7 @@ const ModalToggleForm = ({
       quantity,
       deliveryCost
     );
+
     setInitialInputValuesState();
   };
 
@@ -85,6 +88,7 @@ const ModalToggleForm = ({
                   value={bagPrice}
                   onChange={(e) => setBagPrice(e.target.value)}
                   placeholder="Введіть ціну*"
+                  required={operationType === "Додано"}
                 />
                 <Input
                   type="number"
@@ -92,6 +96,7 @@ const ModalToggleForm = ({
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   placeholder="Введіть кількість*"
+                  required={operationType === "Додано"}
                 />
                 <Input
                   type="number"
@@ -106,11 +111,18 @@ const ModalToggleForm = ({
               <div className={styles.inputWrapper}>
                 <h3>Спишіть мішки:</h3>
                 <Input
+                  type="date"
+                  size="small"
+                  value={operationDate}
+                  onChange={(e) => setOperationDate(e.target.value)}
+                />
+                <Input
                   type="number"
                   size="small"
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   placeholder="Введіть кількість"
+                  required={operationType === "Списано"}
                 />
               </div>
             )}

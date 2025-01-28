@@ -12,6 +12,8 @@ import {
   addBagOperation,
   deleteBagOperation,
 } from "../../../../Firebase/Bags/BagsService.js";
+
+import { serverTimestamp } from "firebase/firestore";
 import {
   errorNotify,
   infoNotify,
@@ -23,7 +25,15 @@ import { ToastContainer } from "react-toastify";
 export const Bags = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const { bagsOperations, setBagsOperationsState } = useBagsStore();
+  const {
+    bagsOperations,
+    setBagsOperationsState,
+    totalBagsInStock,
+    setTotalBagsInStock,
+  } = useBagsStore();
+
+  console.log("bagsOperations", bagsOperations);
+  console.log("totalBagsInStock", totalBagsInStock);
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
@@ -49,9 +59,16 @@ export const Bags = () => {
     quantity,
     deliveryCost
   ) => {
-    if (!operationDate || !bagPrice || !quantity) {
-      infoNotify("Будь ласка, заповніть обов'язкові поля!", 2000);
-      return;
+    if (operationType === "Додано") {
+      if (!operationDate || !bagPrice || !quantity) {
+        infoNotify("Будь ласка, заповніть обов'язкові поля для Додано", 2000);
+        return;
+      }
+    } else {
+      if (!operationDate || !quantity) {
+        infoNotify("Будь ласка, заповніть обов'язкові поля для Списано!", 2000);
+        return;
+      }
     }
 
     const priceInCents = Math.round(parseFloat(bagPrice) * 100);
@@ -68,6 +85,7 @@ export const Bags = () => {
         quantity: parseInt(quantity),
         deliveryCost: parseFloat(deliveryCost || 0),
         totalCost: totalCost,
+        createdAt: serverTimestamp(),
       };
 
       await addBagOperation("summary", newBagsOperation);
@@ -141,6 +159,13 @@ export const Bags = () => {
     },
   ];
 
+  useEffect(() => {
+    const totalBags = bagsOperations.reduce((acc, item) => {
+      return acc + parseInt(item.quantity);
+    }, 0);
+    setTotalBagsInStock(totalBags);
+  }, [bagsOperations, setTotalBagsInStock]);
+
   return (
     <div>
       <div className={styles.topBar}>
@@ -160,7 +185,10 @@ export const Bags = () => {
       />
 
       <div className={styles.cardsWrapper}>
-        <InformationCard title="Мішків на складі" description="1000" />
+        <InformationCard
+          title="Мішків на складі"
+          description={totalBagsInStock.toLocaleString()}
+        />
         <InformationCard
           title="Списано мішків"
           description="1000"
@@ -172,7 +200,7 @@ export const Bags = () => {
         key={bagsOperations.length}
         columns={columns}
         data={bagsOperations || []}
-        sortBy="date"
+        sortBy="createdAt"
       />
       <ToastContainer />
     </div>

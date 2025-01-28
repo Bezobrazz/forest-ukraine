@@ -2,9 +2,12 @@ import { create } from "zustand";
 
 const useBagsStore = create((set) => ({
   bagsOperations: [],
-
+  totalBagsInStock: 0,
   setBagsOperationsState: (operations) =>
     set(() => ({ bagsOperations: operations })),
+
+  setTotalBagsInStock: (totalBagsInStock) =>
+    set(() => ({ totalBagsInStock: totalBagsInStock })),
 
   // addBagOperationState: (operation) =>
   //   set((state) => ({
