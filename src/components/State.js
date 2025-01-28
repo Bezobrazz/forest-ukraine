@@ -7,3 +7,4 @@ export const crmMaterials = signal([]);
 export const suppliers = signal([]);
 
 export const bagsOperations = signal([]);
+console.log("bagsOperations", bagsOperations);

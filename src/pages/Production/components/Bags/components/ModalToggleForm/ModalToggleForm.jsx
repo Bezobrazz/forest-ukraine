@@ -6,6 +6,7 @@ import styles from "./ModalToggleForm.module.css";
 const ModalToggleForm = ({
   operationDate,
   setOperationDate,
+  operationType,
   setOperationType,
   bagPrice,
   setBagPrice,
@@ -17,22 +18,12 @@ const ModalToggleForm = ({
   setIsOpenModal,
   addNewBagsOperation,
 }) => {
-  const [formType, setFormType] = useState("Додано");
-
   const handleRadioChange = (e) => {
-    setFormType(e.target.value);
+    setOperationType(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (formType === "Додано") {
-      console.log("Додано!");
-      setOperationType("Додано");
-    } else {
-      console.log("Списано!");
-      setOperationType("Списано");
-    }
     addNewBagsOperation();
     console.log("submitted");
   };
@@ -52,7 +43,7 @@ const ModalToggleForm = ({
                 <input
                   type="radio"
                   value="Додано"
-                  checked={formType === "Додано"}
+                  checked={operationType === "Додано"}
                   onChange={handleRadioChange}
                 />
                 Додати
@@ -61,23 +52,21 @@ const ModalToggleForm = ({
                 <input
                   type="radio"
                   value="Списано"
-                  checked={formType === "Списано"}
+                  checked={operationType === "Списано"}
                   onChange={handleRadioChange}
                 />
                 Списати
               </label>
             </div>
 
-            {formType === "Додано" && (
+            {operationType === "Додано" && (
               <div className={styles.inputWrapper}>
                 <h3>Додайте мішки:</h3>
                 <Input
                   type="date"
                   size="small"
                   value={operationDate}
-                  onChange={(e) =>
-                    setOperationDate(e.target.value).toLocaleDateString()
-                  }
+                  onChange={(e) => setOperationDate(e.target.value)}
                 />
                 <Input
                   type="number"
@@ -102,7 +91,7 @@ const ModalToggleForm = ({
                 />
               </div>
             )}
-            {formType === "Списано" && (
+            {operationType === "Списано" && (
               <div className={styles.inputWrapper}>
                 <h3>Спишіть мішки:</h3>
                 <Input

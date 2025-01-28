@@ -1,6 +1,7 @@
 import {
   getCollectionData,
   addDocumentToCollection,
+  deleteSubcollectionDocument,
   deleteDocumentFromCollection,
   updateDocumentInCollection,
   getSubcollectionData,
@@ -40,5 +41,14 @@ export const addBagOperation = async (documentId, operation) => {
     documentId,
     SUBCOLLECTION_NAME,
     operation
+  );
+};
+
+export const deleteBagOperation = async (documentId, operationId) => {
+  return await deleteSubcollectionDocument(
+    COLLECTION_NAME,
+    documentId,
+    SUBCOLLECTION_NAME,
+    operationId
   );
 };

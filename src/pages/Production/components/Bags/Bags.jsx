@@ -10,28 +10,27 @@ import { BsFillTrashFill } from "react-icons/bs";
 import {
   getBagOperations,
   addBagOperation,
+  deleteBagOperation,
 } from "../../../../Firebase/Bags/BagsService.js";
-import { bagsOperations } from "../../../../components/State.js";
 import {
   errorNotify,
   infoNotify,
   successNotify,
 } from "../../../../components/Notifications/Notifications.js";
+import useBagsStore from "../../../../components/stores/bagsStore.js";
 
 export const Bags = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const [operationDate, setOperationDate] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [operationType, setOperationType] = useState("");
+  const [operationDate, setOperationDate] = useState(new Date());
+  const [operationType, setOperationType] = useState("Додано");
   const [bagPrice, setBagPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [deliveryCost, setDeliveryCost] = useState("");
 
+  const { bagsOperations, setBagsOperationsState } = useBagsStore();
+
   const setInitialInputValuesState = () => {
     setOperationDate(new Date().toLocaleDateString());
-    setOperationType("");
     setBagPrice("");
     setQuantity("");
     setDeliveryCost("");
@@ -39,20 +38,11 @@ export const Bags = () => {
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
-  const deleteChoosedOperation = (id) => {
-    console.log("deleteChoosedOperation", id);
-  };
-
   const getBagOperationsList = async (documentId) => {
     try {
       const bagOperationsList = await getBagOperations(documentId);
-      console.log("Отримані дані з Firebase:", bagOperationsList); // Перевіряємо, що приходить із Firebase
-      if (bagsOperations === 0) {
-        console.log("No operations found.");
-      } else {
-        bagsOperations.value = bagOperationsList;
-        console.log("Значення сигналу після оновлення:", bagsOperations.value); // Перевіряємо, чи оновлюється сигнал
-      }
+      console.log("Отримані дані з Firebase:", bagOperationsList);
+      setBagsOperationsState(bagOperationsList);
     } catch (error) {
       console.error("Error fetching bag operations:", error);
       errorNotify("Помилка при завантаженні операцій!", 2000);
@@ -60,10 +50,8 @@ export const Bags = () => {
   };
 
   useEffect(() => {
-    getBagOperationsList("summary").then(() => {
-      console.log("Операції завантажені", bagsOperations.value);
-    });
-  }, []);
+    getBagOperationsList("summary");
+  }, [setBagsOperationsState]);
 
   const addNewBagsOperation = async () => {
     if (!operationDate || !bagPrice || !quantity) {
@@ -72,11 +60,10 @@ export const Bags = () => {
     }
 
     const priceInCents = Math.round(parseFloat(bagPrice) * 100);
-    const deliveryCostInCents = Math.round(parseFloat(deliveryCost) * 100);
+    const deliveryCostInCents = Math.round(parseFloat(deliveryCost || 0) * 100);
 
     try {
-      const totalCostInCents =
-        priceInCents * quantity + deliveryCostInCents * quantity;
+      const totalCostInCents = priceInCents * quantity + deliveryCostInCents;
       const totalCost = totalCostInCents / 100;
 
       const newBagsOperation = {
@@ -87,9 +74,10 @@ export const Bags = () => {
         deliveryCost: parseFloat(deliveryCost || 0),
         totalCost: totalCost,
       };
-      console.log("Додавання нової операції:", newBagsOperation); // Лог нової операції
+
+      console.log("Додавання нової операції:", newBagsOperation);
       await addBagOperation("summary", newBagsOperation);
-      getBagOperations("summary");
+      getBagOperationsList("summary");
       setInitialInputValuesState();
       setIsOpenModal(false);
       successNotify("Операція успішно додана!", 2000);
@@ -99,15 +87,20 @@ export const Bags = () => {
     }
   };
 
+  const deleteBagOperationItem = async (id) => {
+    try {
+      await deleteBagOperation("summary", id);
+      getBagOperationsList("summary");
+      successNotify("Операція успішно видалена!", 2000);
+    } catch (error) {
+      console.error("Error deleting bag operation:", error);
+      errorNotify("Помилка при видаленні операції!", 2000);
+    }
+  };
+
   const columns = [
-    {
-      key: "type",
-      title: "Операція",
-    },
-    {
-      key: "date",
-      title: "Дата",
-    },
+    { key: "type", title: "Операція" },
+    { key: "date", title: "Дата" },
     { key: "bagPrice", title: "Ціна" },
     { key: "quantity", title: "Кількість" },
     { key: "deliveryCost", title: "Вартість доставки" },
@@ -118,13 +111,15 @@ export const Bags = () => {
       render: (text, record) => (
         <button
           className={styles.trashButton}
-          onClick={() => deleteChoosedOperation(record.id)}
+          onClick={() => deleteBagOperationItem(record.id)}
         >
           <BsFillTrashFill />
         </button>
       ),
     },
   ];
+
+  console.log("bagsOperations", typeof bagsOperations);
 
   return (
     <div>
@@ -142,6 +137,7 @@ export const Bags = () => {
         setInitialInputValuesState={setInitialInputValuesState}
         operationDate={operationDate}
         setOperationDate={setOperationDate}
+        operationType={operationType}
         setOperationType={setOperationType}
         bagPrice={bagPrice}
         setBagPrice={setBagPrice}
@@ -164,10 +160,9 @@ export const Bags = () => {
       </div>
 
       <Table
-        key={bagsOperations.value.length}
+        key={bagsOperations.length}
         columns={columns}
-        data={bagsOperations.value}
-        // isLoader={isLoader}
+        data={bagsOperations || []}
         sortBy="date"
       />
     </div>
