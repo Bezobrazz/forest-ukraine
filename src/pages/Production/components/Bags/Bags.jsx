@@ -30,6 +30,8 @@ export const Bags = () => {
     setBagsOperationsState,
     totalBagsInStock,
     setTotalBagsInStock,
+    totalBagsUtilized,
+    setTotalBagsUtilized,
   } = useBagsStore();
 
   console.log("bagsOperations", bagsOperations);
@@ -164,7 +166,16 @@ export const Bags = () => {
       return acc + parseInt(item.quantity);
     }, 0);
     setTotalBagsInStock(totalBags);
-  }, [bagsOperations, setTotalBagsInStock]);
+  }, [bagsOperations, setTotalBagsInStock, totalBagsUtilized]);
+
+  useEffect(() => {
+    const totalUtilizedBags = bagsOperations
+      .filter((item) => item.type === "Списано")
+      .reduce((acc, item) => {
+        return acc + parseInt(item.quantity);
+      }, 0);
+    setTotalBagsUtilized(totalUtilizedBags);
+  }, [bagsOperations, setTotalBagsUtilized]);
 
   return (
     <div>
@@ -191,7 +202,7 @@ export const Bags = () => {
         />
         <InformationCard
           title="Списано мішків"
-          description="1000"
+          description={totalBagsUtilized.toLocaleString()}
           bgcolor="var(--warning-color)"
         />
       </div>
