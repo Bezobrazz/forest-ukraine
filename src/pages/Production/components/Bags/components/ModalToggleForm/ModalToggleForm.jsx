@@ -31,13 +31,23 @@ const ModalToggleForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    addNewBagsOperation(
-      operationDate,
-      operationType,
-      bagPrice,
-      quantity,
-      deliveryCost
-    );
+    if (operationType === "Додано") {
+      addNewBagsOperation(
+        operationDate,
+        operationType,
+        bagPrice,
+        quantity,
+        deliveryCost
+      );
+    } else {
+      addNewBagsOperation(
+        operationDate,
+        operationType,
+        bagPrice || 0,
+        quantity || 0,
+        deliveryCost || 0
+      );
+    }
 
     setInitialInputValuesState();
   };
