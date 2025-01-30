@@ -3,7 +3,7 @@ import Button from "../../../../components/Button/Button.jsx";
 import { useMediaQuery } from "react-responsive";
 
 import ModalToggleForm from "./components/ModalToggleForm/ModalToggleForm.jsx";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { InformationCard } from "../../../../components/InformationCard/InformationCard.jsx";
 import Table from "../../../../components/Table/Table.jsx";
 import { BsFillTrashFill } from "react-icons/bs";
@@ -29,13 +29,6 @@ export const Bags = () => {
   const setBagsOperationsState = useBagsStore(
     (state) => state.setBagsOperationsState
   );
-  const setTotalBagsInStock = useBagsStore(
-    (state) => state.setTotalBagsInStock
-  );
-  const setTotalBagsUtilized = useBagsStore(
-    (state) => state.setTotalBagsUtilized
-  );
-
   const totalBagsInStock = useBagsStore((state) => state.totalBagsInStock);
   const totalBagsUtilized = useBagsStore((state) => state.totalBagsUtilized);
 
@@ -59,7 +52,7 @@ export const Bags = () => {
 
   useEffect(() => {
     getBagOperationsList("summary");
-  }, [setBagsOperationsState, getBagOperationsList]);
+  }, [getBagOperationsList]);
 
   const addNewBagsOperation = async (
     operationDate,
@@ -167,24 +160,6 @@ export const Bags = () => {
       ),
     },
   ];
-
-  useEffect(() => {
-    const calculateTotals = () => {
-      const totalBags = bagsOperations.reduce((acc, item) => {
-        return acc + parseInt(item.quantity);
-      }, 0);
-      setTotalBagsInStock(totalBags);
-
-      const totalUtilizedBags = bagsOperations
-        .filter((item) => item.type === "Списано")
-        .reduce((acc, item) => {
-          return acc + parseInt(item.quantity);
-        }, 0);
-      setTotalBagsUtilized(totalUtilizedBags);
-    };
-
-    calculateTotals();
-  }, [bagsOperations, setTotalBagsInStock, setTotalBagsUtilized]);
 
   return (
     <div>
