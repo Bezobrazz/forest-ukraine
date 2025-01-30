@@ -39,3 +39,11 @@
 .red {
   color: red;
 }
+
+.rowAdded {
+  background-color: rgba(0, 255, 0, 0.1) !important;
+}
+
+.rowUtilized {
+  background-color: rgba(255, 255, 0, 0.1) !important;
+}

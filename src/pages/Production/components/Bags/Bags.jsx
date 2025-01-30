@@ -194,10 +194,14 @@ export const Bags = () => {
       <Table
         key={bagsOperations.length}
         columns={columns}
-        data={(() => {
-          console.log("Data being rendered in Table:", bagsOperations);
-          return bagsOperations || [];
-        })()}
+        data={bagsOperations || []}
+        getRowClassName={(row) =>
+          row.type === "Списано"
+            ? styles.rowUtilized
+            : row.type === "Додано"
+            ? styles.rowAdded
+            : ""
+        }
       />
       <ToastContainer />
     </div>

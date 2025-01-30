@@ -7,6 +7,7 @@ const Table = ({
   data,
   rowKey = "id",
   sortBy = "createdAt",
+  getRowClassName = () => "",
 }) => {
   const sortedData = [...data].sort((a, b) => {
     if (a[sortBy] > b[sortBy]) return -1;
@@ -27,17 +28,20 @@ const Table = ({
           </tr>
         </thead>
         <tbody>
-          {sortedData.map((row) => (
-            <tr key={row[rowKey]} className={styles.row}>
-              {columns.map((column) => (
-                <td key={column.key} className={styles.cell}>
-                  {column.render
-                    ? column.render(row[column.key], row)
-                    : row[column.key]}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {sortedData.map((row) => {
+            const rowClass = getRowClassName(row);
+            return (
+              <tr key={row[rowKey]} className={`${styles.row} ${rowClass}`}>
+                {columns.map((column) => (
+                  <td key={column.key} className={styles.cell}>
+                    {column.render
+                      ? column.render(row[column.key], row)
+                      : row[column.key]}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       {isLoader && (
