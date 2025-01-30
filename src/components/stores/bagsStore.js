@@ -4,26 +4,27 @@ const useBagsStore = create((set) => ({
   bagsOperations: [],
   totalBagsInStock: 0,
   totalBagsUtilized: 0,
-  setBagsOperationsState: (operations) =>
-    set(() => ({ bagsOperations: operations })),
 
-  setTotalBagsInStock: (totalBagsInStock) =>
-    set(() => ({ totalBagsInStock: totalBagsInStock })),
+  setBagsOperationsState: (operations) => {
+    set({ bagsOperations: operations });
 
-  setTotalBagsUtilized: (totalBagsUtilized) =>
-    set(() => ({ totalBagsUtilized: totalBagsUtilized })),
+    const totalBags = operations.reduce(
+      (acc, item) => acc + parseInt(item.quantity),
+      0
+    );
 
-  // addBagOperationState: (operation) =>
-  //   set((state) => ({
-  //     bagsOperations: [...state.bagsOperations, operation],
-  //   })),
+    const totalUtilizedBags = operations
+      .filter((item) => item.type === "Списано")
+      .reduce((acc, item) => acc + parseInt(item.quantity), 0);
 
-  // deleteBagOperationState: (id) =>
-  //   set((state) => ({
-  //     bagsOperations: state.bagsOperations.filter(
-  //       (operation) => operation.id !== id
-  //     ),
-  //   })),
+    set({
+      totalBagsInStock: totalBags,
+      totalBagsUtilized: totalUtilizedBags,
+    });
+  },
+
+  setTotalBagsInStock: (total) => set({ totalBagsInStock: total }),
+  setTotalBagsUtilized: (total) => set({ totalBagsUtilized: total }),
 }));
 
 export default useBagsStore;

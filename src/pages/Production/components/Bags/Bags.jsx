@@ -3,7 +3,7 @@ import Button from "../../../../components/Button/Button.jsx";
 import { useMediaQuery } from "react-responsive";
 
 import ModalToggleForm from "./components/ModalToggleForm/ModalToggleForm.jsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { InformationCard } from "../../../../components/InformationCard/InformationCard.jsx";
 import Table from "../../../../components/Table/Table.jsx";
 import { BsFillTrashFill } from "react-icons/bs";
@@ -25,34 +25,41 @@ import { ToastContainer } from "react-toastify";
 export const Bags = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const {
-    bagsOperations,
-    setBagsOperationsState,
-    totalBagsInStock,
-    setTotalBagsInStock,
-    totalBagsUtilized,
-    setTotalBagsUtilized,
-  } = useBagsStore();
+  const bagsOperations = useBagsStore((state) => state.bagsOperations);
+  const setBagsOperationsState = useBagsStore(
+    (state) => state.setBagsOperationsState
+  );
+  const setTotalBagsInStock = useBagsStore(
+    (state) => state.setTotalBagsInStock
+  );
+  const setTotalBagsUtilized = useBagsStore(
+    (state) => state.setTotalBagsUtilized
+  );
+
+  const totalBagsInStock = useBagsStore((state) => state.totalBagsInStock);
+  const totalBagsUtilized = useBagsStore((state) => state.totalBagsUtilized);
 
   console.log("bagsOperations", bagsOperations);
   console.log("totalBagsInStock", totalBagsInStock);
 
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
-  const getBagOperationsList = async (documentId) => {
-    try {
-      const bagOperationsList = await getBagOperations(documentId);
-
-      setBagsOperationsState(bagOperationsList);
-    } catch (error) {
-      console.error("Error fetching bag operations:", error);
-      errorNotify("Помилка при завантаженні операцій!", 2000);
-    }
-  };
+  const getBagOperationsList = useCallback(
+    async (documentId) => {
+      try {
+        const bagOperationsList = await getBagOperations(documentId);
+        setBagsOperationsState(bagOperationsList);
+      } catch (error) {
+        console.error("Error fetching bag operations:", error);
+        errorNotify("Помилка при завантаженні операцій!", 2000);
+      }
+    },
+    [setBagsOperationsState]
+  );
 
   useEffect(() => {
     getBagOperationsList("summary");
-  }, [setBagsOperationsState]);
+  }, [setBagsOperationsState, getBagOperationsList]);
 
   const addNewBagsOperation = async (
     operationDate,
@@ -162,20 +169,22 @@ export const Bags = () => {
   ];
 
   useEffect(() => {
-    const totalBags = bagsOperations.reduce((acc, item) => {
-      return acc + parseInt(item.quantity);
-    }, 0);
-    setTotalBagsInStock(totalBags);
-  }, [bagsOperations, setTotalBagsInStock, totalBagsUtilized]);
-
-  useEffect(() => {
-    const totalUtilizedBags = bagsOperations
-      .filter((item) => item.type === "Списано")
-      .reduce((acc, item) => {
+    const calculateTotals = () => {
+      const totalBags = bagsOperations.reduce((acc, item) => {
         return acc + parseInt(item.quantity);
       }, 0);
-    setTotalBagsUtilized(totalUtilizedBags);
-  }, [bagsOperations, setTotalBagsUtilized]);
+      setTotalBagsInStock(totalBags);
+
+      const totalUtilizedBags = bagsOperations
+        .filter((item) => item.type === "Списано")
+        .reduce((acc, item) => {
+          return acc + parseInt(item.quantity);
+        }, 0);
+      setTotalBagsUtilized(totalUtilizedBags);
+    };
+
+    calculateTotals();
+  }, [bagsOperations, setTotalBagsInStock, setTotalBagsUtilized]);
 
   return (
     <div>
@@ -210,8 +219,10 @@ export const Bags = () => {
       <Table
         key={bagsOperations.length}
         columns={columns}
-        data={bagsOperations || []}
-        sortBy="createdAt"
+        data={(() => {
+          console.log("Data being rendered in Table:", bagsOperations);
+          return bagsOperations || [];
+        })()}
       />
       <ToastContainer />
     </div>
