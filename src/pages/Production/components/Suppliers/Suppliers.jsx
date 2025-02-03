@@ -6,7 +6,6 @@ import Button from "../../../../components/Button/Button.jsx";
 import SearchInput from "../../../../components/SearchInput/SearchInput.jsx";
 import styles from "./Suppliers.module.css";
 import Table from "../../../../components/Table/Table.jsx";
-import { suppliers } from "../../../../components/State.js";
 import {
   addSupplier,
   getSuppliers,
@@ -25,6 +24,7 @@ import { serverTimestamp } from "firebase/firestore";
 import CustomSelect from "../../../../components/CustomSelect/CustomSelect.jsx";
 import { AddModal } from "./components/AddModal/AddModal.jsx";
 import { UpdateModal } from "./components/UpdateModal/UpdateModal.jsx";
+import useSuppliersStore from "../../../../components/stores/suppliersStore.js";
 
 export const Suppliers = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -39,9 +39,12 @@ export const Suppliers = () => {
 
   const [searchValue, setSearchValue] = useState("");
 
+  const suppliersData = useSuppliersStore((state) => state.suppliers);
+  const setSuppliersData = useSuppliersStore((state) => state.setSuppliers);
+
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
-  console.log("suppliers", suppliers.value);
+  console.log("suppliers", suppliersData);
 
   const setInitialInputValuesState = () => {
     setSupplierName("");
@@ -52,13 +55,13 @@ export const Suppliers = () => {
   const getSuppliersList = async () => {
     try {
       setIsLoader(true);
-      const suppliersData = await getSuppliers();
+      const suppliersDataList = await getSuppliers();
 
-      if (suppliers.length === 0) {
+      if (suppliersDataList.length === 0) {
         console.log("No suppliers found.");
       } else {
         setIsLoader(false);
-        suppliers.value = suppliersData;
+        setSuppliersData(suppliersDataList);
       }
     } catch (error) {
       console.error("Error fetching suppliers:", error);
@@ -114,7 +117,7 @@ export const Suppliers = () => {
   };
 
   const deleteChoosedSupplier = async (id) => {
-    const supplierToDelete = suppliers.value.find(
+    const supplierToDelete = suppliersData.find(
       (supplier) => supplier.id === id
     );
     if (!supplierToDelete) {
@@ -160,7 +163,7 @@ export const Suppliers = () => {
   };
 
   const handleOpenUpdateModal = (id) => {
-    const supplierToUpdate = suppliers.value.find(
+    const supplierToUpdate = suppliersData.find(
       (supplier) => supplier.id === id
     );
     if (!supplierToUpdate) {
@@ -182,7 +185,7 @@ export const Suppliers = () => {
   const searchSupplier = (value) => {
     setSearchValue(value);
   };
-  const searchedSuppliers = suppliers.value.filter((supplier) =>
+  const searchedSuppliers = suppliersData.filter((supplier) =>
     supplier.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
@@ -225,7 +228,7 @@ export const Suppliers = () => {
     },
   ];
 
-  const data = searchValue ? searchedSuppliers : suppliers.value;
+  const data = searchValue ? searchedSuppliers : suppliersData;
 
   const selectOptions = [
     { value: "price", label: "По ціні" },
