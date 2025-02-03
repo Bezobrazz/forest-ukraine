@@ -25,10 +25,11 @@ import CustomSelect from "../../../../components/CustomSelect/CustomSelect.jsx";
 import { AddModal } from "./components/AddModal/AddModal.jsx";
 import { UpdateModal } from "./components/UpdateModal/UpdateModal.jsx";
 import useSuppliersStore from "../../../../components/stores/suppliersStore.js";
-
+import OperationsModal from "./components/OperationsModal/OperationsModal.jsx";
 export const Suppliers = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openOperationsModal, setOpenOperationsModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [isLoader, setIsLoader] = useState(false);
 
@@ -194,7 +195,7 @@ export const Suppliers = () => {
       key: "actions",
       title: "",
       render: () => (
-        <Button variant="primary" onClick={() => alert("click")}>
+        <Button variant="primary" onClick={() => setOpenOperationsModal(true)}>
           +
         </Button>
       ),
@@ -290,6 +291,12 @@ export const Suppliers = () => {
         setSupplierPhone={setSupplierPhone}
         supplierPaymentDetails={supplierPaymentDetails}
         setSupplierPaymentDetails={setSupplierPaymentDetails}
+      />
+      <OperationsModal
+        isOpen={openOperationsModal}
+        onClose={() => setOpenOperationsModal(false)}
+        onSave={() => {}}
+        isLoader={isLoader}
       />
       <ToastContainer />
     </div>
