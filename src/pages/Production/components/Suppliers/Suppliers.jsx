@@ -263,9 +263,9 @@ export const Suppliers = () => {
           (t) => t.supplierId === record.id
         );
         const totalBags = supplierTransactions.reduce((sum, t) => {
-          const rawBags = parseInt(t.rawMaterialBagsQuantity) || 0;
-          const usedBags = parseInt(t.bagsQuantity) || 0;
-          return sum + (rawBags - usedBags);
+          const rawBags = parseInt(t.rawBagsQuantity) || 0;
+          const readyBags = parseInt(t.readyBagsQuantity) || 0;
+          return sum + (rawBags - readyBags);
         }, 0);
 
         return totalBags || "—";

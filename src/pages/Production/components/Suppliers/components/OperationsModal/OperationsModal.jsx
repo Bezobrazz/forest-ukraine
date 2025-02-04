@@ -4,10 +4,11 @@ import styles from "./OperationsModal.module.css";
 import useSuppliersStore from "../../../../../../components/stores/suppliersStore.js";
 import { addSupplierTransaction } from "../../../../../../Firebase/Suppliers/SuppliersService.js";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
+
 const OperationsModal = ({
   isOpen,
   onClose,
-  onSave,
   isLoader,
   supplierId,
   getSupplierTransactionsList,
@@ -22,22 +23,34 @@ const OperationsModal = ({
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
       operationDate: new Date().toISOString().split("T")[0],
       bagPrice: "",
-      bagsQuantity: "",
-      rawMaterialBagsQuantity: "",
+      readyBagsQuantity: "",
+      rawBagsQuantity: "",
+      totalSum: "",
       advance: "",
     },
   });
+
+  const bagPrice = watch("bagPrice");
+  const readyBagsQuantity = watch("readyBagsQuantity");
+
+  useEffect(() => {
+    const price = parseFloat(bagPrice) || 0;
+    const quantity = parseInt(readyBagsQuantity) || 0;
+    const total = price * quantity;
+    setValue("totalSum", total);
+  }, [bagPrice, readyBagsQuantity, setValue]);
 
   if (!isOpen) return null;
 
   const onSubmit = (data) => {
     addSupplierTransactionOperation(data);
-    onSave(data);
     reset();
   };
 
@@ -92,23 +105,34 @@ const OperationsModal = ({
         <div className={styles.formGroup}>
           <input
             type="number"
-            placeholder="Кількість мішків"
-            {...register("bagsQuantity")}
+            placeholder="Кількість готових мішків"
+            {...register("readyBagsQuantity")}
           />
-          {errors.bagsQuantity && (
-            <span className={styles.error}>{errors.bagsQuantity.message}</span>
+          {errors.readyBagsQuantity && (
+            <span className={styles.error}>
+              {errors.readyBagsQuantity.message}
+            </span>
           )}
         </div>
 
         <div className={styles.formGroup}>
           <input
             type="number"
-            placeholder="Кількість мішків для сировини"
-            {...register("rawMaterialBagsQuantity")}
+            placeholder="Загальна сума"
+            {...register("totalSum")}
+            disabled
           />
-          {errors.rawMaterialBagsQuantity && (
+        </div>
+
+        <div className={styles.formGroup}>
+          <input
+            type="number"
+            placeholder="Кількість мішків для сировини"
+            {...register("rawBagsQuantity")}
+          />
+          {errors.rawBagsQuantity && (
             <span className={styles.error}>
-              {errors.rawMaterialBagsQuantity.message}
+              {errors.rawBagsQuantity.message}
             </span>
           )}
         </div>
