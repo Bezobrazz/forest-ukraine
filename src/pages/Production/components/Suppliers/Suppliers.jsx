@@ -43,6 +43,12 @@ export const Suppliers = () => {
   const suppliersData = useSuppliersStore((state) => state.suppliers);
   const setSuppliersData = useSuppliersStore((state) => state.setSuppliers);
 
+  const transactionsData = useSuppliersStore((state) => state.transactions);
+  const setTransactionsData = useSuppliersStore(
+    (state) => state.setTransactions
+  );
+  console.log("transactionsData", transactionsData);
+
   const isMobile = useMediaQuery({ query: "(max-width: 425px)" });
 
   console.log("suppliers", suppliersData);
@@ -74,24 +80,44 @@ export const Suppliers = () => {
     getSuppliersList();
   }, []);
 
-  const getSupplierTransactionsList = async (supplierId) => {
+  const getSupplierTransactionsList = async () => {
     try {
-      const suppliersTransactions = await getSupplierTransactions(supplierId);
-      if (suppliersTransactions.length === 0) {
-        console.log("No transactions found for this supplier.");
+      setIsLoader(true);
+      const allTransactions = [];
+
+      for (const supplier of suppliersData) {
+        const supplierTransactions = await getSupplierTransactions(supplier.id);
+        if (supplierTransactions.length > 0) {
+          const transactionsWithSupplier = supplierTransactions.map(
+            (transaction) => ({
+              ...transaction,
+              supplierName: supplier.name,
+              supplierId: supplier.id,
+            })
+          );
+          allTransactions.push(...transactionsWithSupplier);
+        }
+      }
+
+      if (allTransactions.length === 0) {
+        console.log("No transactions found");
       } else {
+        setTransactionsData(allTransactions);
         setIsLoader(false);
-        console.log("suppliersTransactions", suppliersTransactions);
+        console.log("All transactions:", allTransactions);
       }
     } catch (error) {
-      console.error("Error fetching supplier transactions:", error);
-      errorNotify("Помилка при завантаженні транзакцій постачальника!", 2000);
+      console.error("Error fetching transactions:", error);
+      errorNotify("Помилка при завантаженні транзакцій!", 2000);
+      setIsLoader(false);
     }
   };
 
   useEffect(() => {
-    getSupplierTransactionsList("0gEZyxbGil4Bn5SqmRmj");
-  }, []);
+    if (suppliersData.length > 0) {
+      getSupplierTransactionsList();
+    }
+  }, [suppliersData]);
 
   const addNewSupplier = async () => {
     if (!supplierName) {
@@ -218,9 +244,9 @@ export const Suppliers = () => {
         </button>
       ),
     },
-    { key: "price", title: "Ціна" },
+    { key: "price", title: "Ціна (грн)", render: (text) => `${text}` },
     { key: "bags", title: "Мішки (дебет)" },
-    { key: "loan", title: "Борг" },
+    { key: "loan", title: "Аванс" },
     {
       key: "action",
       title: "",
@@ -301,7 +327,6 @@ export const Suppliers = () => {
       <OperationsModal
         isOpen={openOperationsModal}
         onClose={() => setOpenOperationsModal(false)}
-        onSave={() => {}}
         isLoader={isLoader}
         supplierId={selectedSupplierId}
       />
