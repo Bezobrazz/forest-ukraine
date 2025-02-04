@@ -26,6 +26,7 @@ import { AddModal } from "./components/AddModal/AddModal.jsx";
 import { UpdateModal } from "./components/UpdateModal/UpdateModal.jsx";
 import useSuppliersStore from "../../../../components/stores/suppliersStore.js";
 import OperationsModal from "./components/OperationsModal/OperationsModal.jsx";
+import Loader from "../../../../components/Loader/Loader.jsx";
 export const Suppliers = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -82,7 +83,6 @@ export const Suppliers = () => {
 
   const getSupplierTransactionsList = async () => {
     try {
-      setIsLoader(true);
       const allTransactions = [];
 
       for (const supplier of suppliersData) {
@@ -103,13 +103,11 @@ export const Suppliers = () => {
         console.log("No transactions found");
       } else {
         setTransactionsData(allTransactions);
-        setIsLoader(false);
         console.log("All transactions:", allTransactions);
       }
     } catch (error) {
       console.error("Error fetching transactions:", error);
       errorNotify("Помилка при завантаженні транзакцій!", 2000);
-      setIsLoader(false);
     }
   };
 
@@ -251,8 +249,16 @@ export const Suppliers = () => {
         const supplierTransactions = transactionsData.filter(
           (t) => t.supplierId === record.id
         );
+
         const lastTransaction = supplierTransactions[0];
-        return lastTransaction?.bagPrice || "—";
+        if (lastTransaction?.bagPrice) {
+          return lastTransaction.bagPrice;
+        } else {
+          const lastTransactionWithPrice = supplierTransactions.find(
+            (t) => t.bagPrice && t.bagPrice !== ""
+          );
+          return lastTransactionWithPrice?.bagPrice || "—";
+        }
       },
     },
     {
@@ -333,12 +339,11 @@ export const Suppliers = () => {
           Додати постачальника
         </Button>
       </div>
-      <Table
-        columns={columns}
-        data={data}
-        isLoader={isLoader}
-        sortBy="createdAt"
-      />
+      {isLoader ? (
+        <Loader />
+      ) : (
+        <Table columns={columns} data={data} sortBy="createdAt" />
+      )}
       <AddModal
         isOpen={openAddModal}
         onClose={() => setOpenAddModal(false)}
@@ -366,6 +371,7 @@ export const Suppliers = () => {
         isOpen={openOperationsModal}
         onClose={() => setOpenOperationsModal(false)}
         isLoader={isLoader}
+        setIsLoader={setIsLoader}
         supplierId={selectedSupplierId}
         getSupplierTransactionsList={getSupplierTransactionsList}
       />

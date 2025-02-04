@@ -10,6 +10,7 @@ const OperationsModal = ({
   isOpen,
   onClose,
   isLoader,
+  setIsLoader,
   supplierId,
   getSupplierTransactionsList,
 }) => {
@@ -55,11 +56,13 @@ const OperationsModal = ({
   };
 
   const addSupplierTransactionOperation = async (data) => {
+    setIsLoader(true);
     await addSupplierTransaction(supplierId, data);
     getSupplierTransactionsList();
     reset();
     onClose();
     toast.success("Операція успішно додана в 'Операції'");
+    setIsLoader(false);
   };
 
   return (
