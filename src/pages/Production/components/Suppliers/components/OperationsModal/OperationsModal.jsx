@@ -4,7 +4,14 @@ import styles from "./OperationsModal.module.css";
 import useSuppliersStore from "../../../../../../components/stores/suppliersStore.js";
 import { addSupplierTransaction } from "../../../../../../Firebase/Suppliers/SuppliersService.js";
 import { toast } from "react-toastify";
-const OperationsModal = ({ isOpen, onClose, onSave, isLoader, supplierId }) => {
+const OperationsModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  isLoader,
+  supplierId,
+  getSupplierTransactionsList,
+}) => {
   const suppliersData = useSuppliersStore((state) => state.suppliers);
 
   const supplierName = suppliersData.find(
@@ -36,6 +43,7 @@ const OperationsModal = ({ isOpen, onClose, onSave, isLoader, supplierId }) => {
 
   const addSupplierTransactionOperation = async (data) => {
     await addSupplierTransaction(supplierId, data);
+    getSupplierTransactionsList();
     reset();
     onClose();
     toast.success("Операція успішно додана в 'Операції'");

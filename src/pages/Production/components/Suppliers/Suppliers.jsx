@@ -244,9 +244,47 @@ export const Suppliers = () => {
         </button>
       ),
     },
-    { key: "price", title: "Ціна (грн)", render: (text) => `${text}` },
-    { key: "bags", title: "Мішки (дебет)" },
-    { key: "loan", title: "Аванс" },
+    {
+      key: "price",
+      title: "Ціна (грн)",
+      render: (text, record) => {
+        const supplierTransactions = transactionsData.filter(
+          (t) => t.supplierId === record.id
+        );
+        const lastTransaction = supplierTransactions[0];
+        return lastTransaction?.bagPrice || "—";
+      },
+    },
+    {
+      key: "bags",
+      title: "Мішки (дебет)",
+      render: (text, record) => {
+        const supplierTransactions = transactionsData.filter(
+          (t) => t.supplierId === record.id
+        );
+        const totalBags = supplierTransactions.reduce((sum, t) => {
+          const rawBags = parseInt(t.rawMaterialBagsQuantity) || 0;
+          const usedBags = parseInt(t.bagsQuantity) || 0;
+          return sum + (rawBags - usedBags);
+        }, 0);
+
+        return totalBags || "—";
+      },
+    },
+    {
+      key: "loan",
+      title: "Аванс",
+      render: (text, record) => {
+        const supplierTransactions = transactionsData.filter(
+          (t) => t.supplierId === record.id
+        );
+        const totalAdvance = supplierTransactions.reduce(
+          (sum, t) => sum + (parseFloat(t.advance) || 0),
+          0
+        );
+        return totalAdvance ? `${totalAdvance} грн` : "—";
+      },
+    },
     {
       key: "action",
       title: "",
@@ -329,6 +367,7 @@ export const Suppliers = () => {
         onClose={() => setOpenOperationsModal(false)}
         isLoader={isLoader}
         supplierId={selectedSupplierId}
+        getSupplierTransactionsList={getSupplierTransactionsList}
       />
       <ToastContainer />
     </div>
