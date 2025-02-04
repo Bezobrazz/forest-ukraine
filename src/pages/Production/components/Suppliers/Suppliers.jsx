@@ -37,7 +37,7 @@ export const Suppliers = () => {
   const [supplierPhone, setSupplierPhone] = useState("");
   const [supplierPaymentDetails, setSupplierPaymentDetails] = useState("");
   const [supplierId, setSupplierId] = useState("");
-
+  const [selectedSupplierId, setSelectedSupplierId] = useState(null);
   const [searchValue, setSearchValue] = useState("");
 
   const suppliersData = useSuppliersStore((state) => state.suppliers);
@@ -194,8 +194,14 @@ export const Suppliers = () => {
     {
       key: "actions",
       title: "",
-      render: () => (
-        <Button variant="primary" onClick={() => setOpenOperationsModal(true)}>
+      render: (text, record) => (
+        <Button
+          variant="primary"
+          onClick={() => {
+            setSelectedSupplierId(record.id);
+            setOpenOperationsModal(true);
+          }}
+        >
           +
         </Button>
       ),
@@ -297,6 +303,7 @@ export const Suppliers = () => {
         onClose={() => setOpenOperationsModal(false)}
         onSave={() => {}}
         isLoader={isLoader}
+        supplierId={selectedSupplierId}
       />
       <ToastContainer />
     </div>
