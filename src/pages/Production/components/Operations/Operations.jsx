@@ -1,5 +1,5 @@
 import styles from "./Operations.module.css";
-import Button from "../../../../components/Button/Button.jsx";
+
 import Table from "../../../../components/Table/Table.jsx";
 import { useState, useEffect } from "react";
 import useSuppliersStore from "../../../../components/stores/suppliersStore.js";
@@ -10,9 +10,11 @@ import {
 } from "../../../../components/Notifications/Notifications.js";
 import { BsFillTrashFill } from "react-icons/bs";
 import { deleteTransaction } from "../../../../Firebase/Suppliers/SuppliersService.js";
+import SearchInput from "../../../../components/SearchInput/SearchInput.jsx";
 
 export const Operations = () => {
   const [isLoader, setIsLoader] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const transactionsData = useSuppliersStore((state) => state.transactions);
   const setTransactionsData = useSuppliersStore(
     (state) => state.setTransactions
@@ -110,17 +112,34 @@ export const Operations = () => {
     },
   ];
 
+  const searchSupplier = (value) => {
+    setSearchValue(value);
+  };
+
+  const searchedTransactions = transactionsData.filter((transaction) =>
+    transaction.supplierName.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
+  const data = searchValue ? searchedTransactions : transactionsData;
+
   return (
     <div>
       <div className={styles.topBar}>
-        <Button variant="primary" width="230px">
+        <div className={styles.searchWrapper}>
+          <SearchInput
+            placeholder="Пошук постачальників..."
+            value={searchValue}
+            onSearch={searchSupplier}
+          />
+        </div>
+        {/* <Button variant="primary" width="230px">
           Додати операцію
-        </Button>
+        </Button> */}
       </div>
       <Table
         isLoader={isLoader}
         columns={columns}
-        data={transactionsData}
+        data={data}
         sortBy="operationDate"
       />
     </div>
