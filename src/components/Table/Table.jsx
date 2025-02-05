@@ -28,27 +28,30 @@ const Table = ({
           </tr>
         </thead>
         <tbody>
-          {sortedData.map((row) => {
-            const rowClass = getRowClassName(row);
-            return (
-              <tr key={row[rowKey]} className={`${styles.row} ${rowClass}`}>
-                {columns.map((column) => (
-                  <td key={column.key} className={styles.cell}>
-                    {column.render
-                      ? column.render(row[column.key], row)
-                      : row[column.key]}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
+          {isLoader ? (
+            <tr>
+              <td colSpan={columns.length} className={styles.loaderCell}>
+                <Loader />
+              </td>
+            </tr>
+          ) : (
+            sortedData.map((row) => {
+              const rowClass = getRowClassName(row);
+              return (
+                <tr key={row[rowKey]} className={`${styles.row} ${rowClass}`}>
+                  {columns.map((column) => (
+                    <td key={column.key} className={styles.cell}>
+                      {column.render
+                        ? column.render(row[column.key], row)
+                        : row[column.key]}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
-      {isLoader && (
-        <div className={styles.loaderWrapper}>
-          <Loader />
-        </div>
-      )}
     </div>
   );
 };

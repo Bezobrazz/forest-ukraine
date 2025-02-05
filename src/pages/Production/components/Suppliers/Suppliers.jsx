@@ -26,7 +26,6 @@ import { AddModal } from "./components/AddModal/AddModal.jsx";
 import { UpdateModal } from "./components/UpdateModal/UpdateModal.jsx";
 import useSuppliersStore from "../../../../components/stores/suppliersStore.js";
 import OperationsModal from "./components/OperationsModal/OperationsModal.jsx";
-import Loader from "../../../../components/Loader/Loader.jsx";
 export const Suppliers = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -259,7 +258,7 @@ export const Suppliers = () => {
     },
     {
       key: "loan",
-      title: "Аванс",
+      title: "Аванс (грн)",
       render: (text, record) => {
         const supplierTransactions = transactionsData.filter(
           (t) => t.supplierId === record.id
@@ -268,7 +267,7 @@ export const Suppliers = () => {
           (sum, t) => sum + (parseFloat(t.advance) || 0),
           0
         );
-        return totalAdvance ? `${totalAdvance} грн` : "—";
+        return totalAdvance ? `${totalAdvance}` : "—";
       },
     },
     {
@@ -319,11 +318,14 @@ export const Suppliers = () => {
           Додати постачальника
         </Button>
       </div>
-      {isLoader ? (
-        <Loader />
-      ) : (
-        <Table columns={columns} data={data} sortBy="createdAt" />
-      )}
+
+      <Table
+        isLoader={isLoader}
+        columns={columns}
+        data={data}
+        sortBy="createdAt"
+      />
+
       <AddModal
         isOpen={openAddModal}
         onClose={() => setOpenAddModal(false)}

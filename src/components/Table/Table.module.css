@@ -37,8 +37,15 @@
 }
 
 .loaderWrapper {
+  margin: 0 auto;
   padding-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.loaderCell {
+  height: 200px;
+  text-align: center;
+  vertical-align: middle;
 }
