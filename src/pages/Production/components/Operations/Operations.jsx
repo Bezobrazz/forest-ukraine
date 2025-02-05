@@ -4,7 +4,12 @@ import Table from "../../../../components/Table/Table.jsx";
 import { useState, useEffect } from "react";
 import useSuppliersStore from "../../../../components/stores/suppliersStore.js";
 import { getAllTransactions } from "../../../../Firebase/Suppliers/SuppliersService.js";
-import { errorNotify } from "../../../../components/Notifications/Notifications.js";
+import {
+  errorNotify,
+  successNotify,
+} from "../../../../components/Notifications/Notifications.js";
+import { BsFillTrashFill } from "react-icons/bs";
+import { deleteTransaction } from "../../../../Firebase/Suppliers/SuppliersService.js";
 
 export const Operations = () => {
   const [isLoader, setIsLoader] = useState(false);
@@ -12,6 +17,8 @@ export const Operations = () => {
   const setTransactionsData = useSuppliersStore(
     (state) => state.setTransactions
   );
+
+  console.log("transactionsData", transactionsData);
 
   const fetchTransactions = async () => {
     try {
@@ -30,7 +37,27 @@ export const Operations = () => {
     fetchTransactions();
   }, []);
 
-  console.log("transactionsData", transactionsData);
+  const deleteChoosedOperation = async (id) => {
+    const operationToDelete = transactionsData.find(
+      (operation) => operation.id === id
+    );
+    if (!operationToDelete) {
+      errorNotify("Операція із заданим ID не знайдена!", 2000);
+      return;
+    }
+    const isConfirmed = window.confirm(
+      `Ви впевнені, що хочете видалити операцію?`
+    );
+    if (!isConfirmed) return;
+    try {
+      await deleteTransaction(operationToDelete.supplierId, id);
+      successNotify("Операція успішно видалена!", 1000);
+      fetchTransactions();
+    } catch (error) {
+      console.error("Error deleting operation:", error);
+      errorNotify("Помилка при видаленні операції!", 2000);
+    }
+  };
 
   const columns = [
     {
@@ -68,6 +95,18 @@ export const Operations = () => {
     {
       key: "advance",
       title: "Аванс",
+    },
+    {
+      key: "action",
+      title: "",
+      render: (text, record) => (
+        <button
+          className={styles.trashButton}
+          onClick={() => deleteChoosedOperation(record.id)}
+        >
+          <BsFillTrashFill />
+        </button>
+      ),
     },
   ];
 
