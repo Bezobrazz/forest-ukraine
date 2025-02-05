@@ -11,7 +11,7 @@ import {
   getSuppliers,
   deleteSupplier,
   updateSupplier,
-  getSupplierTransactions,
+  getAllTransactions,
 } from "../../../../Firebase/Suppliers/SuppliersService.js";
 import {
   errorNotify,
@@ -60,62 +60,41 @@ export const Suppliers = () => {
     setSupplierPaymentDetails("");
   };
 
-  const getSuppliersList = async () => {
+  const getInitialData = async () => {
     try {
       setIsLoader(true);
+
       const suppliersDataList = await getSuppliers();
-
-      if (suppliersDataList.length === 0) {
-        console.log("No suppliers found.");
-      } else {
-        setIsLoader(false);
+      if (suppliersDataList.length > 0) {
         setSuppliersData(suppliersDataList);
-      }
-    } catch (error) {
-      console.error("Error fetching suppliers:", error);
-      errorNotify("Помилка при завантаженні постачальників!", 2000);
-    }
-  };
 
-  useEffect(() => {
-    getSuppliersList();
-  }, []);
+        const allTransactions = await getAllTransactions();
 
-  const getSupplierTransactionsList = async () => {
-    try {
-      const allTransactions = [];
-
-      for (const supplier of suppliersData) {
-        const supplierTransactions = await getSupplierTransactions(supplier.id);
-        if (supplierTransactions.length > 0) {
-          const transactionsWithSupplier = supplierTransactions.map(
-            (transaction) => ({
+        const transactionsWithSupplierInfo = allTransactions.map(
+          (transaction) => {
+            const supplier = suppliersDataList.find(
+              (s) => s.id === transaction.supplierId
+            );
+            return {
               ...transaction,
-              supplierName: supplier.name,
-              supplierId: supplier.id,
-            })
-          );
-          allTransactions.push(...transactionsWithSupplier);
-        }
-      }
+              supplierName: supplier?.name || "Unknown",
+            };
+          }
+        );
 
-      if (allTransactions.length === 0) {
-        console.log("No transactions found");
-      } else {
-        setTransactionsData(allTransactions);
-        console.log("All transactions:", allTransactions);
+        setTransactionsData(transactionsWithSupplierInfo);
       }
+      setIsLoader(false);
     } catch (error) {
-      console.error("Error fetching transactions:", error);
-      errorNotify("Помилка при завантаженні транзакцій!", 2000);
+      console.error("Error fetching data:", error);
+      errorNotify("Помилка при завантаженні даних!", 2000);
+      setIsLoader(false);
     }
   };
 
   useEffect(() => {
-    if (suppliersData.length > 0) {
-      getSupplierTransactionsList();
-    }
-  }, [suppliersData]);
+    getInitialData();
+  }, []);
 
   const addNewSupplier = async () => {
     if (!supplierName) {
@@ -131,13 +110,14 @@ export const Suppliers = () => {
         createdAt: serverTimestamp(),
       };
       await addSupplier(newSupplier);
-      getSuppliersList();
-      successNotify("Постачальник успішно доданий!", 1000);
+      getInitialData();
+      successNotify("Постачальник успішно доданий!", 1000);
       setOpenAddModal(false);
       setInitialInputValuesState();
     } catch (error) {
       console.error("Error adding supplier:", error);
       errorNotify("Помилка при додаванні постачальника!", 2000);
+      setIsLoader(false);
     }
   };
 
@@ -157,7 +137,7 @@ export const Suppliers = () => {
     try {
       await deleteSupplier(id);
       successNotify("Постачальник успішно видалений!", 1000);
-      getSuppliersList();
+      getInitialData();
     } catch (error) {
       console.error("Error deleting supplier:", error);
       errorNotify("Помилка при видаленні постачальника!", 2000);
@@ -177,7 +157,7 @@ export const Suppliers = () => {
         paymentDetails: supplierPaymentDetails,
       });
       successNotify("Постачальник успішно відредагований!", 1000);
-      getSuppliersList();
+      getInitialData();
       setOpenUpdateModal(false);
       setInitialInputValuesState();
       setIsLoader(false);
@@ -373,7 +353,7 @@ export const Suppliers = () => {
         isLoader={isLoader}
         setIsLoader={setIsLoader}
         supplierId={selectedSupplierId}
-        getSupplierTransactionsList={getSupplierTransactionsList}
+        getSupplierTransactionsList={getInitialData}
       />
       <ToastContainer />
     </div>

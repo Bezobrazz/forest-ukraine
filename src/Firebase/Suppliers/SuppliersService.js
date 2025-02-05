@@ -46,3 +46,24 @@ export const addSupplierTransaction = async (supplierId, transaction) => {
     transaction
   );
 };
+
+export const getAllTransactions = async () => {
+  const suppliers = await getSuppliers();
+  const allTransactions = [];
+
+  for (const supplier of suppliers) {
+    const transactions = await getSubcollectionData(
+      COLLECTION_NAME,
+      supplier.id,
+      SUBCOLLECTION_NAME
+    );
+    allTransactions.push(
+      ...transactions.map((t) => ({
+        ...t,
+        supplierId: supplier.id,
+      }))
+    );
+  }
+
+  return allTransactions;
+};
