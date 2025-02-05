@@ -61,6 +61,7 @@ export const getAllTransactions = async () => {
       ...transactions.map((t) => ({
         ...t,
         supplierId: supplier.id,
+        supplierName: supplier.name,
       }))
     );
   }
