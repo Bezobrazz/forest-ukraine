@@ -2,10 +2,13 @@ import Modal from "../../../../../../components/ReuseComponents/Modal/Modal.jsx"
 import { useForm } from "react-hook-form";
 import styles from "./OperationsModal.module.css";
 import useSuppliersStore from "../../../../../../components/stores/suppliersStore.js";
-import { addSupplierTransaction } from "../../../../../../Firebase/Suppliers/SuppliersService.js";
+import {
+  addSupplierTransaction,
+  updateSupplier,
+} from "../../../../../../Firebase/Suppliers/SuppliersService.js";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-
+import { errorNotify } from "../../../../../../components/Notifications/Notifications.js";
 const OperationsModal = ({
   isOpen,
   onClose,
@@ -57,12 +60,37 @@ const OperationsModal = ({
 
   const addSupplierTransactionOperation = async (data) => {
     setIsLoader(true);
-    await addSupplierTransaction(supplierId, data);
-    getSupplierTransactionsList();
-    reset();
-    onClose();
-    toast.success("Операція успішно додана в 'Операції'");
-    setIsLoader(false);
+    try {
+      const newDataForSupplier = {};
+
+      if (data.advance) {
+        newDataForSupplier.advance = parseFloat(data.advance);
+      }
+
+      if (data.bagPrice) {
+        newDataForSupplier.readyBagsPrice = parseFloat(data.bagPrice);
+      }
+
+      if (data.rawBagsQuantity) {
+        newDataForSupplier.rawBagsQuantity = parseInt(data.rawBagsQuantity);
+      }
+
+      await addSupplierTransaction(supplierId, data);
+
+      if (Object.keys(newDataForSupplier).length > 0) {
+        await updateSupplier(supplierId, newDataForSupplier);
+      }
+
+      getSupplierTransactionsList();
+      reset();
+      onClose();
+      toast.success("Операція успішно додана в 'Операції'");
+      setIsLoader(false);
+    } catch (error) {
+      console.error("Error adding supplier transaction:", error);
+      errorNotify("Помилка при додаванні операції!", 2000);
+      setIsLoader(false);
+    }
   };
 
   return (

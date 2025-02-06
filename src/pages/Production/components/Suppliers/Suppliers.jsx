@@ -222,53 +222,16 @@ export const Suppliers = () => {
       ),
     },
     {
-      key: "price",
+      key: "readyBagsPrice",
       title: "Ціна (грн)",
-      render: (text, record) => {
-        const supplierTransactions = transactionsData.filter(
-          (t) => t.supplierId === record.id
-        );
-
-        const lastTransaction = supplierTransactions[0];
-        if (lastTransaction?.bagPrice) {
-          return lastTransaction.bagPrice;
-        } else {
-          const lastTransactionWithPrice = supplierTransactions.find(
-            (t) => t.bagPrice && t.bagPrice !== ""
-          );
-          return lastTransactionWithPrice?.bagPrice || "—";
-        }
-      },
     },
     {
-      key: "bags",
+      key: "rawBagsQuantity",
       title: "Мішки (дебет)",
-      render: (text, record) => {
-        const supplierTransactions = transactionsData.filter(
-          (t) => t.supplierId === record.id
-        );
-        const totalBags = supplierTransactions.reduce((sum, t) => {
-          const rawBags = parseInt(t.rawBagsQuantity) || 0;
-          const readyBags = parseInt(t.readyBagsQuantity) || 0;
-          return sum + (rawBags - readyBags);
-        }, 0);
-
-        return totalBags || "—";
-      },
     },
     {
-      key: "loan",
+      key: "advance",
       title: "Аванс (грн)",
-      render: (text, record) => {
-        const supplierTransactions = transactionsData.filter(
-          (t) => t.supplierId === record.id
-        );
-        const totalAdvance = supplierTransactions.reduce(
-          (sum, t) => sum + (parseFloat(t.advance) || 0),
-          0
-        );
-        return totalAdvance ? `${totalAdvance}` : "—";
-      },
     },
     {
       key: "action",
