@@ -9,7 +9,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
   const navItems = [
     { to: "/", text: "Форест " },
     {
-      to: "/production",
+      to: "/raw-materials",
       text: "Сировина",
       // subItems: [
       //   { to: "/production/finished-products", text: "Виготовлена Продукція" },

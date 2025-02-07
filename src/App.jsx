@@ -8,17 +8,17 @@ import Sidebar from "./components/Sidebar/Sidebar.jsx";
 import NavBar from "./components/NavBar/NavBar.jsx";
 
 import Home from "./pages/Home/Home.jsx";
-import Production from "./pages/Production/Production.jsx";
+import RawMaterials from "./pages/RawMaterials/RawMaterials.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
 import DeliveryCost from "./pages/DeliveryCost/DeliveryCost.jsx";
 import { GoogleSheet } from "./pages/GoogleSheet/GoogleSheet.jsx";
-import RawMaterialsStatistics from "./pages/Production/components/RawMaterialsStatistics/RawMaterialsStatistics.jsx";
+import RawMaterialsStatistics from "./pages/RawMaterials/components/RawMaterialsStatistics/RawMaterialsStatistics.jsx";
 import {
   Suppliers,
   Bags,
   Operations,
-} from "./pages/Production/components/index.js";
+} from "./pages/RawMaterials/components/index.js";
 
 const App = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -58,7 +58,7 @@ const App = () => {
         <div className={s.content}>
           <Routes>
             <Route index path="/" element={<Home />} />
-            <Route path="/production" element={<Production />}>
+            <Route path="/raw-materials" element={<RawMaterials />}>
               <Route index element={<Navigate to="suppliers-info" />} />
               <Route path="suppliers-info" element={<Suppliers />} />
               <Route path="bags-info" element={<Bags />} />

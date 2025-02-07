@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
-import styles from "./Production.module.css";
+import styles from "./RawMaterials.module.css";
 
-const Production = () => {
+const RawMaterials = () => {
   const navLinks = [
     { name: "Постачальники", path: "suppliers-info" },
     { name: "Мішки", path: "bags-info" },
@@ -30,4 +30,4 @@ const Production = () => {
   );
 };
 
-export default Production;
+export default RawMaterials;
