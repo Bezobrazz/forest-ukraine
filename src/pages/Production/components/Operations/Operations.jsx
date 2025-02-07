@@ -11,10 +11,12 @@ import {
 import { BsFillTrashFill } from "react-icons/bs";
 import { deleteTransaction } from "../../../../Firebase/Suppliers/SuppliersService.js";
 import SearchInput from "../../../../components/SearchInput/SearchInput.jsx";
+import Button from "../../../../components/Button/Button.jsx";
 
 export const Operations = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [filterPeriod, setFilterPeriod] = useState("month"); // "month" | "year" | "all"
   const transactionsData = useSuppliersStore((state) => state.transactions);
   const setTransactionsData = useSuppliersStore(
     (state) => state.setTransactions
@@ -120,9 +122,32 @@ export const Operations = () => {
     transaction.supplierName.toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  const data = searchValue ? searchedTransactions : transactionsData;
+  const filterDataByPeriod = (data) => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
 
-  const sortedData = [...data].sort((a, b) => {
+    return data.filter((item) => {
+      const operationDate = new Date(item.operationDate);
+
+      switch (filterPeriod) {
+        case "month":
+          return (
+            operationDate.getFullYear() === currentYear &&
+            operationDate.getMonth() === currentMonth
+          );
+        case "year":
+          return operationDate.getFullYear() === currentYear;
+        default:
+          return true;
+      }
+    });
+  };
+
+  const data = searchValue ? searchedTransactions : transactionsData;
+  const filteredData = filterDataByPeriod(data);
+
+  const sortedData = [...filteredData].sort((a, b) => {
     return new Date(b.operationDate) - new Date(a.operationDate);
   });
 
@@ -135,6 +160,20 @@ export const Operations = () => {
             value={searchValue}
             onSearch={searchSupplier}
           />
+          <Button
+            variant={filterPeriod === "month" ? "secondary" : "primary"}
+            width="150px"
+            onClick={() => setFilterPeriod("month")}
+          >
+            Місяць
+          </Button>
+          <Button
+            variant={filterPeriod === "year" ? "secondary" : "primary"}
+            width="150px"
+            onClick={() => setFilterPeriod("year")}
+          >
+            Рік
+          </Button>
         </div>
         {/* <Button variant="primary" width="230px">
           Додати операцію

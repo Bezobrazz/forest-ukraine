@@ -7,6 +7,12 @@
   margin-bottom: 40px;
 }
 
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .trashButton {
   width: 35px;
   height: 35px;
