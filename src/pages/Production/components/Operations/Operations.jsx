@@ -122,6 +122,10 @@ export const Operations = () => {
 
   const data = searchValue ? searchedTransactions : transactionsData;
 
+  const sortedData = [...data].sort((a, b) => {
+    return new Date(b.operationDate) - new Date(a.operationDate);
+  });
+
   return (
     <div>
       <div className={styles.topBar}>
@@ -136,12 +140,7 @@ export const Operations = () => {
           Додати операцію
         </Button> */}
       </div>
-      <Table
-        isLoader={isLoader}
-        columns={columns}
-        data={data}
-        sortBy="operationDate"
-      />
+      <Table isLoader={isLoader} columns={columns} data={sortedData} />
     </div>
   );
 };

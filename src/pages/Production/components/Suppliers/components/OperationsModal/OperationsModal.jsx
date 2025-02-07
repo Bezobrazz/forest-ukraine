@@ -11,6 +11,8 @@ import {
   successNotify,
 } from "../../../../../../components/Notifications/Notifications.js";
 import { useEffect } from "react";
+import { serverTimestamp } from "firebase/firestore";
+
 const OperationsModal = ({
   isOpen,
   onClose,
@@ -64,8 +66,15 @@ const OperationsModal = ({
     setIsLoader(true);
     try {
       const newDataForSupplier = {};
-
       const currentSupplier = suppliersData.find((s) => s.id === supplierId);
+
+      const operationTimestamp = new Date(data.operationDate).getTime();
+
+      const transactionData = {
+        ...data,
+        operationDate: operationTimestamp,
+        createdAt: serverTimestamp(),
+      };
 
       if (data.advance) {
         newDataForSupplier.advance = parseFloat(data.advance);
@@ -93,7 +102,7 @@ const OperationsModal = ({
         newDataForSupplier.advance = 0;
       }
 
-      await addSupplierTransaction(supplierId, data);
+      await addSupplierTransaction(supplierId, transactionData);
 
       if (Object.keys(newDataForSupplier).length > 0) {
         await updateSupplier(supplierId, newDataForSupplier);
