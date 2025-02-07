@@ -249,6 +249,20 @@ export const Suppliers = () => {
 
   const data = searchValue ? searchedSuppliers : suppliersData;
 
+  const sortedData = [...data].sort((a, b) => {
+    switch (selectedOption) {
+      case "price":
+        return (b.readyBagsPrice || 0) - (a.readyBagsPrice || 0);
+      case "bags":
+        return (b.rawBagsQuantity || 0) - (a.rawBagsQuantity || 0);
+      case "loan":
+        return (b.advance || 0) - (a.advance || 0);
+      default:
+        // За замовчуванням сортуємо за датою створення
+        return b.createdAt - a.createdAt;
+    }
+  });
+
   const selectOptions = [
     { value: "price", label: "По ціні" },
     { value: "bags", label: "По мішкам" },
@@ -282,12 +296,7 @@ export const Suppliers = () => {
         </Button>
       </div>
 
-      <Table
-        isLoader={isLoader}
-        columns={columns}
-        data={data}
-        sortBy="createdAt"
-      />
+      <Table isLoader={isLoader} columns={columns} data={sortedData} />
 
       <AddModal
         isOpen={openAddModal}

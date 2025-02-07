@@ -6,14 +6,14 @@ const Table = ({
   columns,
   data,
   rowKey = "id",
-  sortBy = "createdAt",
+  // sortBy = "createdAt",
   getRowClassName = () => "",
 }) => {
-  const sortedData = [...data].sort((a, b) => {
-    if (a[sortBy] > b[sortBy]) return -1;
-    if (a[sortBy] < b[sortBy]) return 1;
-    return 0;
-  });
+  // const sortedData = [...data].sort((a, b) => {
+  //   if (a[sortBy] > b[sortBy]) return -1;
+  //   if (a[sortBy] < b[sortBy]) return 1;
+  //   return 0;
+  // });
 
   return (
     <div className={styles.container}>
@@ -35,7 +35,7 @@ const Table = ({
               </td>
             </tr>
           ) : (
-            sortedData.map((row) => {
+            data.map((row) => {
               const rowClass = getRowClassName(row);
               return (
                 <tr key={row[rowKey]} className={`${styles.row} ${rowClass}`}>

@@ -6,9 +6,11 @@ import {
   addSupplierTransaction,
   updateSupplier,
 } from "../../../../../../Firebase/Suppliers/SuppliersService.js";
-import { toast } from "react-toastify";
+import {
+  errorNotify,
+  successNotify,
+} from "../../../../../../components/Notifications/Notifications.js";
 import { useEffect } from "react";
-import { errorNotify } from "../../../../../../components/Notifications/Notifications.js";
 const OperationsModal = ({
   isOpen,
   onClose,
@@ -100,7 +102,7 @@ const OperationsModal = ({
       getSupplierTransactionsList();
       reset();
       onClose();
-      toast.success("Операція успішно додана в 'Операції'");
+      successNotify("Операція успішно додана в 'Операції'");
       setIsLoader(false);
     } catch (error) {
       console.error("Error adding supplier transaction:", error);
