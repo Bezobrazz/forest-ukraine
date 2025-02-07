@@ -63,6 +63,9 @@ const OperationsModal = ({
     try {
       const newDataForSupplier = {};
 
+      // Отримуємо поточного постачальника
+      const currentSupplier = suppliersData.find((s) => s.id === supplierId);
+
       if (data.advance) {
         newDataForSupplier.advance = parseFloat(data.advance);
       }
@@ -71,8 +74,16 @@ const OperationsModal = ({
         newDataForSupplier.readyBagsPrice = parseFloat(data.bagPrice);
       }
 
-      if (data.rawBagsQuantity) {
-        newDataForSupplier.rawBagsQuantity = parseInt(data.rawBagsQuantity);
+      // Якщо є готові мішки, віднімаємо їх від загальної кількості
+      if (data.readyBagsQuantity) {
+        const currentRawBags = currentSupplier?.rawBagsQuantity || 0;
+        const readyBags = parseInt(data.readyBagsQuantity);
+        newDataForSupplier.rawBagsQuantity = currentRawBags - readyBags;
+      } else if (data.rawBagsQuantity) {
+        // Якщо немає готових мішків, але є нові для сировини
+        const currentRawBags = currentSupplier?.rawBagsQuantity || 0;
+        newDataForSupplier.rawBagsQuantity =
+          currentRawBags + parseInt(data.rawBagsQuantity);
       }
 
       await addSupplierTransaction(supplierId, data);
