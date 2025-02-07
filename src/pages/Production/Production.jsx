@@ -6,6 +6,7 @@ const Production = () => {
     { name: "Постачальники", path: "suppliers-info" },
     { name: "Мішки", path: "bags-info" },
     { name: "Операції", path: "operations-info" },
+    { name: "Статистика", path: "raw-materials-statistics" },
   ];
 
   const linkClassName = ({ isActive }) =>

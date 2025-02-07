@@ -13,7 +13,7 @@ import NotFound from "./pages/NotFound/NotFound.jsx";
 import FinishedProducts from "./pages/FinishedProducts/FinishedProducts.jsx";
 import DeliveryCost from "./pages/DeliveryCost/DeliveryCost.jsx";
 import { GoogleSheet } from "./pages/GoogleSheet/GoogleSheet.jsx";
-
+import RawMaterialsStatistics from "./pages/Production/components/RawMaterialsStatistics/RawMaterialsStatistics.jsx";
 import {
   Suppliers,
   Bags,
@@ -63,6 +63,10 @@ const App = () => {
               <Route path="suppliers-info" element={<Suppliers />} />
               <Route path="bags-info" element={<Bags />} />
               <Route path="operations-info" element={<Operations />} />
+              <Route
+                path="raw-materials-statistics"
+                element={<RawMaterialsStatistics />}
+              />
             </Route>
             <Route
               path="/production/finished-products"

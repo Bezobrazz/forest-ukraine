@@ -10,7 +10,7 @@ const Sidebar = ({ toggleSidebar, closeSidebar, isTabletOrMobile }) => {
     { to: "/", text: "Форест " },
     {
       to: "/production",
-      text: "Виробництво",
+      text: "Сировина",
       // subItems: [
       //   { to: "/production/finished-products", text: "Виготовлена Продукція" },
       // ],
