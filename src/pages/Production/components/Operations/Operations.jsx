@@ -164,6 +164,7 @@ export const Operations = () => {
             variant={filterPeriod === "month" ? "secondary" : "primary"}
             width="150px"
             onClick={() => setFilterPeriod("month")}
+            title="Показати операції за поточний місяць"
           >
             Місяць
           </Button>
@@ -171,6 +172,7 @@ export const Operations = () => {
             variant={filterPeriod === "year" ? "secondary" : "primary"}
             width="150px"
             onClick={() => setFilterPeriod("year")}
+            title="Показати операції за поточний рік"
           >
             Рік
           </Button>

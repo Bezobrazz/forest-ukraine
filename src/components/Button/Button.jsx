@@ -7,14 +7,20 @@ const Button = ({
   type = "button",
   variant = "primary",
   disabled = false,
+  title,
 }) => {
+  const buttonStyle = {
+    width: width || "auto",
+  };
+
   return (
     <button
-      style={{ width }}
+      style={buttonStyle}
       className={`${styles.button} ${styles[variant]}`}
       onClick={onClick}
       type={type}
       disabled={disabled}
+      title={title}
     >
       {children}
     </button>
