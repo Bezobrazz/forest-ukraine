@@ -1,0 +1,31 @@
+.topBar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trashButton {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+.trashButton:hover {
+  color: red;
+}

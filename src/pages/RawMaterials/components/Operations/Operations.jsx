@@ -16,7 +16,7 @@ import Button from "../../../../components/Button/Button.jsx";
 export const Operations = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [filterPeriod, setFilterPeriod] = useState("month"); // "month" | "year" | "all"
+  const [filterPeriod, setFilterPeriod] = useState("month");
   const transactionsData = useSuppliersStore((state) => state.transactions);
   const setTransactionsData = useSuppliersStore(
     (state) => state.setTransactions
