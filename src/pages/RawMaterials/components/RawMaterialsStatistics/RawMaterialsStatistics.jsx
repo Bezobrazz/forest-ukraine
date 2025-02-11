@@ -1,12 +1,35 @@
 import styles from "./RawMaterialsStatistics.module.css";
 import Table from "../../../../components/Table/Table";
+import { useState, useEffect } from "react";
+import { getAllTransactions } from "../../../../Firebase/Suppliers/SuppliersService.js";
+import { errorNotify } from "../../../../components/Notifications/Notifications.js";
 
 import useSuppliersStore from "../../../../components/stores/suppliersStore.js";
 
 const RawMaterialsStatistics = () => {
-  // const [isLoader, setIsLoader] = useState(false);
-
+  const [isLoader, setIsLoader] = useState(false);
   const transactionsData = useSuppliersStore((state) => state.transactions);
+  const setTransactionsData = useSuppliersStore(
+    (state) => state.setTransactions
+  );
+
+  const fetchTransactions = async () => {
+    try {
+      setIsLoader(true);
+      const transactions = await getAllTransactions();
+      setTransactionsData(transactions);
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      errorNotify("Помилка при завантаженні операцій!", 2000);
+    } finally {
+      setIsLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
   console.log("transactionsData", transactionsData);
 
   // const totalCostBags = transactionsData.reduce(
@@ -46,6 +69,9 @@ const RawMaterialsStatistics = () => {
   };
 
   const groupTransactionsByMonth = (transactions) => {
+    // Додаємо логування для перевірки вхідних даних
+    console.log("Transactions for grouping:", transactions);
+
     const monthNames = [
       "Січень",
       "Лютий",
@@ -81,17 +107,18 @@ const RawMaterialsStatistics = () => {
       acc[monthKey].totalCostBags += price * quantity;
       acc[monthKey].totalNumberBags += quantity;
 
+      // Розраховуємо середню вартість
+      if (acc[monthKey].totalNumberBags > 0) {
+        acc[monthKey].averageCostBags =
+          acc[monthKey].totalCostBags / acc[monthKey].totalNumberBags;
+      }
+
       return acc;
     }, {});
 
-    // Конвертуємо об'єкт в масив і рахуємо середню вартість
-    return Object.values(groupedData).map((month) => ({
-      ...month,
-      averageCostBags:
-        month.totalNumberBags > 0
-          ? (month.totalCostBags / month.totalNumberBags).toFixed(2)
-          : 0,
-    }));
+    const result = Object.values(groupedData);
+
+    return result;
   };
 
   const statisticsData = groupTransactionsByMonth(transactionsData);
@@ -104,6 +131,8 @@ const RawMaterialsStatistics = () => {
     {
       key: "totalCostBags",
       title: "Вартість мішків",
+      render: (value) =>
+        value.toLocaleString("uk-UA", { style: "currency", currency: "UAH" }),
     },
     {
       key: "totalNumberBags",
@@ -116,6 +145,8 @@ const RawMaterialsStatistics = () => {
     {
       key: "averageCostBags",
       title: "Середня вартість мішка",
+      render: (value) =>
+        value.toLocaleString("uk-UA", { style: "currency", currency: "UAH" }),
     },
   ];
 
@@ -153,7 +184,7 @@ const RawMaterialsStatistics = () => {
 			Додати операцію
 		</Button> */}
       </div>
-      <Table isLoader={false} columns={columns} data={statisticsData} />
+      <Table isLoader={isLoader} columns={columns} data={statisticsData} />
     </div>
   );
 };
