@@ -189,9 +189,13 @@ export const Suppliers = () => {
   const searchSupplier = (value) => {
     setSearchValue(value);
   };
-  const searchedSuppliers = suppliersData.filter((supplier) =>
-    supplier.name.toLowerCase().includes(searchValue.toLowerCase())
-  );
+
+  const searchedSuppliers =
+    suppliersData?.filter((supplier) =>
+      supplier.name?.toLowerCase().includes(searchValue.toLowerCase())
+    ) || [];
+
+  const data = searchValue ? searchedSuppliers : suppliersData || [];
 
   const columns = [
     {
@@ -246,8 +250,6 @@ export const Suppliers = () => {
       ),
     },
   ];
-
-  const data = searchValue ? searchedSuppliers : suppliersData;
 
   const sortedData = [...data].sort((a, b) => {
     switch (selectedOption) {
